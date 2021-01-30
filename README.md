@@ -8,6 +8,9 @@ Assignment 1
 
 2. Discuss what development methodology you will use and why? (2 points)
 
+(Caitlin) We will use the SCRUM model to develop our application. Because it is an agile method, we will create short term goals that are easy to keep track of. This is an ideal structure for a fast-paced project with limited time. Short meetings on working days (Mondays and Wednesdays) will keep us focused and organized, and weekly meetings (Saturdays) to discuss progress and set new goals will keep us from falling behind.
+
+
 
 3. Provide high level design / architecture of your solution that you are proposing? (6 points)
 

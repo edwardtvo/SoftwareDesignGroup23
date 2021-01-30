@@ -8,11 +8,11 @@ Assignment 1
 
 2. Discuss what development methodology you will use and why? (2 points)
 
-(Caitlin) We will use the SCRUM model to develop our application. Because it is an agile method, we will create short term goals that are easy to keep track of. This is an ideal structure for a fast-paced project with limited time. Short meetings on working days (Mondays and Wednesdays) will keep us focused and organized, and weekly meetings (Saturdays) to discuss progress and set new goals will keep us from falling behind.
 
+3. Provide a high level design / architecture of your solution that you are proposing? (6 points)
 
+(Henderson) The user will be introduced to a login screen in which they’ll be prompted for a username and password. If the user inputs valid information, they’ll be moved to either the Profile Management Screen or Fuel Quote Screen depending on their profile completion status. If the information is invalid, they’ll be given an option to register a username and password. Under the scenario that the user has not completed their profile, they’ll be asked to input their personal information before being brought to the Fuel Quote Screen. The screen will prompt the user to fill out a form that includes how much fuel they will need along with their delivery address. Once the form has been filled out, they’ll be brought to the Quote Result Screen in which they may either view their Quote History or request a new Fuel Quote. Every screen will have a navigation box that allows the user to immediately go to Profile Management or log out of their account.
 
-3. Provide high level design / architecture of your solution that you are proposing? (6 points)
 
 
 

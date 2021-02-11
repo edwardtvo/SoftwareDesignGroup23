@@ -94,7 +94,7 @@ const App = () => {
 
   return (
     <Router>
-      <div className="container">
+      <div className="container table">
         <Header onAdd={() => setShowAddTask(!showAddTask)} 
         showAdd={showAddTask}/>
         

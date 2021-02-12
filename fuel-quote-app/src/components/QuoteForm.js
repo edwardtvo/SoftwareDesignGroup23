@@ -13,7 +13,7 @@ const QuoteForm = () => {
     Cannot submit form without validation
     */
     const [validated, setValidated] = useState(false)
-    const [gallons, setGallons] = useState(0)
+    const [gallons, setGallons] = useState(1)
     const price_per_gal = useState(10.00)
     const [showCalc, setShowCalc] = useState(false)
 

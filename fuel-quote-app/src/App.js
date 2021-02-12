@@ -25,7 +25,7 @@ const App = () => {
             </Navbar>
             <Router>
                     <li>
-                        <Link to="/quoteform"></Link>
+                        <Link to="/quoteform"> </Link>
                     </li>
                 <Switch>
                     <Route path="/quoteform">

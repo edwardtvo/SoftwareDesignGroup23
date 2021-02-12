@@ -1,6 +1,7 @@
 import {Container, Button, Form, Row, Col} from 'react-bootstrap'
 import {useState} from 'react'
 import DatePicker from 'react-datepicker'
+import QuoteCalcResult from './QuoteCalcResult'
 
 require('react-datepicker/dist/react-datepicker.css')
 
@@ -12,15 +13,20 @@ const QuoteForm = () => {
     Cannot submit form without validation
     */
     const [validated, setValidated] = useState(false)
+    const [gallons, setGallons] = useState(0)
+    const price_per_gal = useState(10.00)
+    const [showCalc, setShowCalc] = useState(false)
 
-    const handleSubmit = (e) => {
+    const calcQuote = (e) => {
         const form = e.currentTarget
         if (form.checkValidity() === false) {
             e.preventDefault()
             e.stopPropagation()
         }
         setValidated(true)
+        setShowCalc(true)
     }
+
 
     /*
     Delivery Date validated using react-datepicker DatePicker
@@ -32,7 +38,7 @@ const QuoteForm = () => {
     return (
         <Container fluid className='px-5'>
             <h1>Get a Quote:</h1>
-            <Form noValidate validated={validated} onSubmit={handleSubmit}>
+            <Form noValidate validated={validated} onSubmit={calcQuote}>
                 {/*Gallon Request*/}
                 <Form.Group controlId='validationGallonReq'>
                     <Row>
@@ -40,7 +46,14 @@ const QuoteForm = () => {
                             <Form.Label>Gallons Requested:</Form.Label>
                         </Col>
                         <Col className='col-auto'>
-                            <Form.Control required type='number' placeholder='0' min='1' id='gallonReq'/>
+                            <Form.Control required
+                                          className='gallonReq'
+                                          type='number'
+                                          placeholder='0'
+                                          min='1'
+                                          value={gallons}
+                                          onChange={(e) => setGallons(e.target.value)}
+                            />
                             <Form.Control.Feedback type='invalid'>Please provide a valid number</Form.Control.Feedback>
                         </Col>
                     </Row>
@@ -50,7 +63,9 @@ const QuoteForm = () => {
                 <Form.Group controlId='validationAddress'>
                     <Row>
                         <Col className='col-auto'><p>[This will be the delivery address]</p></Col>
-                        <Col><Form.Check required type='checkbox' label='Delivery Address Verified'
+                        <Col><Form.Check required
+                                         type='checkbox'
+                                         label='Delivery Address Verified'
                                          feedback='Please verify address'/></Col>
                     </Row>
                 </Form.Group>
@@ -59,18 +74,18 @@ const QuoteForm = () => {
                 <Form.Group>
                     <Form.Label>Delivery Date: </Form.Label>
                     <DatePicker
+                        className='delivDatePicker'
                         selected={startDate}
                         onChange={date => setStartDate(date)}
                         minDate={new Date()}
                         showDisabledMonthNavigation
-                        id='delivDatePicker'
                     />
                 </Form.Group>
 
                 <Button variant='primary' type='submit'>Calculate</Button>
-
             </Form>
 
+            {showCalc && <QuoteCalcResult perGal={price_per_gal} total={gallons*price_per_gal} />}
 
         </Container>
     )

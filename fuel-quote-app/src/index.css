@@ -12,10 +12,10 @@ code {
     monospace;
 }
 
-#delivDatePicker {
+.delivDatePicker {
   width: 40%
 }
 
-#gallonReq {
+.gallonReq {
   width: 30%
 }

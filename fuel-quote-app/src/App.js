@@ -15,21 +15,18 @@ const App = () => {
                 <Navbar.Toggle aria-controls='basic-navbar-nav'/>
                 <Navbar.Collapse id='basic-navbar-nav'>
                     <Nav className='ml-auto'>
-                        <Nav.Link className='ml-auto' href='#home'>Home</Nav.Link>
-                        <Nav.Link className='ml-auto' href='#quoteform'>Get Quote</Nav.Link>
-                        <Nav.Link className='ml-auto' href='#home'>Quote History</Nav.Link>
-                        <Nav.Link className='ml-auto' href='#home'>Account Details</Nav.Link>
+                        <Nav.Link className='ml-auto' href='/home'>Home</Nav.Link>
+                        <Nav.Link className='ml-auto' href='/quoteform'>Get Quote</Nav.Link>
+                        <Nav.Link className='ml-auto' href='/home'>Quote History</Nav.Link>
+                        <Nav.Link className='ml-auto' href='/home'>Account Details</Nav.Link>
 
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
-            <h1>Testing Page</h1>
             <Router>
-                <ul>
                     <li>
-                        <Link to="/quoteform">Quote Form</Link>
+                        <Link to="/quoteform"></Link>
                     </li>
-                </ul>
                 <Switch>
                     <Route path="/quoteform">
                         <QuoteForm/>

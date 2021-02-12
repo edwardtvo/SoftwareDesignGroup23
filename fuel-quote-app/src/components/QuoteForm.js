@@ -1,5 +1,8 @@
-import {Button, Form, Row, Col} from 'react-bootstrap'
+import {Container, Button, Form, Row, Col} from 'react-bootstrap'
 import {useState} from 'react'
+import DatePicker from 'react-datepicker'
+require('react-datepicker/dist/react-datepicker.css')
+
 const QuoteForm = () => {
     /*
     Form Validation https://react-bootstrap.netlify.app/components/forms/#forms-validation-input-group
@@ -8,6 +11,7 @@ const QuoteForm = () => {
     Cannot submit form without validation
     */
     const [validated, setValidated] = useState(false)
+
     const handleSubmit = (e) => {
         const form = e.currentTarget
         if (form.checkValidity() === false) {
@@ -16,14 +20,22 @@ const QuoteForm = () => {
         }
         setValidated(true)
     }
+
+    /*
+    Delivery Date validated using react-datepicker DatePicker
+    https://reactdatepicker.com/
+    https://github.com/Hacker0x01/react-datepicker/issues/879
+    */
+    const [startDate, setStartDate] = useState(new Date())
+
     return (
-        <div>
+        <Container fluid className='px-5'>
             <h1>Get a Quote:</h1>
             <Form noValidate validated={validated} onSubmit={handleSubmit}>
                 {/*Gallon Request*/}
                 <Form.Group controlId='validationGallonReq'>
                     <Form.Label>Gallons Requested:</Form.Label>
-                    <Form.Control required type='number' placeholder='0' />
+                    <Form.Control required type='number' placeholder='0' min='1' />
                     <Form.Control.Feedback type='invalid'>Please provide a valid number</Form.Control.Feedback>
                 </Form.Group>
 
@@ -36,15 +48,19 @@ const QuoteForm = () => {
                 </Form.Group>
 
                 {/*Delivery Date*/}
-                <Form.Group controlId='validationDelivDate'>
+                <Form.Group>
                     <Form.Label>Delivery Date: </Form.Label>
-                    <Form.Control required type='date' />
-                    <Form.Control.Feedback type='invalid'>Please select a delivery date</Form.Control.Feedback>
+                    <DatePicker
+                        selected={startDate}
+                        onChange={date => setStartDate(date)}
+                        minDate={new Date()}
+                        showDisabledMonthNavigation
+                    />
                 </Form.Group>
 
                 <Button variant='primary' type='submit'>Calculate</Button>
             </Form>
-        </div>
+        </Container>
     )
 }
 

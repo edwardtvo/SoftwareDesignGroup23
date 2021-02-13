@@ -63,10 +63,13 @@ const QuoteForm = () => {
                 <Form.Group controlId='validationAddress'>
                     <Row>
                         <Col className='col-auto'><p>[This will be the delivery address]</p></Col>
-                        <Col><Form.Check required
+                        <Col>
+                            <Form.Check required
                                          type='checkbox'
                                          label='Delivery Address Verified'
-                                         feedback='Please verify address'/></Col>
+                                         feedback='Please verify address'
+                        />
+                        </Col>
                     </Row>
                 </Form.Group>
 

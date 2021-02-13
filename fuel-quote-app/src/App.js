@@ -1,4 +1,4 @@
-import {Nav, Navbar} from 'react-bootstrap'
+import {Nav, Navbar, Form} from 'react-bootstrap'
 import {
     BrowserRouter as Router,
     Switch,
@@ -6,8 +6,10 @@ import {
     Link
 } from 'react-router-dom'
 import QuoteForm from './components/QuoteForm'
+import ProfileManagement from './components/ProfileManagement'
 
 const App = () => {
+
     return (
         <div className="App">
             <Navbar bg='light' variant='light' sticky='top' expand='xl'>
@@ -15,6 +17,7 @@ const App = () => {
                 <Navbar.Toggle aria-controls='basic-navbar-nav'/>
                 <Navbar.Collapse id='basic-navbar-nav'>
                     <Nav className='ml-auto'>
+                        <Nav.Link className='ml-auto' href='/profilemanagement'>Profile Management</Nav.Link>
                         <Nav.Link className='ml-auto' href='/home'>Home</Nav.Link>
                         <Nav.Link className='ml-auto' href='/quoteform'>Get Quote</Nav.Link>
                         <Nav.Link className='ml-auto' href='/home'>Quote History</Nav.Link>
@@ -23,12 +26,21 @@ const App = () => {
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
-            <Router>
-                        <Link to="/quoteform"> </Link>
 
+
+    
+            <Router>
+                <Link to="/quoteform"> </Link>
                 <Switch>
                     <Route path="/quoteform">
                         <QuoteForm/>
+                    </Route>
+                </Switch>
+
+                <Link to="/profilemanagement"> </Link>
+                <Switch>
+                    <Route path="/profilemanagement">
+                        <ProfileManagement/>
                     </Route>
                 </Switch>
             </Router>

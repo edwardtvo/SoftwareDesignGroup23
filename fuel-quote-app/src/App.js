@@ -24,9 +24,8 @@ const App = () => {
                 </Navbar.Collapse>
             </Navbar>
             <Router>
-                    <li>
                         <Link to="/quoteform"> </Link>
-                    </li>
+
                 <Switch>
                     <Route path="/quoteform">
                         <QuoteForm/>

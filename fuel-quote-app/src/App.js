@@ -6,10 +6,11 @@ import {
     Link
 } from 'react-router-dom'
 import QuoteForm from './components/QuoteForm'
+import History from './components/History'
 
 const App = () => {
     return (
-        <div className="App">
+        <div className="App table">
             <Navbar bg='light' variant='light' sticky='top' expand='xl'>
                 <Navbar.Text className='pr-3 ml-auto'>USERNAME</Navbar.Text>
                 <Navbar.Toggle aria-controls='basic-navbar-nav'/>
@@ -17,19 +18,23 @@ const App = () => {
                     <Nav className='ml-auto'>
                         <Nav.Link className='ml-auto' href='/home'>Home</Nav.Link>
                         <Nav.Link className='ml-auto' href='/quoteform'>Get Quote</Nav.Link>
-                        <Nav.Link className='ml-auto' href='/home'>Quote History</Nav.Link>
+                        <Nav.Link className='ml-auto' href='/history'>Quote History</Nav.Link>
                         <Nav.Link className='ml-auto' href='/home'>Account Details</Nav.Link>
 
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
             <Router>
-                    <li>
                         <Link to="/quoteform"> </Link>
-                    </li>
                 <Switch>
                     <Route path="/quoteform">
                         <QuoteForm/>
+                    </Route>
+                </Switch>
+                        <Link to="/history"> </Link>
+                <Switch>
+                    <Route path="/history">
+                        <History/>
                     </Route>
                 </Switch>
             </Router>

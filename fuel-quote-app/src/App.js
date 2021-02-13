@@ -8,6 +8,10 @@ import {
 import QuoteForm from './components/QuoteForm'
 import History from './components/History'
 
+/*npm install react-bootstrap bootstrap*/
+/*npm install react-table*/
+/*npm start*/
+
 const App = () => {
     return (
         <div className="App table">

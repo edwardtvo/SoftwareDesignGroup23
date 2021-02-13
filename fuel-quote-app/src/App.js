@@ -1,25 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import {Nav, Navbar} from 'react-bootstrap'
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link
+} from 'react-router-dom'
+import QuoteForm from './components/QuoteForm'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const App = () => {
+    return (
+        <div className="App">
+            <Navbar bg='light' variant='light' sticky='top' expand='xl'>
+                <Navbar.Text className='pr-3 ml-auto'>USERNAME</Navbar.Text>
+                <Navbar.Toggle aria-controls='basic-navbar-nav'/>
+                <Navbar.Collapse id='basic-navbar-nav'>
+                    <Nav className='ml-auto'>
+                        <Nav.Link className='ml-auto' href='/home'>Home</Nav.Link>
+                        <Nav.Link className='ml-auto' href='/quoteform'>Get Quote</Nav.Link>
+                        <Nav.Link className='ml-auto' href='/home'>Quote History</Nav.Link>
+                        <Nav.Link className='ml-auto' href='/home'>Account Details</Nav.Link>
+
+                    </Nav>
+                </Navbar.Collapse>
+            </Navbar>
+            <Router>
+                    <li>
+                        <Link to="/quoteform"> </Link>
+                    </li>
+                <Switch>
+                    <Route path="/quoteform">
+                        <QuoteForm/>
+                    </Route>
+                </Switch>
+            </Router>
+        </div>
+    );
 }
 
 export default App;

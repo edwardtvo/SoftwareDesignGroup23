@@ -19,14 +19,11 @@ const App = () => {
                         <Nav.Link className='ml-auto' href='/quoteform'>Get Quote</Nav.Link>
                         <Nav.Link className='ml-auto' href='/home'>Quote History</Nav.Link>
                         <Nav.Link className='ml-auto' href='/home'>Account Details</Nav.Link>
-
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
             <Router>
-                    <li>
-                        <Link to="/quoteform"> </Link>
-                    </li>
+                <Link to="/quoteform"> </Link>
                 <Switch>
                     <Route path="/quoteform">
                         <QuoteForm/>

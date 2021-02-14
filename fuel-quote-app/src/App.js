@@ -8,6 +8,7 @@ import {
 import QuoteForm from './components/QuoteForm'
 import ProfileManagement from './components/ProfileManagement'
 import Login from './components/Login'
+import Registration from './components/Registration'
 
 const App = () => {
 
@@ -18,9 +19,10 @@ const App = () => {
                 <Navbar.Toggle aria-controls='basic-navbar-nav'/>
                 <Navbar.Collapse id='basic-navbar-nav'>
                     <Nav className='ml-auto'>
-                        <Nav.Link className='ml-auto' href='/Login'>Login</Nav.Link>
-                        <Nav.Link className='ml-auto' href='/profilemanagement'>Profile Management</Nav.Link>
                         <Nav.Link className='ml-auto' href='/home'>Home</Nav.Link>
+                        <Nav.Link className='ml-auto' href='/login'>Login</Nav.Link>
+                        <Nav.Link className='ml-auto' href='/registration'>Registration</Nav.Link>
+                        <Nav.Link className='ml-auto' href='/profilemanagement'>Profile Management</Nav.Link>
                         <Nav.Link className='ml-auto' href='/quoteform'>Get Quote</Nav.Link>
                         <Nav.Link className='ml-auto' href='/home'>Quote History</Nav.Link>
                         <Nav.Link className='ml-auto' href='/home'>Account Details</Nav.Link>
@@ -50,6 +52,13 @@ const App = () => {
                 <Switch>
                     <Route path="/login">
                         <Login/>
+                    </Route>
+                </Switch>
+
+                <Link to="/registration"> </Link>
+                <Switch>
+                    <Route path="/registration">
+                        <Registration/>
                     </Route>
                 </Switch>
             </Router>

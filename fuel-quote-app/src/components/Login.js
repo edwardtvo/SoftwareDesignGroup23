@@ -20,14 +20,14 @@ const Login = () => {
                 <Col md="4"></Col>
                 <Col md="4">
                     <Form.Label>Username</Form.Label>
-                    <Form.Control type="text"/>
+                    <Form.Control type="text" required/>
                 </Col>
             </Row>
             <Row>
                 <Col md="4"></Col>
                 <Col>
                     <Form.Label>Password</Form.Label>
-                    <Form.Control type="password"/>
+                    <Form.Control type="password" required/>
                 </Col>
                 <Col md="4"></Col>
             </Row>

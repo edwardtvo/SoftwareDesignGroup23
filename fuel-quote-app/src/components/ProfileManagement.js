@@ -16,18 +16,18 @@ function ProfileManagement() {
         <Row>
           <Col md="4">
             <Form.Label>Full Name: </Form.Label>
-            <Form.Control type="text" required/>
+            <Form.Control type="text"/>
           </Col>
         </Row>
  
         <Row>
           <Col md="7">
             <Form.Label>Address: </Form.Label>
-            <Form.Control type="text"required/>
+            <Form.Control type="text"/>
           </Col>
           <Col sm="3">
             <Form.Label> Address 2 (optional) : </Form.Label>
-            <Form.Control type="text" placeholder="Apt no., suite, etc."/>
+            <Form.Control type="text"/>
           </Col>
         </Row>
   
@@ -36,9 +36,12 @@ function ProfileManagement() {
         <Row>
           <Col md="3">
           <Form.Label>City: </Form.Label>
-          <Form.Control type="text" required/>
+          <Form.Control type="text"/>
           </Col>
-        
+          <Col md="2">
+          <Form.Label> Zip code: </Form.Label>
+          <Form.Control type="text"/>
+          </Col>
 
           <Col md="1">
           <Form.Label>State: </Form.Label>
@@ -61,12 +64,6 @@ function ProfileManagement() {
           <option>VA</option><option>WA</option><option>WV</option>
           <option>WI</option><option>WY</option>
           </Form.Control>
-          </Col>
-
-          
-          <Col md="2">
-          <Form.Label> Zip code: </Form.Label>
-          <Form.Control type="number" required/>
           </Col>
         </Row>
             

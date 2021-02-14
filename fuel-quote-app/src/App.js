@@ -7,7 +7,6 @@ import {
 } from 'react-router-dom'
 import QuoteForm from './components/QuoteForm'
 import ProfileManagement from './components/ProfileManagement'
-import Login from './components/Login'
 
 const App = () => {
 
@@ -18,7 +17,6 @@ const App = () => {
                 <Navbar.Toggle aria-controls='basic-navbar-nav'/>
                 <Navbar.Collapse id='basic-navbar-nav'>
                     <Nav className='ml-auto'>
-                        <Nav.Link className='ml-auto' href='/Login'>Login</Nav.Link>
                         <Nav.Link className='ml-auto' href='/profilemanagement'>Profile Management</Nav.Link>
                         <Nav.Link className='ml-auto' href='/home'>Home</Nav.Link>
                         <Nav.Link className='ml-auto' href='/quoteform'>Get Quote</Nav.Link>
@@ -43,13 +41,6 @@ const App = () => {
                 <Switch>
                     <Route path="/profilemanagement">
                         <ProfileManagement/>
-                    </Route>
-                </Switch>
-
-                <Link to="/login"> </Link>
-                <Switch>
-                    <Route path="/login">
-                        <Login/>
                     </Route>
                 </Switch>
             </Router>

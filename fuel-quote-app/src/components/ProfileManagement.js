@@ -92,7 +92,7 @@ function ProfileManagement() {
           
           <Col md="2">
           <Form.Label> Zip code: </Form.Label>
-          <Form.Control name="zip" type="text" required/>
+          <Form.Control name="zip" pattern="[0-9]{5,9}" type="text" required/>
           <Form.Control.Feedback type="invalid">Please enter a valid zip code</Form.Control.Feedback>
           </Col>
         </Row>
@@ -113,12 +113,5 @@ function ProfileManagement() {
     </Container>
   );
 }
-
-const styles = {
-  horizontalForm: {
-    paddingLeft: "2em",
-  }
-}
-
 
 export default ProfileManagement;

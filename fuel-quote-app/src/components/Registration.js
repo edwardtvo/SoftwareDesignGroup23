@@ -7,6 +7,7 @@ const Registration = () => {
         
         <Container fluid>
             
+            <Form>
             <Row>
                 <Col md="5"></Col>
                 <Col md="auto">
@@ -20,7 +21,7 @@ const Registration = () => {
                 <Col md="4"></Col>
                 <Col md="4">
                     <Form.Label>Username</Form.Label>
-                    <Form.Control type="text" required/>
+                    <Form.Control pattern="[\w\d]+" type="text" required/> 
                 </Col>
             </Row>
             <Row>
@@ -36,13 +37,13 @@ const Registration = () => {
         <Row>
             <Col md="7"></Col>
             <Col md="auto">    
-                <Button variant="primary">Sign up</Button>{' '}
+            <Button variant="primary" type="submit">Submit</Button>{' '}
             </Col>
             <Col></Col>
         </Row>
 
         
-
+        </Form>
         </Container>
     )
 }

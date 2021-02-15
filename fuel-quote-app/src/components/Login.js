@@ -34,9 +34,9 @@ const Login = () => {
             </Form>
         <br />
         <Row>
-            <Col md="6"></Col>
-            <Col md="1">    
-                <p></p><p>Sign up</p>
+            <Col md="5"></Col>
+            <Col md="auto">    
+                <Button variant="light" href="/Registration">Sign up</Button>{' '}
             </Col>
             <Col md="auto">    
                 <Button variant="primary">Login</Button>{' '}
@@ -47,6 +47,8 @@ const Login = () => {
         
 
         </Container>
+
+        
     )
 }
 

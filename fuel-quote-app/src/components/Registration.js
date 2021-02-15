@@ -35,9 +35,13 @@ const Registration = () => {
             </Form>
         <br />
         <Row>
-            <Col md="7"></Col>
+            <Col md="6"></Col>
             <Col md="auto">    
             <Button variant="primary" type="submit">Submit</Button>{' '}
+            </Col>
+            <Col md="auto">
+                {/* add boolean here to make sure registration is complete prior to profman */}
+            <Button variant="secondary" href="/profilemanagement">Go to Profile Management</Button>{' '}
             </Col>
             <Col></Col>
         </Row>

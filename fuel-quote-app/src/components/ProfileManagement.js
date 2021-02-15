@@ -1,11 +1,21 @@
 import {Container, Button, Form, Row, Col} from 'react-bootstrap'
+import { useState } from 'react'
 
 
 
 
 function ProfileManagement() {
 
+  const [validated, setValidated] = useState(false)
 
+  const handleSubmit = (event) => {
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    setValidated(true);
+  }
   
 
   return (
@@ -20,9 +30,11 @@ function ProfileManagement() {
         <Row>
           <Col md="4">
             <Form.Label>Full Name: </Form.Label>
-            <Form.Control type="text" required/>
-            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-            <Form.Control.Feedback type="invalid">Please enter your full name</Form.Control.Feedback>
+            <Form.Control name="fullname" 
+                          pattern="[A-Za-z0-9'\.\-\s]{0,100}$" 
+                          type="text"
+                          required/>
+            <Form.Control.Feedback type="invalid">Please enter a real full name</Form.Control.Feedback>
           </Col>
         </Row>
         
@@ -30,11 +42,14 @@ function ProfileManagement() {
         <Row>
           <Col md="7">
             <Form.Label>Address: </Form.Label>
-            <Form.Control type="text"required/>
+            <Form.Control name="address" type="text" pattern="^[A-Za-z0-9'\.\-\s\,#\:\/]{0,100}$" required/>
+            <Form.Control.Feedback type="invalid">Address is required</Form.Control.Feedback>
+
+            
           </Col>
           <Col sm="3">
             <Form.Label> Address 2 (optional) : </Form.Label>
-            <Form.Control type="text" placeholder="Apt no., suite, etc."/>
+            <Form.Control name="address" type="text" placeholder="Apt no., suite, etc."/>
           </Col>
         </Row>
   
@@ -43,14 +58,15 @@ function ProfileManagement() {
         <Row>
           <Col md="3">
           <Form.Label>City: </Form.Label>
-          <Form.Control type="text" required/>
+          <Form.Control name="city" type="text" patttern="[A-Za-z]{1,100}" required/>
+          <Form.Control.Feedback type="invalid">City is required</Form.Control.Feedback>
           </Col>
         
 
           <Col md="1">
           <Form.Label>State: </Form.Label>
-          <Form.Control as="select">
-          <option> </option>
+          <Form.Control name = "state" as="select">
+          <option value=''> </option>
           <option>AL</option><option>AK</option><option>AZ</option>
           <option>AR</option><option>CA</option><option>CO</option>
           <option>CT</option><option>DE</option><option>FL</option>
@@ -69,13 +85,15 @@ function ProfileManagement() {
           <option>VA</option><option>WA</option><option>WV</option>
           <option>WI</option><option>WY</option>
           </Form.Control>
+          <Form.Control.Feedback type="invalid">Please select a state</Form.Control.Feedback>
+
           </Col>
 
           
           <Col md="2">
           <Form.Label> Zip code: </Form.Label>
-          <Form.Control type="text" pattern="[0-9]{5,9}" required/>
-          <Form.Control.Feedback type="invalid">Wrong zip code fool</Form.Control.Feedback>
+          <Form.Control name="zip" type="text" required/>
+          <Form.Control.Feedback type="invalid">Please enter a valid zip code</Form.Control.Feedback>
           </Col>
         </Row>
             

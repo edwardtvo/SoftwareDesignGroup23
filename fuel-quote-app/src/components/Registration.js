@@ -1,8 +1,23 @@
-import React from 'react'
+import React, { useEffect, useState } from "react";
 import {Container, Button, Form, Row, Col} from 'react-bootstrap'
 
+function simulateNetworkRequest() {
+    return new Promise((resolve) => setTimeout(resolve, 100));
+  }
 
 const Registration = () => {
+    const [isLoading, setLoading] = useState(false);
+
+    useEffect(() => {
+        if (isLoading) {
+          simulateNetworkRequest().then(() => {
+            setLoading(false);
+          });
+        }
+      }, [isLoading]);
+
+      const handleClick = () => setLoading(true);
+
     return (
         
         <Container fluid>
@@ -41,7 +56,11 @@ const Registration = () => {
             </Col>
             <Col md="auto">
                 {/* add boolean here to make sure registration is complete prior to profman */}
-            <Button variant="secondary" href="/profilemanagement">Go to Profile Management</Button>{' '}
+                <Button variant="secondary" 
+                disabled={isLoading}
+                onClick={!isLoading ? handleClick : null}
+                href="/profilemanagement">
+                {isLoading ? 'Confirming...' : 'Go to Profile Management'}</Button>{' '}
             </Col>
             <Col></Col>
         </Row>

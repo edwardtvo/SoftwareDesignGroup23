@@ -14,7 +14,7 @@ const QuoteForm = () => {
     */
     const [validated, setValidated] = useState(false)
     const [gallons, setGallons] = useState(1)
-    const price_per_gal = useState(10.00)
+    const price_per_gal = useState(10.50)
     const [showCalc, setShowCalc] = useState(false)
 
     const calcQuote = (e) => {
@@ -88,7 +88,7 @@ const QuoteForm = () => {
                 <Button variant='primary' type='submit'>Calculate</Button>
             </Form>
 
-            {showCalc && <QuoteCalcResult perGal={parseFloat(price_per_gal.toString())} total={gallons*parseFloat(price_per_gal.toString())} />}
+            {showCalc && <QuoteCalcResult perGal={parseFloat(price_per_gal.toString()).toFixed(2)} total={(gallons*parseFloat(price_per_gal.toString())).toFixed(2)} />}
 
         </Container>
     )

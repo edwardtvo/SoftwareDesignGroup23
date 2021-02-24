@@ -12,6 +12,7 @@ import Login from './components/Login'
 import Registration from './components/Registration'
 
 import History from './components/History'
+import AccountDetails from './components/AccountDetails'
 
 /*npm install react-bootstrap bootstrap*/
 /*npm install react-table*/
@@ -52,7 +53,6 @@ const App = () => {
                         <QuoteForm/>
                     </Route>
                 </Switch>
-
                 <Link to="/profilemanagement"> </Link>
                 <Switch>
                     <Route path="/profilemanagement">
@@ -73,7 +73,6 @@ const App = () => {
                         <Registration/>
                     </Route>
                 </Switch>
-
                 <Link to="/history"> </Link>
                 <Switch>
                     <Route path="/history">
@@ -81,6 +80,12 @@ const App = () => {
                     </Route>
                 </Switch>
 
+                <Link to="/accountdetails"> </Link>
+                <Switch>
+                    <Route path="/accountdetails">
+                        <AccountDetails/>
+                    </Route>
+                </Switch>
             </Router>
         </div>
     );

@@ -8,12 +8,13 @@ const QuoteForm = () => {
     /*
     Form Validation https://react-bootstrap.netlify.app/components/forms/#forms-validation-input-group
     handleSubmit function checks that al required fields contain valid input
-    Form.Control>Feedback prompts user to correct info if necessary
+    Form.Control.Feedback prompts user to correct info if necessary
     Cannot submit form without validation
+    To fix immediate refresh on click/submit https://github.com/react-bootstrap/react-bootstrap/issues/1510
     */
     const [validated, setValidated] = useState(false)
-    const [gallons, setGallons] = useState(1)
-    const price_per_gal = useState(10.50)
+    const [gallons, setGallons] = useState(0)
+    const price_per_gal = useState(1.50)
     const [show, setShow] = useState(false)
 
     const calcQuote = (e) => {
@@ -24,6 +25,8 @@ const QuoteForm = () => {
         }
         setValidated(true)
         setShow(true)
+
+        return false
     }
 
     const handleClose = () => {
@@ -88,7 +91,7 @@ const QuoteForm = () => {
                     />
                 </Form.Group>
 
-                <Button variant='primary' type='submit'>Calculate</Button>
+                <Button variant='primary' onClick={calcQuote}>Calculate</Button>
             </Form>
 
             <Modal
@@ -105,10 +108,9 @@ const QuoteForm = () => {
                     <p>Total cost: $ {(gallons*parseFloat(price_per_gal.toString())).toFixed(2)}</p>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant='primary' onClick={handleClose}>Get Another Quote</Button>
+                    <Button variant='primary' type='submit'>Get Another Quote</Button>
                 </Modal.Footer>
             </Modal>
-
 
         </Container>
     )

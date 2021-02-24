@@ -88,7 +88,7 @@ const QuoteForm = () => {
                 <Button variant='primary' type='submit'>Calculate</Button>
             </Form>
 
-            {showCalc && <QuoteCalcResult perGal={price_per_gal} total={gallons*price_per_gal} />}
+            {showCalc && <QuoteCalcResult perGal={parseFloat(price_per_gal.toString())} total={gallons*parseFloat(price_per_gal.toString())} />}
 
         </Container>
     )

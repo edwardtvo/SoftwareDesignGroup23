@@ -6,14 +6,22 @@ import {
     Link
 } from 'react-router-dom'
 import QuoteForm from './components/QuoteForm'
+
 import ProfileManagement from './components/ProfileManagement'
 import Login from './components/Login'
 import Registration from './components/Registration'
 
+import History from './components/History'
+
+/*npm install react-bootstrap bootstrap*/
+/*npm install react-table*/
+/*npm start*/
+
+
 const App = () => {
 
     return (
-        <div className="App">
+        <div className="App table">
             <Navbar bg='light' variant='light' sticky='top' expand='xl'>
                 <Navbar.Text className='pr-3 ml-auto'>COUGARGAS INC.</Navbar.Text>
                 <Navbar.Toggle aria-controls='basic-navbar-nav'/>
@@ -24,7 +32,7 @@ const App = () => {
                         <Nav.Link className='ml-auto' href='/registration'>Registration</Nav.Link>
                         <Nav.Link className='ml-auto' href='/profilemanagement'>Profile Management</Nav.Link>
                         <Nav.Link className='ml-auto' href='/quoteform'>Get Quote</Nav.Link>
-                        <Nav.Link className='ml-auto' href='/home'>Quote History</Nav.Link>
+                        <Nav.Link className='ml-auto' href='/history'>Quote History</Nav.Link>
                         <Nav.Link className='ml-auto' href='/home'>Account Details</Nav.Link>
 
                     </Nav>
@@ -34,12 +42,16 @@ const App = () => {
             {/*<img src="/images/gas-30170_640.png" responsive / > */}
     
             <Router>
+
                 <Link to="/quoteform"> </Link>
+
+                
+
                 <Switch>
                     <Route path="/quoteform">
                         <QuoteForm/>
                     </Route>
-                </Switch>
+
 
                 <Link to="/profilemanagement"> </Link>
                 <Switch>
@@ -59,6 +71,12 @@ const App = () => {
                 <Switch>
                     <Route path="/registration">
                         <Registration/>
+
+                        <Link to="/history"> </Link>
+                <Switch>
+                    <Route path="/history">
+                        <History/>
+
                     </Route>
                 </Switch>
             </Router>

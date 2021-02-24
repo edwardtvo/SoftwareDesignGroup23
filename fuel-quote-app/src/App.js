@@ -44,15 +44,11 @@ const App = () => {
             <Router>
 
                 <Link to="/quoteform"> </Link>
-
-                
-
                 <Switch>
                     <Route path="/quoteform">
                         <QuoteForm/>
                     </Route>
-
-
+                </Switch>
                 <Link to="/profilemanagement"> </Link>
                 <Switch>
                     <Route path="/profilemanagement">
@@ -71,8 +67,9 @@ const App = () => {
                 <Switch>
                     <Route path="/registration">
                         <Registration/>
-
-                        <Link to="/history"> </Link>
+                    </Route>
+                </Switch>
+                <Link to="/history"> </Link>
                 <Switch>
                     <Route path="/history">
                         <History/>

@@ -12,6 +12,7 @@ import Login from './components/Login'
 import Registration from './components/Registration'
 
 import History from './components/History'
+import AccountDetails from './components/AccountDetails'
 
 /*npm install react-bootstrap bootstrap*/
 /*npm install react-table*/
@@ -33,7 +34,7 @@ const App = () => {
                         <Nav.Link className='ml-auto' href='/profilemanagement'>Profile Management</Nav.Link>
                         <Nav.Link className='ml-auto' href='/quoteform'>Get Quote</Nav.Link>
                         <Nav.Link className='ml-auto' href='/history'>Quote History</Nav.Link>
-                        <Nav.Link className='ml-auto' href='/home'>Account Details</Nav.Link>
+                        <Nav.Link className='ml-auto' href='/accountdetails'>Account Details</Nav.Link>
 
                     </Nav>
                 </Navbar.Collapse>
@@ -74,6 +75,13 @@ const App = () => {
                     <Route path="/history">
                         <History/>
 
+                    </Route>
+                </Switch>
+
+                <Link to="/accountdetails"> </Link>
+                <Switch>
+                    <Route path="/accountdetails">
+                        <AccountDetails/>
                     </Route>
                 </Switch>
             </Router>

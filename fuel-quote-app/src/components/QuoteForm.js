@@ -1,7 +1,6 @@
-import {Container, Button, Form, Row, Col} from 'react-bootstrap'
+import {Container, Button, Form, Row, Col, Modal} from 'react-bootstrap'
 import {useState} from 'react'
 import DatePicker from 'react-datepicker'
-import QuoteCalcResult from './QuoteCalcResult'
 
 require('react-datepicker/dist/react-datepicker.css')
 
@@ -15,7 +14,7 @@ const QuoteForm = () => {
     const [validated, setValidated] = useState(false)
     const [gallons, setGallons] = useState(1)
     const price_per_gal = useState(10.50)
-    const [showCalc, setShowCalc] = useState(false)
+    const [show, setShow] = useState(false)
 
     const calcQuote = (e) => {
         const form = e.currentTarget
@@ -24,9 +23,13 @@ const QuoteForm = () => {
             e.stopPropagation()
         }
         setValidated(true)
-        setShowCalc(true)
+        setShow(true)
     }
 
+    const handleClose = () => {
+        setShow(false)
+        setValidated(false)
+    }
 
     /*
     Delivery Date validated using react-datepicker DatePicker
@@ -88,7 +91,24 @@ const QuoteForm = () => {
                 <Button variant='primary' type='submit'>Calculate</Button>
             </Form>
 
-            {showCalc && <QuoteCalcResult perGal={parseFloat(price_per_gal.toString()).toFixed(2)} total={(gallons*parseFloat(price_per_gal.toString())).toFixed(2)} />}
+            <Modal
+                show={show}
+                onHide={handleClose}
+                backdrop='static'
+                keyboard={false}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Calculated Cost</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>Price per gallon: $ {parseFloat(price_per_gal.toString()).toFixed(2)}</p>
+                    <p>Total cost: $ {(gallons*parseFloat(price_per_gal.toString())).toFixed(2)}</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant='primary' onClick={handleClose}>Get Another Quote</Button>
+                </Modal.Footer>
+            </Modal>
+
 
         </Container>
     )

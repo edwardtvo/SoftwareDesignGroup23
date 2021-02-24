@@ -14,7 +14,7 @@ const App = () => {
 
     return (
         <div className="App">
-            <Navbar bg='light' variant='light' sticky='top' expand='xl'>
+            <Navbar bg='314e52' variant='light' sticky='top' expand='xl'>
                 <Navbar.Text className='pr-3 ml-auto'>COUGARGAS INC.</Navbar.Text>
                 <Navbar.Toggle aria-controls='basic-navbar-nav'/>
                 <Navbar.Collapse id='basic-navbar-nav'>

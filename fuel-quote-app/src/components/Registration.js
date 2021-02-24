@@ -52,15 +52,16 @@ const Registration = () => {
         <Row>
             <Col md="6"></Col>
             <Col md="auto">    
-            <Button variant="primary" type="submit">Submit</Button>{' '}
+            <Button variant="primary" 
+                    type="submit"
+                    disabled={isLoading}
+                    onClick={!isLoading ? handleClick : null}
+                    href="/profilemanagement">
+                    {isLoading ? 'Confirming...' : 'Submit'}</Button>{' '}
             </Col>
             <Col md="auto">
                 {/* add boolean here to make sure registration is complete prior to profman */}
-                <Button variant="secondary" 
-                disabled={isLoading}
-                onClick={!isLoading ? handleClick : null}
-                href="/profilemanagement">
-                {isLoading ? 'Confirming...' : 'Go to Profile Management'}</Button>{' '}
+                
             </Col>
             <Col></Col>
         </Row>

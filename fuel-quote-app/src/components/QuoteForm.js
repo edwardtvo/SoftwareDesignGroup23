@@ -56,7 +56,7 @@ const QuoteForm = () => {
                                           placeholder='0'
                                           min='1'
                                           value={gallons}
-                                          onChange={(e) => {setGallons(e.target.value)}}
+                                          onChange={(e) => {setGallons(parseInt(e.target.value))}}
                             />
                             <Form.Control.Feedback type='invalid'>Please provide a valid number</Form.Control.Feedback>
                         </Col>

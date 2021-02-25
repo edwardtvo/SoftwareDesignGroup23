@@ -54,3 +54,39 @@ img {
   color: white;
 
 }
+
+.navbar,
+.navbar-color {
+  background-color: #df4040 !important;
+  color: #f7f6e7 !important;
+}
+
+.nav-link {
+  color: #ffe9e9 !important;
+  font-family: 'Noto Sans SC Medium';
+}
+
+.cougar-gas {
+  font-family: 'Noto Sans SC Bold';
+  color: #ffe9e9 !important;
+}
+
+.page-title {
+  font-family: 'Noto Sans SC Bold';
+  color: #df4040 !important;
+}
+
+.button-color {
+  background-color: #df4040 !important;
+}
+
+@font-face {
+  font-family: 'Noto Sans SC Medium';
+  src: local('NotoSansSC'), url('./fonts/NotoSansSC-Medium.otf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Noto Sans SC Bold';
+  src: local('NotoSansSC'), url('./fonts/NotoSansSC-Bold.otf') format('truetype');
+}
+

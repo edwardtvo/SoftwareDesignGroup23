@@ -1,10 +1,25 @@
 import {Container, Button, Form, Row, Col} from 'react-bootstrap'
-import { useState } from 'react'
+import React, { useEffect, useState } from "react";
 
 
+function simulateNetworkRequest() {
+  return new Promise((resolve) => setTimeout(resolve, 100));
+}
 
 
 function ProfileManagement() {
+
+  const [isLoading, setLoading] = useState(false);
+
+    useEffect(() => {
+        if (isLoading) {
+          simulateNetworkRequest().then(() => {
+            setLoading(false);
+          });
+        }
+      }, [isLoading]);
+
+  const handleClick = () => setLoading(true);
 
   const [validated, setValidated] = useState(false)
 
@@ -100,7 +115,13 @@ function ProfileManagement() {
 
 
         <br />
-      <Button variant="primary" type="submit">Submit</Button>{' '}
+
+        {/* figure out validation before submitting */}
+      <Button variant="danger" type="submit"
+              disabled={isLoading} 
+              onClick={!isLoading ? handleClick : null}
+              href="/quoteform">
+                {isLoading ? 'Submitting..' : 'Submit'}</Button>{' '}
         
 
         

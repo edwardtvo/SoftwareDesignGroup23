@@ -52,7 +52,7 @@ const Registration = () => {
         <Row>
             <Col md="6"></Col>
             <Col md="auto">    
-            <Button variant="primary" 
+            <Button variant="danger" 
                     type="submit"
                     disabled={isLoading}
                     onClick={!isLoading ? handleClick : null}

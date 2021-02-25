@@ -10,7 +10,7 @@ const Login = () => {
             <Row>
                 <Col md="5"></Col>
                 <Col md="auto">
-                    <h1>Welcome!</h1>
+                    <h1 className="page-title">Welcome!</h1>
                 </Col>
                 <Col md="5"></Col>
             </Row>
@@ -39,7 +39,7 @@ const Login = () => {
                 <Button variant="light" href="/Registration">Sign up</Button>{' '}
             </Col>
             <Col md="auto">    
-                <Button variant="primary">Login</Button>{' '}
+                <Button variant="danger">Login</Button>{' '}
             </Col>
             <Col></Col>
         </Row>

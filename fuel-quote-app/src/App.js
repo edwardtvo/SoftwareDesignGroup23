@@ -23,15 +23,17 @@ const App = () => {
 
     return (
 
+        
+
 
         <div className="App table">
-            <Navbar bg='light' variant='light' sticky='top' expand='xl'>
+            <Navbar bg='navbar-color' variant='dark' sticky='top' expand='xl'>
 
-                <Navbar.Text className='pr-3 ml-auto'>COUGARGAS INC.</Navbar.Text>
+                <Navbar.Brand href='/home' className='cougar-gas'>COUGAR GAS INC.</Navbar.Brand>
                 <Navbar.Toggle aria-controls='basic-navbar-nav'/>
                 <Navbar.Collapse id='basic-navbar-nav'>
                     <Nav className='ml-auto'>
-                        <Nav.Link className='ml-auto' href='/home'>Home</Nav.Link>
+                        <Nav.Link className='nav-link' href='/home'>Home</Nav.Link>
                         <Nav.Link className='ml-auto' href='/login'>Login</Nav.Link>
                         <Nav.Link className='ml-auto' href='/registration'>Registration</Nav.Link>
                         <Nav.Link className='ml-auto' href='/profilemanagement'>Profile Management</Nav.Link>
@@ -90,5 +92,7 @@ const App = () => {
         </div>
     );
 }
+
+
 
 export default App;

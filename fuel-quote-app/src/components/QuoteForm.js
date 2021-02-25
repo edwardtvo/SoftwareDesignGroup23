@@ -11,34 +11,32 @@ const QuoteForm = () => {
     Form.Control.Feedback prompts user to correct info if necessary
     Cannot submit form without validation
     To fix immediate refresh on click/submit https://github.com/react-bootstrap/react-bootstrap/issues/1510
+    Stop modal from appearing if validation check fails https://stackoverflow.com/questions/58753515/bootstrap-4-validation-disable-submit-button-until-form-validated
     */
     const [validated, setValidated] = useState(false)
     const [gallons, setGallons] = useState(0)
+    const [checked, setChecked] = useState(false)
     const price_per_gal = useState(1.50)
     const [show, setShow] = useState(false)
 
+
     const calcQuote = (e) => {
+        e.preventDefault()
         const form = e.currentTarget
         if (form.checkValidity() === false) {
-            e.preventDefault()
             e.stopPropagation()
         }
-        setValidated(true)
-        setShow(true)
-
-        return false
+        else if (gallons > 0 && checked) {
+            setValidated(true)
+            setShow(true)
+        }
     }
 
     const handleClose = () => {
-        setShow(false)
         setValidated(false)
+        setShow(false)
     }
 
-    /*
-    Delivery Date validated using react-datepicker DatePicker
-    https://reactdatepicker.com/
-    https://github.com/Hacker0x01/react-datepicker/issues/879
-    */
     const [startDate, setStartDate] = useState(new Date())
 
     return (
@@ -58,7 +56,7 @@ const QuoteForm = () => {
                                           placeholder='0'
                                           min='1'
                                           value={gallons}
-                                          onChange={(e) => setGallons(e.target.value)}
+                                          onChange={(e) => {setGallons(e.target.value)}}
                             />
                             <Form.Control.Feedback type='invalid'>Please provide a valid number</Form.Control.Feedback>
                         </Col>
@@ -74,18 +72,27 @@ const QuoteForm = () => {
                                          type='checkbox'
                                          label='Delivery Address Verified'
                                          feedback='Please verify address'
+                                        onChange = {() => {setChecked(!checked)}}
                         />
                         </Col>
                     </Row>
                 </Form.Group>
 
                 {/*Delivery Date*/}
+                {/* Delivery Date validated using react-datepicker DatePicker
+                https://reactdatepicker.com/
+                https://github.com/Hacker0x01/react-datepicker/issues/879
+
+                possible alt date picker https://getdatepicker.com/4/
+                */}
                 <Form.Group>
                     <Form.Label>Delivery Date: </Form.Label>
                     <DatePicker
                         className='delivDatePicker'
                         selected={startDate}
-                        onChange={date => setStartDate(date)}
+                        onChange={date => {
+                            setStartDate(date)
+                        }}
                         minDate={new Date()}
                         showDisabledMonthNavigation
                     />
@@ -108,7 +115,7 @@ const QuoteForm = () => {
                     <p>Total cost: $ {(gallons*parseFloat(price_per_gal.toString())).toFixed(2)}</p>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant='primary' type='submit'>Get Another Quote</Button>
+                    <Button variant='primary' onClick={handleClose}>Get Another Quote</Button>
                 </Modal.Footer>
             </Modal>
 

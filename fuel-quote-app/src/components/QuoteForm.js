@@ -98,7 +98,7 @@ const QuoteForm = () => {
                     />
                 </Form.Group>
 
-                <Button variant='primary' onClick={calcQuote}>Calculate</Button>
+                <Button variant='danger' onClick={calcQuote}>Calculate</Button>
             </Form>
 
             <Modal

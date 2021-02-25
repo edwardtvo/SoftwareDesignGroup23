@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import './fonts/NotoSansSC-Medium.otf'
 
 ReactDOM.render(
   <React.StrictMode>

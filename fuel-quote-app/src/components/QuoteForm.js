@@ -27,9 +27,10 @@ const QuoteForm = () => {
             e.stopPropagation()
         }
         else if (gallons > 0 && checked) {
-            setValidated(true)
             setShow(true)
+            setValidated(true)
         }
+
     }
 
     const handleClose = () => {
@@ -73,7 +74,7 @@ const QuoteForm = () => {
                                          label='Delivery Address Verified'
                                          feedback='Please verify address'
                                         onChange = {() => {setChecked(!checked)}}
-                        />
+                            />
                         </Col>
                     </Row>
                 </Form.Group>
@@ -98,7 +99,7 @@ const QuoteForm = () => {
                     />
                 </Form.Group>
 
-                <Button variant='danger' onClick={calcQuote}>Calculate</Button>
+                <Button variant='danger' type='submit'>Calculate</Button>
             </Form>
 
             <Modal

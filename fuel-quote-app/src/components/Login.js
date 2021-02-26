@@ -20,8 +20,6 @@ const Login = () => {
 
   const handleClick = () => setLoading(true);
 
-
-
   const [validated, setValidated] = useState(false)
 
   const handleSubmit = (event) => {
@@ -35,12 +33,12 @@ const Login = () => {
   
     return (
         
-        <Container fluid>
+        <Container fluid className="title-padding">
             
             <Row>
                 <Col md="5"></Col>
                 <Col md="auto">
-                    <h1 className="page-title">Welcome!</h1>
+                    <h1 className="title-page">Welcome!</h1>
                 </Col>
                 <Col md="5"></Col>
             </Row>

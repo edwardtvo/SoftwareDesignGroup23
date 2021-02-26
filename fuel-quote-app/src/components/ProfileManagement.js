@@ -37,11 +37,11 @@ function ProfileManagement() {
 
   return (
     
-    <Container fluid className='px-5'>
+    <Container fluid className='profman-padding'>
 
     
 
-    <h1>Profile Management</h1>
+    <h1 className="title-page">Profile Management</h1>
 
         <Form noValidate validated={validated} onSubmit={handleSubmit}>
         <Row>

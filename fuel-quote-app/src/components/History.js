@@ -24,7 +24,7 @@ const History = () => {
 
     return (
         <div>
-            <NavBar/>
+        <NavBar loggedIn={true}/>
         <table {...getTableProps()}>
             <thead>
                 {

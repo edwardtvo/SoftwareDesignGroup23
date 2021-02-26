@@ -3,6 +3,7 @@ import { useTable } from 'react-table'
 import AccDetails from './AccDetails.json'
 import { ACCCOLUMNS } from './AccColumns'
 import { Link } from 'react-router-dom'
+import NavBar from './NavBar'
 
 const AccountDetails = () => {
 
@@ -21,6 +22,9 @@ const AccountDetails = () => {
             prepareRow } = tableInstance 
 
     return (
+        <>
+                <NavBar loggedIn={true}/>
+
         <table {...getTableProps()}>
             <thead>
                 {
@@ -55,7 +59,7 @@ const AccountDetails = () => {
             <Link to='/'>Go Back</Link>
             
         </table>
-        
+        </>
     )
 }
 

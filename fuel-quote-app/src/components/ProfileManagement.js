@@ -1,5 +1,6 @@
 import {Container, Button, Form, Row, Col} from 'react-bootstrap'
 import React, { useEffect, useState } from "react";
+import NavBar from "./NavBar";
 
 
 function simulateNetworkRequest() {
@@ -36,8 +37,11 @@ function ProfileManagement() {
   
 
   return (
-    
+    <>
+        <NavBar loggedIn={true}/>
+
     <Container fluid className='profman-padding'>
+      
 
     
 
@@ -135,6 +139,7 @@ function ProfileManagement() {
       
 
     </Container>
+    </>
   );
 }
 

@@ -41,7 +41,7 @@ const QuoteForm = () => {
 
     return (
         <>
-            <NavBar/>
+        <NavBar loggedIn={true}/>
             <Container fluid className='profman-padding'>
                 <h1 className="title-page">Get a Quote:</h1>
                 <Form noValidate validated={validated} onSubmit={calcQuote}>

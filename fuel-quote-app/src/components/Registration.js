@@ -1,5 +1,7 @@
 import {Container, Button, Form, Row, Col} from 'react-bootstrap'
 import React, { useEffect, useState } from "react";
+import NavBar from './NavBar'
+
 
 function simulateNetworkRequest() {
     return new Promise((resolve) => setTimeout(resolve, 100));
@@ -32,6 +34,9 @@ const Registration = () => {
   }
   
     return (
+        <>
+
+        <NavBar loggedIn={false}/>
         
         <Container fluid className="title-padding">
             
@@ -64,7 +69,8 @@ const Registration = () => {
         <br />
         <Row>
             <Col md="6"></Col>
-            <Col md="auto">    
+            <Col md="auto">    {/* TODO: redirect AND validate at the same time */}
+                                {/* can't redirect at the moment */}
                 <Button variant="danger" type="submit">Sign up</Button>{' '}
             </Col>
             <Col></Col>
@@ -75,7 +81,7 @@ const Registration = () => {
         
 
         </Container>
-
+        </>
         
     )
 }

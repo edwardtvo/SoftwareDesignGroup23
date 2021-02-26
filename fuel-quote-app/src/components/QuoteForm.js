@@ -122,7 +122,6 @@ const QuoteForm = () => {
                 </Modal.Footer>
             </Modal>
         </Container>
-        </>
     )
 }
 

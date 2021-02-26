@@ -1,4 +1,3 @@
-import {Nav, Navbar, Form} from 'react-bootstrap'
 import {
     BrowserRouter as Router,
     Switch,
@@ -17,38 +16,14 @@ import AccountDetails from './components/AccountDetails'
 /*npm install react-bootstrap bootstrap*/
 /*npm install react-table*/
 /*npm start*/
-
+import {useState} from "react"
 
 const App = () => {
+    const [loggedIn, setLoggedIn] = useState(false)
 
     return (
-
-        
-
-
         <div className="App table">
-            <Navbar bg='navbar-color' variant='dark' sticky='top' expand='xl'>
-
-                <Navbar.Brand href='/home' className='cougar-gas'>COUGAR GAS INC.</Navbar.Brand>
-                <Navbar.Toggle aria-controls='basic-navbar-nav'/>
-                <Navbar.Collapse id='basic-navbar-nav'>
-                    <Nav className='ml-auto'>
-                        <Nav.Link className='nav-link' href='/home'>Home</Nav.Link>
-                        <Nav.Link className='ml-auto' href='/login'>Login</Nav.Link>
-                        <Nav.Link className='ml-auto' href='/registration'>Registration</Nav.Link>
-                        <Nav.Link className='ml-auto' href='/profilemanagement'>Profile Management</Nav.Link>
-                        <Nav.Link className='ml-auto' href='/quoteform'>Get Quote</Nav.Link>
-                        <Nav.Link className='ml-auto' href='/history'>Quote History</Nav.Link>
-                        <Nav.Link className='ml-auto' href='/accountdetails'>Account Details</Nav.Link>
-
-                    </Nav>
-                </Navbar.Collapse>
-            </Navbar>
-
-            {/*<img src="/images/gas-30170_640.png" responsive / > */}
-    
             <Router>
-
                 <Link to="/quoteform"> </Link>
                 <Switch>
                     <Route path="/quoteform">

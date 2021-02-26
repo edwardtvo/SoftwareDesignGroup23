@@ -12,6 +12,7 @@ code {
     monospace;
 }
 
+
 .delivDatePicker {
   width: 50%
 }
@@ -28,7 +29,6 @@ img {
   height: 200px;
   vertical-align: middle;
 }
-  
 
 .table {
   font-family: Arial, Helvetica, sans-serif;

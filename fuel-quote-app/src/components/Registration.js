@@ -18,11 +18,23 @@ const Registration = () => {
 
       const handleClick = () => setLoading(true);
 
+
+  const [validated, setValidated] = useState(false)
+
+  const handleSubmit = (event) => {
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    setValidated(true);
+  }
+
     return (
         
         <Container fluid>
             
-            <Form>
+            <Form noValidate validated={validated} onSubmit={handleSubmit}>
             <Row>
                 <Col md="5"></Col>
                 <Col md="auto">
@@ -37,6 +49,7 @@ const Registration = () => {
                 <Col md="4">
                     <Form.Label>Username</Form.Label>
                     <Form.Control pattern="[\w\d]+" type="text" required/> 
+                    <Form.Control.Feedback type="invalid">Please follow the username rules below</Form.Control.Feedback>
                 </Col>
             </Row>
             <Row>
@@ -44,6 +57,8 @@ const Registration = () => {
                 <Col>
                     <Form.Label>Password</Form.Label>
                     <Form.Control type="password" required/>
+                    <Form.Control.Feedback type="invalid">Please follow the password rules below</Form.Control.Feedback>
+
                 </Col>
                 <Col md="4"></Col>
             </Row>
@@ -53,11 +68,11 @@ const Registration = () => {
             <Col md="6"></Col>
             <Col md="auto">    
             <Button variant="danger" 
-                    type="submit"
-                    disabled={isLoading}
+                    type="submit">Submit</Button>{' '}
+                    {/*disabled={isLoading}
                     onClick={!isLoading ? handleClick : null}
-                    href="/profilemanagement">
-                    {isLoading ? 'Confirming...' : 'Submit'}</Button>{' '}
+                    href="/profilemanagement"
+                    {isLoading ? 'Confirming...' : 'Submit'}*/}
             </Col>
             <Col md="auto">
                 {/* add boolean here to make sure registration is complete prior to profman */}

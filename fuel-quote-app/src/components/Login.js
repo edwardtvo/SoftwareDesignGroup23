@@ -1,8 +1,38 @@
-import React from 'react'
 import {Container, Button, Form, Row, Col} from 'react-bootstrap'
+import React, { useEffect, useState } from "react";
 
+function simulateNetworkRequest() {
+    return new Promise((resolve) => setTimeout(resolve, 100));
+  }
+  
 
 const Login = () => {
+
+    const [isLoading, setLoading] = useState(false);
+
+    useEffect(() => {
+        if (isLoading) {
+          simulateNetworkRequest().then(() => {
+            setLoading(false);
+          });
+        }
+      }, [isLoading]);
+
+  const handleClick = () => setLoading(true);
+
+
+
+  const [validated, setValidated] = useState(false)
+
+  const handleSubmit = (event) => {
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    setValidated(true);
+  }
+  
     return (
         
         <Container fluid>
@@ -15,12 +45,13 @@ const Login = () => {
                 <Col md="5"></Col>
             </Row>
 
-            <Form>
+            <Form noValidate validated={validated} onSubmit={handleSubmit}>
             <Row>
                 <Col md="4"></Col>
                 <Col md="4">
                     <Form.Label>Username</Form.Label>
                     <Form.Control type="text" required/>
+                    <Form.Control.Feedback type="invalid">Please provide a username</Form.Control.Feedback>
                 </Col>
             </Row>
             <Row>
@@ -28,10 +59,10 @@ const Login = () => {
                 <Col>
                     <Form.Label>Password</Form.Label>
                     <Form.Control type="password" required/>
+                    <Form.Control.Feedback type="invalid">Please provide a password</Form.Control.Feedback>
                 </Col>
                 <Col md="4"></Col>
             </Row>
-            </Form>
         <br />
         <Row>
             <Col md="5"></Col>
@@ -39,10 +70,12 @@ const Login = () => {
                 <Button variant="light" href="/Registration">Sign up</Button>{' '}
             </Col>
             <Col md="auto">    
-                <Button variant="danger">Login</Button>{' '}
+                <Button variant="danger" type="submit">Login</Button>{' '}
             </Col>
             <Col></Col>
         </Row>
+        </Form>
+
 
         
 

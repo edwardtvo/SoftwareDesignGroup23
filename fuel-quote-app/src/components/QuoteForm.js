@@ -115,7 +115,7 @@ const QuoteForm = () => {
                     <p>Total cost: $ {(gallons*parseFloat(price_per_gal.toString())).toFixed(2)}</p>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant='primary' onClick={handleClose}>Get Another Quote</Button>
+                    <Button variant='danger' onClick={handleClose}>Get Another Quote</Button>
                 </Modal.Footer>
             </Modal>
 

@@ -1,5 +1,6 @@
 import {Container, Button, Form, Row, Col} from 'react-bootstrap'
 import React, { useEffect, useState } from "react";
+import NavBar from "./NavBar";
 
 function simulateNetworkRequest() {
     return new Promise((resolve) => setTimeout(resolve, 100));
@@ -7,7 +8,7 @@ function simulateNetworkRequest() {
   
 
 const Login = () => {
-
+    const [loggedIn, setLoggedIn] = useState(false)
     const [isLoading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -23,16 +24,19 @@ const Login = () => {
   const [validated, setValidated] = useState(false)
 
   const handleSubmit = (event) => {
+      event.preventDefault();
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
-      event.preventDefault();
       event.stopPropagation();
+    } else {
+        setValidated(true);
+        setLoggedIn(true)
     }
-    setValidated(true);
   }
   
     return (
-        
+        <>
+            <NavBar loggedIn={loggedIn}/>
         <Container fluid className="title-padding">
             
             <Row>
@@ -78,8 +82,7 @@ const Login = () => {
         
 
         </Container>
-
-        
+        </>
     )
 }
 

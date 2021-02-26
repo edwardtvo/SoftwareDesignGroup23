@@ -1,21 +1,20 @@
 import {Nav, Navbar} from "react-bootstrap"
 
-const NavBar = () => {
+const NavBar = ({loggedIn}) => {
     return (
     <div>
         <Navbar bg='navbar-color' variant='dark' sticky='top' expand='xl'>
-
             <Navbar.Brand href='/home' className='cougar-gas'>COUGAR GAS INC.</Navbar.Brand>
             <Navbar.Toggle aria-controls='basic-navbar-nav'/>
             <Navbar.Collapse id='basic-navbar-nav'>
                 <Nav className='ml-auto'>
-                    <Nav.Link className='nav-link' href='/home'>Home</Nav.Link>
-                    <Nav.Link className='ml-auto' href='/login'>Login</Nav.Link>
-                    <Nav.Link className='ml-auto' href='/registration'>Registration</Nav.Link>
-                    <Nav.Link className='ml-auto' href='/profilemanagement'>Profile Management</Nav.Link>
-                    <Nav.Link className='ml-auto' href='/quoteform'>Get Quote</Nav.Link>
-                    <Nav.Link className='ml-auto' href='/history'>Quote History</Nav.Link>
-                    <Nav.Link className='ml-auto' href='/accountdetails'>Account Details</Nav.Link>
+                    <Nav.Link className='nav-link ml-auto' href='/home' disabled={!loggedIn}>Home</Nav.Link>
+                    <Nav.Link className='nav-link ml-auto' href='/login'>Login</Nav.Link>
+                    <Nav.Link className='nav-link ml-auto' href='/registration'>Registration</Nav.Link>
+                    <Nav.Link className='nav-link ml-auto' href='/profilemanagement' disabled={!loggedIn}>Profile Management</Nav.Link>
+                    <Nav.Link className='nav-link ml-auto' href='/quoteform' disabled={!loggedIn}>Get Quote</Nav.Link>
+                    <Nav.Link className='nav-link ml-auto' href='/history' disabled={!loggedIn}>Quote History</Nav.Link>
+                    <Nav.Link className='nav-link ml-auto' href='/accountdetails' disabled={!loggedIn}>Account Details</Nav.Link>
                 </Nav>
             </Navbar.Collapse>
         </Navbar>

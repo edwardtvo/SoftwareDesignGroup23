@@ -26,8 +26,7 @@ const QuoteForm = () => {
         const form = e.currentTarget
         if (form.checkValidity() === false) {
             e.stopPropagation()
-        }
-        else if (gallons > 0 && checked) {
+        } else if (gallons > 0 && checked) {
             setShow(true)
             setValidated(true)
         }
@@ -41,87 +40,93 @@ const QuoteForm = () => {
     const [startDate, setStartDate] = useState(new Date())
 
     return (
+        <>
+            <NavBar/>
+            <Container fluid className='profman-padding'>
+                <h1 className="title-page">Get a Quote:</h1>
+                <Form noValidate validated={validated} onSubmit={calcQuote}>
+                    {/*Gallon Request*/}
+                    <Form.Group controlId='validationGallonReq'>
+                        <Row>
+                            <Col className='col-auto'>
+                                <Form.Label>Gallons Requested:</Form.Label>
+                            </Col>
+                            <Col className='col-auto'>
+                                <Form.Control required
+                                              className='gallonReq'
+                                              type='number'
+                                              placeholder='0'
+                                              min='1'
+                                              value={gallons}
+                                              onChange={(e) => {
+                                                  setGallons(parseInt(e.target.value))
+                                              }}
+                                />
+                                <Form.Control.Feedback type='invalid'>Please provide a valid
+                                    number</Form.Control.Feedback>
+                            </Col>
+                        </Row>
+                    </Form.Group>
 
-        <Container fluid className='profman-padding'>
-            <h1 className="title-page">Get a Quote:</h1>
+                    {/*Verify Address*/}
+                    <Form.Group controlId='validationAddress'>
+                        <Row>
+                            <Col className='col-auto'><p>[This will be the delivery address]</p></Col>
+                            <Col>
+                                <Form.Check required
+                                            type='checkbox'
+                                            label='Delivery Address Verified'
+                                            feedback='Please verify address'
+                                            onChange={() => {
+                                                setChecked(!checked)
+                                            }}
+                                />
+                            </Col>
+                        </Row>
+                    </Form.Group>
 
-            <Form noValidate validated={validated} onSubmit={calcQuote}>
-                {/*Gallon Request*/}
-                <Form.Group controlId='validationGallonReq'>
-                    <Row>
-                        <Col className='col-auto'>
-                            <Form.Label>Gallons Requested:</Form.Label>
-                        </Col>
-                        <Col className='col-auto'>
-                            <Form.Control required
-                                          className='gallonReq'
-                                          type='number'
-                                          placeholder='0'
-                                          min='1'
-                                          value={gallons}
-                                          onChange={(e) => {setGallons(parseInt(e.target.value))}}
-                            />
-                            <Form.Control.Feedback type='invalid'>Please provide a valid number</Form.Control.Feedback>
-                        </Col>
-                    </Row>
-                </Form.Group>
-
-                {/*Verify Address*/}
-                <Form.Group controlId='validationAddress'>
-                    <Row>
-                        <Col className='col-auto'><p>[This will be the delivery address]</p></Col>
-                        <Col>
-                            <Form.Check required
-                                         type='checkbox'
-                                         label='Delivery Address Verified'
-                                         feedback='Please verify address'
-                                        onChange = {() => {setChecked(!checked)}}
-                            />
-                        </Col>
-                    </Row>
-                </Form.Group>
-
-                {/*Delivery Date*/}
-                {/* Delivery Date validated using react-datepicker DatePicker
+                    {/*Delivery Date*/}
+                    {/* Delivery Date validated using react-datepicker DatePicker
                 https://reactdatepicker.com/
                 https://github.com/Hacker0x01/react-datepicker/issues/879
 
                 possible alt date picker https://getdatepicker.com/4/
                 */}
-                <Form.Group>
-                    <Form.Label>Delivery Date: </Form.Label>
-                    <DatePicker
-                        className='delivDatePicker'
-                        selected={startDate}
-                        onChange={date => {
-                            setStartDate(date)
-                        }}
-                        minDate={new Date()}
-                        showDisabledMonthNavigation
-                    />
-                </Form.Group>
+                    <Form.Group>
+                        <Form.Label>Delivery Date: </Form.Label>
+                        <DatePicker
+                            className='delivDatePicker'
+                            selected={startDate}
+                            onChange={date => {
+                                setStartDate(date)
+                            }}
+                            minDate={new Date()}
+                            showDisabledMonthNavigation
+                        />
+                    </Form.Group>
 
-                <Button variant='danger' type='submit'>Calculate</Button>
-            </Form>
+                    <Button variant='danger' type='submit'>Calculate</Button>
+                </Form>
 
-            <Modal
-                show={show}
-                onHide={handleClose}
-                backdrop='static'
-                keyboard={false}
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title>Calculated Cost</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <p>Price per gallon: $ {parseFloat(price_per_gal.toString()).toFixed(2)}</p>
-                    <p>Total cost: $ {(gallons*parseFloat(price_per_gal.toString())).toFixed(2)}</p>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant='danger' onClick={handleClose}>Get Another Quote</Button>
-                </Modal.Footer>
-            </Modal>
-        </Container>
+                <Modal
+                    show={show}
+                    onHide={handleClose}
+                    backdrop='static'
+                    keyboard={false}
+                >
+                    <Modal.Header closeButton>
+                        <Modal.Title>Calculated Cost</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <p>Price per gallon: $ {parseFloat(price_per_gal.toString()).toFixed(2)}</p>
+                        <p>Total cost: $ {(gallons * parseFloat(price_per_gal.toString())).toFixed(2)}</p>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant='danger' onClick={handleClose}>Get Another Quote</Button>
+                    </Modal.Footer>
+                </Modal>
+            </Container>
+        </>
     )
 }
 

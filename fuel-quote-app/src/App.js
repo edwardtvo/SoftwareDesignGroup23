@@ -5,11 +5,9 @@ import {
     Link
 } from 'react-router-dom'
 import QuoteForm from './components/QuoteForm'
-
 import ProfileManagement from './components/ProfileManagement'
 import Login from './components/Login'
 import Registration from './components/Registration'
-
 import History from './components/History'
 import AccountDetails from './components/AccountDetails'
 
@@ -17,9 +15,9 @@ import AccountDetails from './components/AccountDetails'
 /*npm install react-table*/
 /*npm start*/
 import {useState} from "react"
+import NavBar from "./components/NavBar";
 
 const App = () => {
-    const [loggedIn, setLoggedIn] = useState(false)
 
     return (
         <div className="App table">

@@ -2,7 +2,8 @@ import {
     BrowserRouter as Router,
     Switch,
     Route,
-    Link
+    Link,
+    Redirect
 } from 'react-router-dom'
 import QuoteForm from './components/QuoteForm'
 import ProfileManagement from './components/ProfileManagement'
@@ -10,6 +11,7 @@ import Login from './components/Login'
 import Registration from './components/Registration'
 import History from './components/History'
 import AccountDetails from './components/AccountDetails'
+import {Container, Button, Form, Row, Col} from 'react-bootstrap'
 
 /*npm install react-bootstrap bootstrap*/
 /*npm install react-table*/
@@ -17,14 +19,20 @@ import AccountDetails from './components/AccountDetails'
 import {useState} from "react"
 import NavBar from "./components/NavBar";
 
-const App = () => {
 
+const App = () => {
+    
     return (
-        <div className="App table">
+        <div className="table">
             <Router>
-                <Link to="/quoteform"> </Link>
                 <Switch>
-                    <Route path="/quoteform">
+                    <Route exact path="/">
+                        <Redirect to="/login"/>
+                    </Route>
+                </Switch>
+                <Link to="/getquote"> </Link>
+                <Switch>
+                    <Route path="/getquote">
                         <QuoteForm/>
                     </Route>
                 </Switch>
@@ -48,9 +56,9 @@ const App = () => {
                         <Registration/>
                     </Route>
                 </Switch>
-                <Link to="/history"> </Link>
+                <Link to="/quotehistory"> </Link>
                 <Switch>
-                    <Route path="/history">
+                    <Route path="/quotehistory">
                         <History/>
                     </Route>
                 </Switch>
@@ -62,7 +70,8 @@ const App = () => {
                     </Route>
                 </Switch>
             </Router>
-        </div>
+            </div>
+        
     );
 }
 

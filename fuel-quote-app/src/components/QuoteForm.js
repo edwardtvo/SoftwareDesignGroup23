@@ -1,6 +1,7 @@
 import {Container, Button, Form, Row, Col, Modal} from 'react-bootstrap'
 import {useState} from 'react'
 import DatePicker from 'react-datepicker'
+import NavBar from './NavBar'
 
 require('react-datepicker/dist/react-datepicker.css')
 
@@ -30,7 +31,6 @@ const QuoteForm = () => {
             setShow(true)
             setValidated(true)
         }
-
     }
 
     const handleClose = () => {
@@ -41,6 +41,8 @@ const QuoteForm = () => {
     const [startDate, setStartDate] = useState(new Date())
 
     return (
+        <>
+            <NavBar/>
         <Container fluid className='px-5'>
             <h1>Get a Quote:</h1>
             <Form noValidate validated={validated} onSubmit={calcQuote}>
@@ -119,8 +121,8 @@ const QuoteForm = () => {
                     <Button variant='danger' onClick={handleClose}>Get Another Quote</Button>
                 </Modal.Footer>
             </Modal>
-
         </Container>
+        </>
     )
 }
 

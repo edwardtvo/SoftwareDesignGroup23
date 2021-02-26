@@ -21,6 +21,8 @@ function ProfileManagement() {
 
   const handleClick = () => setLoading(true);
 
+
+
   const [validated, setValidated] = useState(false)
 
   const handleSubmit = (event) => {
@@ -41,12 +43,12 @@ function ProfileManagement() {
 
     <h1>Profile Management</h1>
 
-        <Form>
+        <Form noValidate validated={validated} onSubmit={handleSubmit}>
         <Row>
           <Col md="4">
             <Form.Label>Full Name: </Form.Label>
             <Form.Control name="fullname" 
-                          pattern="[A-Za-z0-9'\.\-\s]{0,100}$" 
+                          pattern="[A-Za-z0-9'\.\-\s]{1,100}$"
                           type="text"
                           required/>
             <Form.Control.Feedback type="invalid">Please enter a real full name</Form.Control.Feedback>
@@ -57,7 +59,7 @@ function ProfileManagement() {
         <Row>
           <Col md="7">
             <Form.Label>Address: </Form.Label>
-            <Form.Control name="address" type="text" pattern="^[A-Za-z0-9'\.\-\s\,#\:\/]{0,100}$" required/>
+            <Form.Control name="address" type="text" pattern="^[A-Za-z0-9'\.\-\s\,#\:\/]{1,100}$" required/>
             <Form.Control.Feedback type="invalid">Address is required</Form.Control.Feedback>
 
             
@@ -80,8 +82,8 @@ function ProfileManagement() {
 
           <Col md="1">
           <Form.Label>State: </Form.Label>
-          <Form.Control name = "state" as="select">
-          <option value=''> </option>
+          <Form.Control name = "state" as="select" required>
+          <option> </option>
           <option>AL</option><option>AK</option><option>AZ</option>
           <option>AR</option><option>CA</option><option>CO</option>
           <option>CT</option><option>DE</option><option>FL</option>
@@ -117,11 +119,12 @@ function ProfileManagement() {
         <br />
 
         {/* figure out validation before submitting */}
-      <Button variant="danger" type="submit"
-              disabled={isLoading} 
+      <Button variant="danger" type="submit">Submit</Button>
+
+              {/*disabled={isLoading} 
               onClick={!isLoading ? handleClick : null}
               href="/quoteform">
-                {isLoading ? 'Submitting..' : 'Submit'}</Button>{' '}
+                {isLoading ? 'Submitting..' : 'Submit'}</Button>{' '}*/}
         
 
         

@@ -30,7 +30,6 @@ const QuoteForm = () => {
             setShow(true)
             setValidated(true)
         }
-
     }
 
     const handleClose = () => {
@@ -119,7 +118,6 @@ const QuoteForm = () => {
                     <Button variant='danger' onClick={handleClose}>Get Another Quote</Button>
                 </Modal.Footer>
             </Modal>
-
         </Container>
     )
 }

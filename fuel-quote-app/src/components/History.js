@@ -4,6 +4,7 @@ import MOCK_DATA from './MOCK_DATA.json'
 import { COLUMNS } from './Columns'
 import './History.css'
 import { Link } from 'react-router-dom'
+import NavBar from './NavBar'
 
 const History = () => {
 
@@ -22,6 +23,8 @@ const History = () => {
             prepareRow } = tableInstance 
 
     return (
+        <div>
+            <NavBar/>
         <table {...getTableProps()}>
             <thead>
                 {
@@ -56,6 +59,7 @@ const History = () => {
             <Link to='/'>Go Back</Link>
             
         </table>
+        </div>
         
     )
 }

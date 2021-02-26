@@ -1,4 +1,4 @@
-import {Nav, Navbar, Form} from 'react-bootstrap'
+import {Nav, Navbar } from 'react-bootstrap'
 import {
     BrowserRouter as Router,
     Switch,
@@ -22,10 +22,6 @@ import AccountDetails from './components/AccountDetails'
 const App = () => {
 
     return (
-
-        
-
-
         <div className="App table">
             <Navbar bg='navbar-color' variant='dark' sticky='top' expand='xl'>
 
@@ -40,13 +36,12 @@ const App = () => {
                         <Nav.Link className='ml-auto' href='/quoteform'>Get Quote</Nav.Link>
                         <Nav.Link className='ml-auto' href='/history'>Quote History</Nav.Link>
                         <Nav.Link className='ml-auto' href='/accountdetails'>Account Details</Nav.Link>
-
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
 
             {/*<img src="/images/gas-30170_640.png" responsive / > */}
-    
+
             <Router>
 
                 <Link to="/quoteform"> </Link>

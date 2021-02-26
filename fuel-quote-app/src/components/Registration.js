@@ -38,7 +38,7 @@ const Registration = () => {
             <Row>
                 <Col md="5"></Col>
                 <Col md="auto">
-                    <h1 className="page-title">Registration</h1>
+                    <h1 className="title-page">Registration</h1>
                 </Col>
                 <Col md="5"></Col>
             </Row>

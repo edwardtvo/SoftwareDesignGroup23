@@ -41,7 +41,7 @@ function ProfileManagement() {
 
     
 
-    <h1 className="page-title">Profile Management</h1>
+    <h1 className="title-page">Profile Management</h1>
 
         <Form noValidate validated={validated} onSubmit={handleSubmit}>
         <Row>

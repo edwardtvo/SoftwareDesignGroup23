@@ -41,8 +41,8 @@ const QuoteForm = () => {
     const [startDate, setStartDate] = useState(new Date())
 
     return (
-        <Container fluid className='px-5'>
-            <h1>Get a Quote:</h1>
+        <Container fluid className='profman-padding'>
+            <h1 className="title-page">Get a Quote:</h1>
             <Form noValidate validated={validated} onSubmit={calcQuote}>
                 {/*Gallon Request*/}
                 <Form.Group controlId='validationGallonReq'>

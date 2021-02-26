@@ -26,9 +26,9 @@ const QuoteForm = () => {
         if (form.checkValidity() === false) {
             e.stopPropagation()
         }
-        else if (gallons > 0 && checked) {
+        setValidated(true)
+        if (gallons > 0 && checked) {
             setShow(true)
-            setValidated(true)
         }
 
     }

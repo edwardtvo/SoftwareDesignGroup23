@@ -80,6 +80,15 @@ img {
   background-color: #df4040 !important;
 }
 
+.title-padding {
+  padding-top: 100px !important;
+}
+
+.profman-padding {
+  padding-top: 50px !important;
+  padding-left: 70px !important;
+}
+
 @font-face {
   font-family: 'Noto Sans SC Medium';
   src: local('NotoSansSC'), url('./fonts/NotoSansSC-Medium.otf') format('truetype');

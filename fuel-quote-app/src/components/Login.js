@@ -5,8 +5,6 @@ import NavBar from "./NavBar";
 function simulateNetworkRequest() {
     return new Promise((resolve) => setTimeout(resolve, 100));
   }
-  
-
 const Login = () => {
     const [isLoading, setLoading] = useState(false);
 
@@ -25,15 +23,17 @@ const Login = () => {
   const handleSubmit = (event) => {
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
-        event.preventDefault();
+      event.preventDefault();
       event.stopPropagation();
-    } else {
-        setValidated(true);
     }
+    setValidated(true);
   }
   
     return (
-    
+        <>
+
+        <NavBar loggedIn={false}/>
+        
         <Container fluid className="title-padding">
             
             <Row>
@@ -64,12 +64,11 @@ const Login = () => {
             </Row>
         <br />
         <Row>
-            <Col md="5"></Col>
-            <Col md="auto">    
-                <Button variant="light" href="/Registration">Sign up</Button>{' '}
-            </Col>
-            <Col md="auto">    
-                <Button variant="danger" type="submit">Login</Button>{' '}
+            <Col md="6"></Col>
+            <Col md="auto"><Button variant="light" href="/Registration">Sign up</Button></Col>
+            <Col md="auto">    {/* TODO: redirect AND validate at the same time */}
+                                {/* can't redirect at the moment */}
+                <Button variant="danger" type="submit">Log in</Button>{' '}
             </Col>
             <Col></Col>
         </Row>
@@ -79,7 +78,7 @@ const Login = () => {
         
 
         </Container>
-        
+        </>
     )
 }
 

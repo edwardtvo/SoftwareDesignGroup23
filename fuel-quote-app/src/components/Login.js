@@ -29,7 +29,7 @@ const Login = () => {
       event.stopPropagation();
     }
     setValidated(true);
-    if (form.checkValidity() == true) history.push("/welcome");
+    if (form.checkValidity() == true) history.push("/home");
 
   }
   

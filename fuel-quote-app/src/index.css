@@ -66,6 +66,13 @@ img {
   font-family: 'Noto Sans SC Medium';
 }
 
+.home-text {
+  color: #050505 !important;
+  font-family: 'Noto Sans SC Medium';
+  font-size: 15px;
+  text-align: center;
+}
+
 .cougar-gas {
   font-family: 'Noto Sans SC Bold';
   color: #ffe9e9 !important;
@@ -74,6 +81,7 @@ img {
 .title-page {
   font-family: 'Noto Sans SC Bold';
   color: #df4040 !important;
+  text-align: center;
 }
 
 .button-color {

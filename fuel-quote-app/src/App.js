@@ -11,6 +11,7 @@ import Login from './components/Login'
 import Registration from './components/Registration'
 import History from './components/History'
 import AccountDetails from './components/AccountDetails'
+import Home from './components/Home'
 import {Container, Button, Form, Row, Col} from 'react-bootstrap'
 
 /*npm install react-bootstrap bootstrap*/
@@ -30,6 +31,11 @@ const App = () => {
                         <Redirect to="/login"/>
                     </Route>
                 </Switch>
+            <Switch>
+                    <Route exact path="/home">
+                        <Home/>
+                    </Route>
+            </Switch>
                 <Link to="/getquote"> </Link>
                 <Switch>
                     <Route path="/getquote">

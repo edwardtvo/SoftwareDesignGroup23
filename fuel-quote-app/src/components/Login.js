@@ -1,3 +1,4 @@
+import { useHistory } from "react-router-dom";
 import {Container, Button, Form, Row, Col} from 'react-bootstrap'
 import React, { useEffect, useState } from "react";
 import NavBar from "./NavBar";
@@ -7,6 +8,7 @@ function simulateNetworkRequest() {
   }
 const Login = () => {
     const [isLoading, setLoading] = useState(false);
+    let history=useHistory();
 
     useEffect(() => {
         if (isLoading) {
@@ -27,12 +29,14 @@ const Login = () => {
       event.stopPropagation();
     }
     setValidated(true);
+    if (form.checkValidity() == true) history.push("/welcome");
+
   }
   
     return (
         <>
 
-        <NavBar loggedIn={false}/>
+        
         
         <Container fluid className="title-padding">
             

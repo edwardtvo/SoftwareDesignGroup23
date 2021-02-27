@@ -34,7 +34,7 @@ function ProfileManagement() {
     }
     setValidated(true);
   }
-  
+  {/**/}
 
   return (
     <>

@@ -25,7 +25,7 @@ const App = () => {
     return (
         <div className="table">
             <Router>
-                <Switch>
+            <Switch>
                     <Route exact path="/">
                         <Redirect to="/login"/>
                     </Route>

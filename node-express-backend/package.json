@@ -5,7 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server/index.js"
+    "start": "node server/index.js",
+    "build": "cd ~/fuel-quote-app && npm install && npm run build"
+  },
+  "engines": {
+    "node": "v12.18.2"
   },
   "keywords": [],
   "author": "",

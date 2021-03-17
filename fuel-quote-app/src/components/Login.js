@@ -7,7 +7,8 @@ import axios from 'axios';
 function simulateNetworkRequest() {
     return new Promise((resolve) => setTimeout(resolve, 100));
   }
-const Login = () => {
+
+export default class Login extends Component {
     const [isLoading, setLoading] = useState(false);
     let history=useHistory();
 

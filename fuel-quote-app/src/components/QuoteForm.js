@@ -2,6 +2,7 @@ import {Container, Button, Form, Row, Col, Modal} from 'react-bootstrap'
 import {useState} from 'react'
 import DatePicker from 'react-datepicker'
 import NavBar from './NavBar'
+import {axios} from 'axios'
 
 require('react-datepicker/dist/react-datepicker.css')
 
@@ -19,10 +20,16 @@ const QuoteForm = () => {
     const [checked, setChecked] = useState(false)
     const price_per_gal = useState(1.50)
     const [show, setShow] = useState(false)
-
+    const [startDate, setStartDate] = useState(new Date())
 
     const calcQuote = (e) => {
         e.preventDefault()
+        const quoteObj = {
+            //user: username
+            //delivery_address: address
+            gallons_requested: gallons,
+            delivery_date: startDate,
+        }
         const form = e.currentTarget
         if (form.checkValidity() === false) {
             e.stopPropagation()
@@ -37,7 +44,7 @@ const QuoteForm = () => {
         setShow(false)
     }
 
-    const [startDate, setStartDate] = useState(new Date())
+
 
     return (
         <>

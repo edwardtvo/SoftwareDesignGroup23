@@ -15,7 +15,7 @@ router.route('/create').post((req, res, next) => {
     })
 });
 
-router.route('/').get((req, res) => {
+router.route('/').get((req, res, next) => {
     user.find((error, data) => {
         if (error) {
             return next(error)
@@ -25,7 +25,7 @@ router.route('/').get((req, res) => {
     })
 })
 
-router.route('/edit/:id').get((req, res) => {
+router.route('/edit/:id').get((req, res, next) => {
     user.findById(req.params.id, (error, data) => {
         if (error) {
             return next(error)
@@ -41,8 +41,8 @@ router.route('/update/:id').put((req, res, next) => {
         $set: req.body
     }, (error, data) => {
         if (error) {
-            return next(error);
             console.log(error)
+            return next(error);
         } else {
             res.json(data)
             console.log('User updated successfully !')

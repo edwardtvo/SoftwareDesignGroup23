@@ -1,9 +1,7 @@
 import {
     BrowserRouter as Router,
     Switch,
-    Route,
-    Link,
-    Redirect
+    Route
 } from 'react-router-dom'
 import React from 'react'
 import QuoteForm from './components/QuoteForm'
@@ -28,61 +26,21 @@ const App = () => {
     return (
         <div className="table">
             <Router>
-            <Switch>
-                    <Route exact path="/">
-                        <Redirect to="/login"/>
-                    </Route>
-                </Switch>
-            <Switch>
-                    <Route exact path="/home">
-                        <Home/>
-                    </Route>
-            </Switch>
-                <Link to="/getquote"> </Link>
                 <Switch>
-                    <Route path="/getquote">
-                        <QuoteForm/>
-                    </Route>
-                </Switch>
-                <Link to="/profilemanagement"> </Link>
-                <Switch>
-                    <Route path="/profilemanagement">
-                        <ProfileManagement/>
-                    </Route>
-                </Switch>
-
-                <Link to="/login"> </Link>
-                <Switch>
-                    <Route path="/login">
-                        <Login/>
-                    </Route>
-                </Switch>
-
-                <Link to="/registration"> </Link>
-                <Switch>
-                    <Route path="/registration">
-                        <Registration/>
-                    </Route>
-                </Switch>
-                <Link to="/quotehistory"> </Link>
-                <Switch>
-                    <Route path="/quotehistory">
-                        <History/>
-                    </Route>
-                </Switch>
-
-                <Link to="/accountdetails"> </Link>
-                <Switch>
-                    <Route path="/accountdetails">
-                        <AccountDetails/>
-                    </Route>
+                    <Route exact path="/" component={Login} />
+                    <Route exact path="/home" component={Home} />
+                    <Route path="/getquote" component={QuoteForm} />
+                    <Route path="/profilemanagement" component={ProfileManagement} />
+                    <Route path="/login" component={Login} />
+                    <Route path="/registration" component={Registration} />
+                    <Route path="/quotehistory" component={History} />
+                    <Route path="/accountdetails" component={AccountDetails} />
                 </Switch>
             </Router>
-            </div>
-        
+        </div>
+
     );
 }
-
 
 
 export default App;

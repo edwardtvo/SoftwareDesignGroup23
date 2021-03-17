@@ -8,7 +8,7 @@ function simulateNetworkRequest() {
     return new Promise((resolve) => setTimeout(resolve, 100));
   }
 
-export default class Login extends Component {
+const Login = () => {
     const [isLoading, setLoading] = useState(false);
     let history=useHistory();
 

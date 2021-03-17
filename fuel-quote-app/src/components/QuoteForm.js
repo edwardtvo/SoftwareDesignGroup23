@@ -25,10 +25,12 @@ const QuoteForm = () => {
     const calcQuote = (e) => {
         e.preventDefault()
         const quoteObj = {
-            //user: username
-            //delivery_address: address
-            gallons_requested: gallons,
-            delivery_date: startDate,
+            //user: current_user,
+            quotes: [{
+                //delivery_address: current_user.address1,
+                gallons_requested: gallons,
+                delivery_date: startDate
+            }]
         }
         const form = e.currentTarget
         if (form.checkValidity() === false) {
@@ -36,6 +38,12 @@ const QuoteForm = () => {
         } else if (gallons > 0 && checked) {
             setShow(true)
             setValidated(true)
+            axios.post('http://localhost:4000/users/update', quoteObj)
+                .then((res) => {
+                    console.log(res.data)
+                }).catch((error) => {
+                console.log(error)
+            });
         }
     }
 

@@ -2,6 +2,7 @@ import { useHistory } from "react-router-dom";
 import {Container, Button, Form, Row, Col} from 'react-bootstrap'
 import React, { useEffect, useState } from "react";
 import NavBar from "./NavBar";
+import axios from 'axios';
 
 function simulateNetworkRequest() {
     return new Promise((resolve) => setTimeout(resolve, 100));
@@ -29,12 +30,9 @@ const Login = () => {
       event.stopPropagation();
     }
     setValidated(true);
-    if (form.checkValidity() == true) history.push("/home");
+    if (form.checkValidity() == true) history.push("/welcome");
+
   }
-
-  
-
-
   
     return (
         <>
@@ -56,8 +54,7 @@ const Login = () => {
                 <Col md="4"></Col>
                 <Col md="4">
                     <Form.Label>Username</Form.Label>
-                    <Form.Control type="text" 
-                                  required/>
+                    <Form.Control type="text" required/>
                     <Form.Control.Feedback type="invalid">Please provide a username</Form.Control.Feedback>
                 </Col>
             </Row>
@@ -76,8 +73,7 @@ const Login = () => {
             <Col md="auto"><Button variant="light" href="/Registration">Sign up</Button></Col>
             <Col md="auto">    {/* TODO: redirect AND validate at the same time */}
                                 {/* can't redirect at the moment */}
-                <Button variant="danger" type="submit" 
-                        >Log in</Button>{' '}
+                <Button variant="danger" type="submit">Log in</Button>{' '}
             </Col>
             <Col></Col>
         </Row>

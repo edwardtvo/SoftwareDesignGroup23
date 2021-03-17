@@ -12,6 +12,7 @@ const Home = () => {
                       
               
                     <h1 className="home-text">Click an option on the Navigation Bar above to navigate to a page</h1>
+                    <h2 className="home-text">Go to "Profile Management if you haven't set up your profile</h2>
                 
             
         </Container>

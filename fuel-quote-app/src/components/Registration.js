@@ -1,11 +1,6 @@
 import {Container, Button, Form, Row, Col} from 'react-bootstrap'
 import React, { useEffect, useState } from "react";
-import { browserHistory } from "react-router";
-import { createBrowserHistory } from 'history'
-
 import NavBar from './NavBar'
-import { useHistory } from "react-router-dom";
-
 
 
 function simulateNetworkRequest() {
@@ -16,7 +11,6 @@ function simulateNetworkRequest() {
 const Registration = () => {
 
     const [isLoading, setLoading] = useState(false);
-    let history=useHistory();
 
     useEffect(() => {
         if (isLoading) {
@@ -37,7 +31,6 @@ const Registration = () => {
       event.stopPropagation();
     }
     setValidated(true);
-    if (form.checkValidity() == true) history.push('/profilemanagement');
   }
   
     return (

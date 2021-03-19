@@ -25,6 +25,8 @@ const History = () => {
 
     return (
         <div>
+                    <NavBar loggedIn={true}/>
+
             <Container>{userList.map((data, i) => {console.log(data.username); return <Row><Col>{data.username}</Col><Col>{data.password}</Col></Row>;})}</Container>
         </div>
     )

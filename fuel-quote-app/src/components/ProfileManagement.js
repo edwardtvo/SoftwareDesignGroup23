@@ -50,7 +50,7 @@ function ProfileManagement() {
       zip: zip
     }
                                           /* CHANGE /create TO /update */
-    axios.post('http://localhost:4000/users/create', userObj)
+    axios.post('http://localhost:4000/users/update', userObj)
           .then((res) => {
               console.log(res.data)
           }).catch((error) => {

@@ -1,10 +1,14 @@
 import {Container, Button, Form, Row, Col, Modal} from 'react-bootstrap'
-import {useState} from 'react'
+import React, { useEffect, useState } from "react";
 import DatePicker from 'react-datepicker'
 import NavBar from './NavBar'
-import {axios} from 'axios'
+import axios from 'axios';
 
 require('react-datepicker/dist/react-datepicker.css')
+
+function simulateNetworkRequest() {
+    return new Promise((resolve) => setTimeout(resolve, 100));
+  }
 
 const QuoteForm = () => {
     /*
@@ -16,27 +20,39 @@ const QuoteForm = () => {
     Stop modal from appearing if validation check fails https://stackoverflow.com/questions/58753515/bootstrap-4-validation-disable-submit-button-until-form-validated
     */
     const [validated, setValidated] = useState(false)
+    const [username, setUsername] = useState('')
     const [gallons, setGallons] = useState(0)
     const [checked, setChecked] = useState(false)
     const price_per_gal = useState(1.50)
     const [show, setShow] = useState(false)
     const [startDate, setStartDate] = useState(new Date())
+    const [isLoading, setLoading] = useState(false);
+
+    useEffect(() => {
+        if (isLoading) {
+          simulateNetworkRequest().then(() => {
+            setLoading(false);
+          });
+        }
+      }, [isLoading]);
+
+      const handleClick = () => setLoading(true);
+
 
     const calcQuote = (e) => {
-        e.preventDefault()
         const form = e.currentTarget
         if (form.checkValidity() === false) {
+            e.preventDefault()
             e.stopPropagation()
-        } else if (gallons > 0 && checked) {
             setShow(true)
             setValidated(true)
             const quoteObj = {
-                quotes: [{
-                    gallons_requested: gallons,
-                    delivery_date: startDate
-                }]
-            }
-            axios.post('http://localhost:4000/users/update', quoteObj)
+                username: username,
+                gallons_requested: gallons,
+                delivery_date: startDate
+                }
+            
+                axios.post('http://localhost:4000/users/createquote', quoteObj)
                 .then((res) => {
                     console.log(res.data)
                 }).catch((error) => {
@@ -60,6 +76,18 @@ const QuoteForm = () => {
                 <Form noValidate validated={validated} onSubmit={calcQuote}>
                     {/*Gallon Request*/}
                     <Form.Group controlId='validationGallonReq'>
+                    <Row className="quoteform-padding">
+                            <Col md="4">
+                           <Form.Label>Insert username to archive this quote: </Form.Label>
+                                <Form.Control required
+                                              type='text'
+                                              value={username}
+                                              onChange={(e) => {
+                                                setUsername((e.target.value))
+                                            }} />   
+                            </Col>                
+
+                        </Row> 
                         <Row>
                             <Col className='col-auto'>
                                 <Form.Label>Gallons Requested:</Form.Label>
@@ -79,6 +107,7 @@ const QuoteForm = () => {
                                     number</Form.Control.Feedback>
                             </Col>
                         </Row>
+                        
                     </Form.Group>
 
                     {/*Verify Address*/}
@@ -110,9 +139,7 @@ const QuoteForm = () => {
                         <DatePicker
                             className='delivDatePicker'
                             selected={startDate}
-                            onChange={date => {
-                                setStartDate(date)
-                            }}
+                            onChange={date => {setStartDate(date)}}
                             minDate={new Date()}
                             showDisabledMonthNavigation
                         />

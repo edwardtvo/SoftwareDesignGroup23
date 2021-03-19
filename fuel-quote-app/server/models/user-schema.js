@@ -72,6 +72,10 @@ let userSchema = new Schema({
             }, message: 'Please enter a valid zip code'
         }
     },
+    quoteInfo: [{
+        gallons_requested: {type: Number},
+        delivery_date: {type: Date}
+    }]
 }, {
     collection: 'users'
 });

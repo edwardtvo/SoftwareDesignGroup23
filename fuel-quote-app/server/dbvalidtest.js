@@ -89,9 +89,10 @@ let userSchema = new Schema({
             }, message: 'Please enter a valid zip code'
         }
     },
-}, {
-    collection: 'users'
-});
+      quoteInfo: [{
+          gallons_requested: {type: Number},
+          delivery_date: {type: Date}
+      }]});
 
 const User = mongoose.model('User', userSchema);
 
@@ -111,6 +112,8 @@ async function saveUser() {
     const result = await newUser.save();
     console.log(result);
 }
+
+
 
 
 

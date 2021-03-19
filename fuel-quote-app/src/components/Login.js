@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import NavBar from "./NavBar";
 import axios from 'axios';
 import { useHistory } from "react-router-dom";
+const bcrypt = require('./custom-bcrypt');
 
 function simulateNetworkRequest() {
     return new Promise((resolve) => setTimeout(resolve, 100));
@@ -25,7 +26,6 @@ const Login = () => {
 
   const handleClick = () => setLoading(true);
 
-
   const handleSubmit = (event) => {
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
@@ -34,7 +34,7 @@ const Login = () => {
     } else {    
       const userObj = {
         username: username,
-        password: password
+        password: bcrypt.hash(password)
       }
                                             /* CHANGE /create TO /update */
       axios.post('http://localhost:4000/users/create', userObj)

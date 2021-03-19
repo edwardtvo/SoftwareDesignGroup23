@@ -128,6 +128,26 @@ router.route('/update').post((req, res, next) => {
     })
 });
 
+router.route('/createquote').post((req, res, next) => {
+    user.findOneAndUpdate( {username: req.body.username }, 
+            {  
+            $push : {
+                quoteInfo : { 
+                    gallons_requested: req.body.gallons_requested,
+                    delivery_date: req.body.delivery_date
+                            }
+                    }
+        }, { useFindAndModify: true} , (error, data) => {
+            if (error) {
+                console.log(error);
+                return next(error);
+            } else {
+                res.json(data);
+                console.log('Quote history updated successfully !')
+            }
+    })
+})
+
 router.route('/delete/:id').delete((req, res, next) => {
     user.findByIdAndRemove(req.params.id, (error, data) => {
         if (error) {
@@ -138,6 +158,9 @@ router.route('/delete/:id').delete((req, res, next) => {
             })
         }
     })
+})
+
+module.exports = router;
 });
 
 module.exports = router;

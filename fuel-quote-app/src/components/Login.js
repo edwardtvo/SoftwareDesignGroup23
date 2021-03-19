@@ -1,14 +1,18 @@
-import { useHistory } from "react-router-dom";
 import {Container, Button, Form, Row, Col} from 'react-bootstrap'
 import React, { useEffect, useState } from "react";
 import NavBar from "./NavBar";
-import axios from "axios";
+import axios from 'axios';
+import { useHistory } from "react-router-dom";
 
 function simulateNetworkRequest() {
     return new Promise((resolve) => setTimeout(resolve, 100));
   }
 const Login = () => {
+  const [validated, setValidated] = useState(false);
     const [isLoading, setLoading] = useState(false);
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+
     let history=useHistory();
 
     useEffect(() => {
@@ -21,30 +25,28 @@ const Login = () => {
 
   const handleClick = () => setLoading(true);
 
-  const [validated, setValidated] = useState(false)
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
 
   const handleSubmit = (event) => {
     const form = event.currentTarget;
-      event.preventDefault();
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
-    } else {
-        const userObj = {
-            username: username,
-            password: password
-        }
-        axios.post('http://localhost:4000/users/login', userObj)
+    } else {    
+      const userObj = {
+        username: username,
+        password: password
+      }
+                                            /* CHANGE /create TO /update */
+      axios.post('http://localhost:4000/users/create', userObj)
             .then((res) => {
                 console.log(res.data)
             }).catch((error) => {
             console.log(error)
         });
-        setValidated(true);
+
+      if (/*Correct login credentials */ true) history.push("/profilemanagement");
     }
-    if (form.checkValidity() === true) history.push("/welcome");
+    setValidated(true);
 
   }
   
@@ -63,16 +65,17 @@ const Login = () => {
                 <Col md="5"></Col>
             </Row>
 
-            <Form noValidate validated={validated} onSubmit={handleSubmit}>
+            <Form noValidate 
+                  validated={validated}
+                  onSubmit={handleSubmit}>
             <Row>
                 <Col md="4"></Col>
                 <Col md="4">
                     <Form.Label>Username</Form.Label>
-                    <Form.Control type="text"
-                                  value={username}
+                    <Form.Control type="text" 
+                                  value={username} 
                                   onChange={(e) => setUsername(e.target.value)}
-                                  required
-                    />
+                                  required/>
                     <Form.Control.Feedback type="invalid">Please provide a username</Form.Control.Feedback>
                 </Col>
             </Row>
@@ -80,11 +83,10 @@ const Login = () => {
                 <Col md="4"></Col>
                 <Col>
                     <Form.Label>Password</Form.Label>
-                    <Form.Control type="password"
+                    <Form.Control type="password" 
                                   value={password}
                                   onChange={(e) => setPassword(e.target.value)}
-                                  required
-                    />
+                                  required/>
                     <Form.Control.Feedback type="invalid">Please provide a password</Form.Control.Feedback>
                 </Col>
                 <Col md="4"></Col>

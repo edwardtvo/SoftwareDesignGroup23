@@ -2,19 +2,31 @@ import {Container, Button, Form, Row, Col} from 'react-bootstrap'
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import NavBar from './NavBar'
-import { connect } from "react-redux";
-import { registerUser } from "../actions/authActions";
-import PropTypes from "prop-types";
-import { withRouter } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
-const Registration = (props) => {
+function simulateNetworkRequest() {
+    return new Promise((resolve) => setTimeout(resolve, 100));
+  }
+const Registration = () => {
   const [validated, setValidated] = useState(false);
+  const [isLoading, setLoading] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+  let history=useHistory();
+
+  useEffect(() => {
+    if (isLoading) {
+      simulateNetworkRequest().then(() => {
+        setLoading(false);
+      });
+    }
+  }, [isLoading]);
+
+  const handleClick = () => setLoading(true);
+
   const handleSubmit = (event) => {
     const form = event.currentTarget;
-      event.preventDefault();
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
@@ -23,18 +35,18 @@ const Registration = (props) => {
             username: username,
             password: password
         }
-        registerUser(userObj, props.history)
-        /*
         axios.post('http://localhost:4000/users/create', userObj)
             .then((res) => {
                 console.log(res.data)
             }).catch((error) => {
             console.log(error)
-        }); */
+        });
+        
         setValidated(true);
+        history.push("/login")
     }
   }
-
+  
     return (
         <>
 
@@ -50,7 +62,9 @@ const Registration = (props) => {
                 <Col md="5"></Col>
             </Row>
 
-            <Form noValidate validated={validated} onSubmit={handleSubmit}>
+            <Form   noValidate 
+                    validated={validated} 
+                    onSubmit={handleSubmit}>
             <Row>
                 <Col md="4"></Col>
                 <Col md="4">
@@ -58,8 +72,7 @@ const Registration = (props) => {
                     <Form.Control type="text"
                                   value={username}
                                   onChange={(e) => setUsername(e.target.value)}
-                                  required
-                    />
+                                  required/>
                     <Form.Control.Feedback type="invalid">Please provide a username</Form.Control.Feedback>
                 </Col>
             </Row>
@@ -70,8 +83,7 @@ const Registration = (props) => {
                     <Form.Control type="password"
                                   value={password}
                                   onChange={(e) => setPassword(e.target.value)}
-                                  required
-                    />
+                                  required/>
                     <Form.Control.Feedback type="invalid">Please provide a password</Form.Control.Feedback>
                 </Col>
                 <Col md="4"></Col>
@@ -79,8 +91,7 @@ const Registration = (props) => {
         <br />
         <Row>
             <Col md="6"></Col>
-            <Col md="auto">    {/* TODO: redirect AND validate at the same time */}
-                                {/* can't redirect at the moment */}
+            <Col md="auto">    
                 <Button variant="danger" type="submit">Sign up</Button>{' '}
             </Col>
             <Col></Col>
@@ -94,26 +105,6 @@ const Registration = (props) => {
         </>
         
     )
-
 }
 
-Registration.propTypes = {
-    registerUser: PropTypes.func.isRequired,
-    auth: PropTypes.object.isRequired,
-    errors: PropTypes.object.isRequired
-};
-
-Registration.componentWillReceiveProps = (nextProps) => {
-    if (nextProps.errors) {
-        this.setState({
-            errors: nextProps.errors
-        });
-    }
-}
-
-const mapStateToProps = state => ({
-    auth: state.auth,
-    errors: state.errors
-});
-
-export default connect(mapStateToProps, {registerUser})(withRouter(Registration))
+export default Registration

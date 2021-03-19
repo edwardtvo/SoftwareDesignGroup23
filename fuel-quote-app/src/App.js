@@ -13,7 +13,9 @@ import History from './components/History'
 import AccountDetails from './components/AccountDetails'
 import Home from './components/Home'
 
-const mongoose = require('mongoose')
+
+
+//const mongoose = require('mongoose')
 
 const App = () => {
 

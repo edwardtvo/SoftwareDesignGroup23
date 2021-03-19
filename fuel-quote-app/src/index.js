@@ -7,6 +7,7 @@ import reportWebVitals from './reportWebVitals';
 import './fonts/NotoSansSC-Medium.otf'
 import { BrowserRouter } from "react-router-dom";
 
+
 ReactDOM.render(
   <BrowserRouter>
     <App />

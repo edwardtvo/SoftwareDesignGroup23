@@ -50,8 +50,6 @@ const QuoteForm = () => {
         setShow(false)
     }
 
-
-
     return (
         <>
         <NavBar loggedIn={true}/>

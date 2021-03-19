@@ -105,7 +105,6 @@ router.route('/edit/:id').get((req, res, next) => {
     })
 });
 
-
 router.route('/update/:id').put((req, res, next) => {
     user.findByIdAndUpdate(req.params.id, {
         $set: req.body

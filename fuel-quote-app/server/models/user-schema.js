@@ -14,7 +14,7 @@ let userSchema = new Schema({
     //_id: mongoose.Schema.Types.ObjectId,
     username: {
         type: String,
-        required: true,
+        //required: true,
         unique: true,
         validate: { validator: function (i) {
             var regex = /[a-zA-Z0-9\.\-\'\_]{6,30}$/;
@@ -23,11 +23,11 @@ let userSchema = new Schema({
     },
     password: {
         type: String,
-        required: true
+        //required: true
     },
     fullname: {
         type: String,
-        required: true,
+        //required: true,
         validate: {
             validator: function (i) {
                 var regex = /[A-Za-z0-9\.\-\'\s]{1,100}$/;
@@ -37,7 +37,7 @@ let userSchema = new Schema({
     },
     address1: {
         type: String,
-        required: true,
+        //required: true,
         validate: {
             validator: function (i) {
                 var regex = /[A-Za-z0-9\.\-\'\,#\s]{1,150}$/;
@@ -50,7 +50,7 @@ let userSchema = new Schema({
     },
     city: {
         type: String,
-        required: true,
+        //required: true,
         validate: {
             validator: function (i) {
                 var regex = /[A-Za-z]{1,100}$/;
@@ -60,11 +60,11 @@ let userSchema = new Schema({
     },
     state: {
         type: String,
-        required: true
+        //required: true
     },
     zipcode: {
         type: String,
-        required: true,
+        //required: true,
         validate: {
             validator: function (i) {
                 var regex = /[0-9]{5,9}$/;

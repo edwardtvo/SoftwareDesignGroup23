@@ -33,9 +33,9 @@ const Login = () => {
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
-    } else {     
+    } else {    
+       
       setValidated(true);
-
       const userObj = {
         username: username,
         password: password

@@ -4,19 +4,29 @@ import axios from 'axios';
 import NavBar from './NavBar'
 import { useHistory } from "react-router-dom";
 
-
-
+function simulateNetworkRequest() {
+    return new Promise((resolve) => setTimeout(resolve, 100));
+  }
 const Registration = () => {
   const [validated, setValidated] = useState(false);
+  const [isLoading, setLoading] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   let history=useHistory();
 
+  useEffect(() => {
+    if (isLoading) {
+      simulateNetworkRequest().then(() => {
+        setLoading(false);
+      });
+    }
+  }, [isLoading]);
+
+  const handleClick = () => setLoading(true);
 
   const handleSubmit = (event) => {
     const form = event.currentTarget;
-      event.preventDefault();
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
@@ -52,7 +62,9 @@ const Registration = () => {
                 <Col md="5"></Col>
             </Row>
 
-            <Form noValidate validated={validated} onSubmit={handleSubmit}>
+            <Form   noValidate 
+                    validated={validated} 
+                    onSubmit={handleSubmit}>
             <Row>
                 <Col md="4"></Col>
                 <Col md="4">
@@ -60,8 +72,7 @@ const Registration = () => {
                     <Form.Control type="text"
                                   value={username}
                                   onChange={(e) => setUsername(e.target.value)}
-                                  required
-                    />
+                                  required/>
                     <Form.Control.Feedback type="invalid">Please provide a username</Form.Control.Feedback>
                 </Col>
             </Row>
@@ -72,8 +83,7 @@ const Registration = () => {
                     <Form.Control type="password"
                                   value={password}
                                   onChange={(e) => setPassword(e.target.value)}
-                                  required
-                    />
+                                  required/>
                     <Form.Control.Feedback type="invalid">Please provide a password</Form.Control.Feedback>
                 </Col>
                 <Col md="4"></Col>
@@ -81,8 +91,7 @@ const Registration = () => {
         <br />
         <Row>
             <Col md="6"></Col>
-            <Col md="auto">    {/* TODO: redirect AND validate at the same time */}
-                                {/* can't redirect at the moment */}
+            <Col md="auto">    
                 <Button variant="danger" type="submit">Sign up</Button>{' '}
             </Col>
             <Col></Col>

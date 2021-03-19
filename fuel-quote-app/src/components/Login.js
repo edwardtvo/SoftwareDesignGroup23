@@ -1,14 +1,14 @@
-import { useHistory } from "react-router-dom";
 import {Container, Button, Form, Row, Col} from 'react-bootstrap'
 import React, { useEffect, useState } from "react";
 import NavBar from "./NavBar";
 import axios from 'axios';
-
+import { useHistory } from "react-router-dom";
 
 function simulateNetworkRequest() {
     return new Promise((resolve) => setTimeout(resolve, 100));
   }
 const Login = () => {
+  const [validated, setValidated] = useState(false);
     const [isLoading, setLoading] = useState(false);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -25,7 +25,6 @@ const Login = () => {
 
   const handleClick = () => setLoading(true);
 
-  const [validated, setValidated] = useState(false)
 
   const handleSubmit = (event) => {
     const form = event.currentTarget;
@@ -66,7 +65,8 @@ const Login = () => {
                 <Col md="5"></Col>
             </Row>
 
-            <Form noValidate validated={validated}
+            <Form noValidate 
+                  validated={validated}
                   onSubmit={handleSubmit}>
             <Row>
                 <Col md="4"></Col>

@@ -10,7 +10,7 @@ function simulateNetworkRequest() {
 
 const Login = () => {
     const [isLoading, setLoading] = useState(false);
-    let history=useHistory();
+    //let history=useHistory();
 
     useEffect(() => {
         if (isLoading) {

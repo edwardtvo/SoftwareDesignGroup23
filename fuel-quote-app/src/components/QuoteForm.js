@@ -73,8 +73,7 @@ const QuoteForm = () => {
                                                   setGallons(parseInt(e.target.value))
                                               }}
                                 />
-                                <Form.Control.Feedback type='invalid'>Please provide a valid
-                                    number</Form.Control.Feedback>
+                                <Form.Control.Feedback type='invalid'>Please provide a valid number</Form.Control.Feedback>
                             </Col>
                         </Row>
                     </Form.Group>

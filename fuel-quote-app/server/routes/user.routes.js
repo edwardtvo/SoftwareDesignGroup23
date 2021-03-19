@@ -5,10 +5,12 @@ const jwt = require("jsonwebtoken");
 const keys = require('../database/db')
 
 let router = express.Router();
-let user = require('../models/user-schema');
+require('../models/user-schema').registerModels();
+// This is the right model because ^registerModels set it up for us.
+let user = mongoose.model('user');
 
 router.route('/create').post((req, res, next) => {
-    user.findOne({ username: req.body.username }).then(user => {
+   /* user.findOne({ username: req.body.username }).then(user => {
         if (user) {
             return res.status(400).json({ username: "Username already exists" });
         } else {
@@ -32,8 +34,8 @@ router.route('/create').post((req, res, next) => {
                 });
             });
         }
-        })
-/*
+        })*/
+
          user.create(req.body, (error, data) => {
              if (error) {
                  return next(error)
@@ -41,7 +43,7 @@ router.route('/create').post((req, res, next) => {
                  console.log(data)
                  res.json(data)
              }
-         })*/
+         })
 });
 
 router.route('/login').post((req,res) => {

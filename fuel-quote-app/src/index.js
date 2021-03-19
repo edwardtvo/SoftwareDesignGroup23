@@ -6,13 +6,12 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './fonts/NotoSansSC-Medium.otf'
 import { BrowserRouter } from "react-router-dom";
-import store from './store'
-import { Provider } from 'react-redux';
+
 
 ReactDOM.render(
-  <Provider store={store}>
+  <BrowserRouter>
     <App />
-  </Provider>,
+  </BrowserRouter>,
   document.getElementById('root')
 );
 

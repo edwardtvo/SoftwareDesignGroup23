@@ -14,7 +14,7 @@ let userSchema = new Schema({
     //_id: mongoose.Schema.Types.ObjectId,
     username: {
         type: String,
-        //required: true,
+        required: true,
         unique: true,
         validate: { validator: function (i) {
             var regex = /[a-zA-Z0-9\.\-\'\_]{6,30}$/;
@@ -23,7 +23,8 @@ let userSchema = new Schema({
     },
     password: {
         type: String,
-        //required: true
+        required: true,
+        message: 'Please provide a password'
     },
     fullname: {
         type: String,
@@ -91,4 +92,12 @@ var usernameValidator = [
 ]
 
 // https://www.sitepoint.com/understanding-module-exports-exports-node-js/
-module.exports = mongoose.model('User', userSchema);
+//module.exports = mongoose.model('User', userSchema);
+
+exports.registerModels = function() {
+    try {
+        mongoose.model('user', userSchema);
+    } catch (error) {
+        console.log(error)
+    }
+}

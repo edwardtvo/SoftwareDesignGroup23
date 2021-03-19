@@ -45,7 +45,7 @@ describe('Models', function() {
             });
         });
 
-
+/*
         it('should not save invalid address', function(done) {
             let userid = '60552acdf6cd8196c6ad0269'
             User.find({_id: userid}, (err, user) => {
@@ -55,7 +55,7 @@ describe('Models', function() {
         )
 
 
-    });
+    });*/
 
 });
 

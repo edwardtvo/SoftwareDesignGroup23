@@ -42,22 +42,51 @@ let userSchema = new Schema({
         type: String
     },
     full_name: {
-        type: String
+        type: String,
+        required: true,
+        validate: {
+            validator: function (i) {
+                var regex = /[A-Za-z0-9\.\-\'\s]{1,100}$/;
+                return regex.test(i);
+            }, message: 'Please enter a real full name'
+        }
     },
     address1: {
-        type: String
+        type: String,
+        required: true,
+        validate: {
+            validator: function (i) {
+                var regex = /[A-Za-z0-9\.\-\'\,#\s]{1,100}$/;
+                return regex.test(i);
+            }, message: 'Address is required'
+        }
     },
     address2: {
         type: String
     },
     city: {
-        type: String
+        type: String,
+        required: true,
+        validate: {
+            validator: function (i) {
+                var regex = /[A-Za-z]{1,100}$/;
+                return regex.test(i);
+            }, message: 'City is required'
+        }
     },
     state: {
-        type: String
+        type: String,
+        required: true
     },
     zipcode: {
-        type: String
+        type: String,
+        required: true,
+        validate: {
+            validator: function (i) {
+                var regex = /[0-9]{5,9}$/;
+                return regex.test(i);
+            }, message: 'Please enter a valid zip code'
+        }
     },
 }, {
     collection: 'users'

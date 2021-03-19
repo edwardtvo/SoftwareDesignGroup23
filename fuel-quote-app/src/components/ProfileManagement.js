@@ -15,6 +15,7 @@ function ProfileManagement() {
 
   const [isLoading, setLoading] = useState(false);
   const [validated, setValidated] = useState(false)
+  const [username, setUsername] = useState('');
   const [fullname, setFullname] = useState('');
   const [address1, setAddress1] = useState('');
   const [address2, setAddress2] = useState('');
@@ -42,6 +43,7 @@ function ProfileManagement() {
     } else {
 
     const userObj = {
+      username: username,
       fullname: fullname,
       address1: address1,
       address2: address2,
@@ -81,6 +83,16 @@ function ProfileManagement() {
                           onChange={(e) => setFullname(e.target.value)}
                           required/>
             <Form.Control.Feedback type="invalid">Please enter a real full name</Form.Control.Feedback>
+          </Col>
+          <Col md="3">
+            <Form.Label>Username: </Form.Label>
+            <Form.Control name="username"
+                          pattern="/[a-zA-Z0-9\.\-\'\_]{6,30}$/"
+                          type="text"
+                          value={username}
+                          onChange={(e) => setUsername(e.target.value)}
+                          required/>
+            <Form.Control.Feedback type="invalid">Please enter the same username from Registration</Form.Control.Feedback>
           </Col>
         </Row>
         

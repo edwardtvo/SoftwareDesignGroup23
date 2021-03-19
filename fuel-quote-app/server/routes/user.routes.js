@@ -36,17 +36,19 @@ router.route('/edit/:id').get((req, res, next) => {
 })
 
 
-router.route('/update').put((req, res, next) => {
-    user.findOneAndUpdate(req.params.username, {
-        fullname: req.params.fullname,
-        address1: req.params.address1,
-        address2: req.params.address2,
-        city: req.params.city,
-        state: req.params.state,
-        zip: req.params.zip,
-    }, (error, data) => {
+router.route('/update').post((req, res, next) => {
+    var filter = { username: req.body.username };
+    user.findOneAndUpdate( filter, {
+        $set:{
+        fullname: req.body.fullname,
+        address1: req.body.address1,
+        address2: req.body.address2,
+        city: req.body.city,
+        state: req.body.state,
+        zip: req.body.zip}
+    }, { strict: false}, (error, data) => {
         if (error) {
-            console.log(error)
+            console.log(error);
             return next(error);
         } else {
             res.json(data)

@@ -5,9 +5,32 @@ import { COLUMNS } from './Columns'
 import './History.css'
 import { Link } from 'react-router-dom'
 import NavBar from './NavBar'
+import {useState} from 'react'
+import axios from 'axios'
+import {Row, Col, Container} from 'react-bootstrap'
 
 const History = () => {
+    const [userList, setUserList] = useState([])
+    const componentDidMount = () => {
+        axios.get('http://localhost:4000/users')
+            .then(res => {
+                setUserList(res.data);
+                console.log(userList)
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+    }
+    componentDidMount()
 
+    return (
+        <div>
+                    <NavBar loggedIn={true}/>
+
+            <Container>{userList.map((data, i) => {console.log(data.username); return <Row><Col>{data.username}</Col><Col>{data.password}</Col></Row>;})}</Container>
+        </div>
+    )
+/*
     const columns = useMemo(() => COLUMNS, [])
     const data = useMemo(() => MOCK_DATA, [])
 
@@ -61,7 +84,7 @@ const History = () => {
         </table>
         </div>
         
-    )
+    )*/
 }
 
 export default History

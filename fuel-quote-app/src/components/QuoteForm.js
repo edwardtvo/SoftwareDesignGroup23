@@ -2,6 +2,7 @@ import {Container, Button, Form, Row, Col, Modal} from 'react-bootstrap'
 import {useState} from 'react'
 import DatePicker from 'react-datepicker'
 import NavBar from './NavBar'
+import {axios} from 'axios'
 
 require('react-datepicker/dist/react-datepicker.css')
 
@@ -19,7 +20,7 @@ const QuoteForm = () => {
     const [checked, setChecked] = useState(false)
     const price_per_gal = useState(1.50)
     const [show, setShow] = useState(false)
-
+    const [startDate, setStartDate] = useState(new Date())
 
     const calcQuote = (e) => {
         e.preventDefault()
@@ -29,6 +30,18 @@ const QuoteForm = () => {
         } else if (gallons > 0 && checked) {
             setShow(true)
             setValidated(true)
+            const quoteObj = {
+                quotes: [{
+                    gallons_requested: gallons,
+                    delivery_date: startDate
+                }]
+            }
+            axios.post('http://localhost:4000/users/update', quoteObj)
+                .then((res) => {
+                    console.log(res.data)
+                }).catch((error) => {
+                console.log(error)
+            });
         }
     }
 
@@ -36,8 +49,6 @@ const QuoteForm = () => {
         setValidated(false)
         setShow(false)
     }
-
-    const [startDate, setStartDate] = useState(new Date())
 
     return (
         <>
@@ -62,8 +73,7 @@ const QuoteForm = () => {
                                                   setGallons(parseInt(e.target.value))
                                               }}
                                 />
-                                <Form.Control.Feedback type='invalid'>Please provide a valid
-                                    number</Form.Control.Feedback>
+                                <Form.Control.Feedback type='invalid'>Please provide a valid number</Form.Control.Feedback>
                             </Col>
                         </Row>
                     </Form.Group>

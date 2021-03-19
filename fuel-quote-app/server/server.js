@@ -5,6 +5,7 @@ let bodyParser = require('body-parser');
 let database = require('./database/db');
 const createError = require('http-errors');
 const userRoute = require('./routes/user.routes')
+const passport = require("passport");
 
 mongoose.Promise = global.Promise;
 mongoose.connect(database.db, {
@@ -23,6 +24,10 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(cors());
+// Passport middleware
+app.use(passport.initialize());
+// Passport config
+require("./database/passport")(passport);
 app.use('/users', userRoute)
 
 

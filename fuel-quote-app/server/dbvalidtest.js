@@ -14,18 +14,29 @@ mongoose.connect(database.db, {
     }
 )
 
+var usernameValidator = [
+    { validator: function (i) {
+        var regex = /[a-zA-Z0-9\.\-\'\_]{6,30}$/;
+        return regex.test(i);
+    }, message: 'Please provide a proper username with at least 6 characters' },
+
+    { validator: function(v, cb) {
+        User.find({name: v}, function(err,docs){
+           cb(docs.length == 0);
+        });
+      },
+      message: 'User already exists!' }
+
+]
+
+
 let userSchema = new Schema({
     //_id: mongoose.Schema.Types.ObjectId,
     username: {
         type: String,
         required: true,
         unique: true,
-        validate: {
-            validator: function (i) {
-                var regex = /[a-zA-Z0-9\.\-\'\_]{6,30}$/;
-                return regex.test(i);
-            }, message: 'Please provide a proper username with at least 6 characters'
-        }
+        validate: usernameValidator
     },
     password: {
         type: String
@@ -56,7 +67,7 @@ const User = mongoose.model('User', userSchema);
 
 async function saveUser() {
     const newUser = new User({
-        username: 'hello',
+        username: 'hello1',
         password: 'goodbye'
     })
 
@@ -68,5 +79,4 @@ async function saveUser() {
 
 
 saveUser();
-
 

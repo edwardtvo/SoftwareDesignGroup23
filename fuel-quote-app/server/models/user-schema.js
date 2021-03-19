@@ -13,7 +13,10 @@ let quoteSchema = new Schema({
 let userSchema = new Schema({
     //_id: mongoose.Schema.Types.ObjectId,
     username: {
-        type: String
+        type: String,
+        required: true,
+        match: '/[a-zA-Z0-9\.\-\'\_]{6,30}$/',
+        unique: true
     },
     password: {
         type: String

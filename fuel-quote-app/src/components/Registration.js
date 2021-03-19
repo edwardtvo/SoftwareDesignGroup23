@@ -2,9 +2,12 @@ import {Container, Button, Form, Row, Col} from 'react-bootstrap'
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import NavBar from './NavBar'
+import { connect } from "react-redux";
+import { registerUser } from "../actions/authActions";
+import PropTypes from "prop-types";
+import { withRouter } from "react-router-dom";
 
-
-const Registration = () => {
+const Registration = (props) => {
   const [validated, setValidated] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -20,16 +23,18 @@ const Registration = () => {
             username: username,
             password: password
         }
+        registerUser(userObj, props.history)
+        /*
         axios.post('http://localhost:4000/users/create', userObj)
             .then((res) => {
                 console.log(res.data)
             }).catch((error) => {
             console.log(error)
-        });
+        }); */
         setValidated(true);
     }
   }
-  
+
     return (
         <>
 
@@ -89,6 +94,26 @@ const Registration = () => {
         </>
         
     )
+
 }
 
-export default Registration
+Registration.propTypes = {
+    registerUser: PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired,
+    errors: PropTypes.object.isRequired
+};
+
+Registration.componentWillReceiveProps = (nextProps) => {
+    if (nextProps.errors) {
+        this.setState({
+            errors: nextProps.errors
+        });
+    }
+}
+
+const mapStateToProps = state => ({
+    auth: state.auth,
+    errors: state.errors
+});
+
+export default connect(mapStateToProps, {registerUser})(withRouter(Registration))

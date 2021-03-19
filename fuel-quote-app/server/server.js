@@ -41,7 +41,7 @@ app.use((req, res, next) => {
     next(createError(404));
 });
 
-app.use(function (req, res, next, err) {
+app.use((req, res, next, err)=> {
     console.error(err.message);
     if (!err.statusCode) err.statusCode = 500;
     res.status(err.statusCode).send(err.message);

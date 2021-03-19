@@ -12,8 +12,10 @@ import Registration from './components/Registration'
 import History from './components/History'
 import AccountDetails from './components/AccountDetails'
 import Home from './components/Home'
+import { Provider } from "react-redux";
+import store from "./store";
 
-const mongoose = require('mongoose')
+//const mongoose = require('mongoose')
 
 const App = () => {
 

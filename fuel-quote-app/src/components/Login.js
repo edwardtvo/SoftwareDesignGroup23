@@ -33,7 +33,6 @@ const Login = () => {
       event.preventDefault();
       event.stopPropagation();
     } else {    
-      setValidated(true);
       const userObj = {
         username: username,
         password: password
@@ -48,6 +47,8 @@ const Login = () => {
 
       if (/*Correct login credentials */ true) history.push("/profilemanagement");
     }
+    setValidated(true);
+
   }
   
     return (

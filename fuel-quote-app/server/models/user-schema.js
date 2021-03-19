@@ -13,15 +13,15 @@ let quoteSchema = new Schema({
 let userSchema = new Schema({
     //_id: mongoose.Schema.Types.ObjectId,
     username: {
-        type: String,
-        required: true,
+        type: String
+        /*required: true,
         match: '/[a-zA-Z0-9\.\-\'\_]{6,30}$/',
-        unique: true
+        unique: true */
     },
     password: {
         type: String
     },
-    full_name: {
+    fullname: {
         type: String
     },
     address1: {
@@ -36,7 +36,7 @@ let userSchema = new Schema({
     state: {
         type: String
     },
-    zipcode: {
+    zip: {
         type: String
     },
     quotes: [quoteSchema]

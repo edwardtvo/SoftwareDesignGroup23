@@ -2,12 +2,17 @@ import {Container, Button, Form, Row, Col} from 'react-bootstrap'
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import NavBar from './NavBar'
+import { useHistory } from "react-router-dom";
+
 
 
 const Registration = () => {
   const [validated, setValidated] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+
+  let history=useHistory();
+
 
   const handleSubmit = (event) => {
     const form = event.currentTarget;
@@ -26,7 +31,9 @@ const Registration = () => {
             }).catch((error) => {
             console.log(error)
         });
+        
         setValidated(true);
+        history.push("/login")
     }
   }
   

@@ -18,14 +18,14 @@ var usernameValidator = [
     { validator: function (i) {
         var regex = /[a-zA-Z0-9\.\-\'\_]{6,30}$/;
         return regex.test(i);
-    }, message: 'Please provide a proper username with at least 6 characters' },
+    }, message: 'Please provide a proper username with at least 6 characters' }
 
-    { validator: function(v, cb) {
+    /*{ validator: function(v, cb) {
         User.find({name: v}, function(err,docs){
            cb(docs.length == 0);
         });
       },
-      message: 'User already exists!' }
+      message: 'User already exists!' } */
 
 ]
 
@@ -39,9 +39,10 @@ let userSchema = new Schema({
         validate: usernameValidator
     },
     password: {
-        type: String
+        type: String,
+        required: true
     },
-    full_name: {
+    fullname: {
         type: String,
         required: true,
         validate: {
@@ -56,7 +57,7 @@ let userSchema = new Schema({
         required: true,
         validate: {
             validator: function (i) {
-                var regex = /[A-Za-z0-9\.\-\'\,#\s]{1,100}$/;
+                var regex = /[A-Za-z0-9\.\-\'\,#\s]{1,150}$/;
                 return regex.test(i);
             }, message: 'Address is required'
         }
@@ -97,7 +98,14 @@ const User = mongoose.model('User', userSchema);
 async function saveUser() {
     const newUser = new User({
         username: 'hello1',
-        password: 'goodbye'
+        password: 'goodbye',
+        fullname: 'Edward Vo',
+        address1: '100 Street',
+        address2: 'Apt 123',
+        city: 'Houston',
+        state: 'TX',
+        zipcode: '123'
+
     })
 
     const result = await newUser.save();

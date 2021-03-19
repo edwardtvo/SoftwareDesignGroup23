@@ -13,36 +13,82 @@ let quoteSchema = new Schema({
 let userSchema = new Schema({
     //_id: mongoose.Schema.Types.ObjectId,
     username: {
-        type: String
-        /*required: true,
-        match: '/[a-zA-Z0-9\.\-\'\_]{6,30}$/',
-        unique: true */
+        type: String,
+        required: true,
+        unique: true,
+        validate: { validator: function (i) {
+            var regex = /[a-zA-Z0-9\.\-\'\_]{6,30}$/;
+            return regex.test(i);
+        }, message: 'Please provide a proper username with at least 6 characters' }
     },
     password: {
-        type: String
+        type: String,
+        required: true
     },
     fullname: {
-        type: String
+        type: String,
+        required: true,
+        validate: {
+            validator: function (i) {
+                var regex = /[A-Za-z0-9\.\-\'\s]{1,100}$/;
+                return regex.test(i);
+            }, message: 'Please enter a real full name'
+        }
     },
     address1: {
-        type: String
+        type: String,
+        required: true,
+        validate: {
+            validator: function (i) {
+                var regex = /[A-Za-z0-9\.\-\'\,#\s]{1,150}$/;
+                return regex.test(i);
+            }, message: 'Address is required'
+        }
     },
     address2: {
         type: String
     },
     city: {
-        type: String
+        type: String,
+        required: true,
+        validate: {
+            validator: function (i) {
+                var regex = /[A-Za-z]{1,100}$/;
+                return regex.test(i);
+            }, message: 'City is required'
+        }
     },
     state: {
-        type: String
+        type: String,
+        required: true
     },
-    zip: {
-        type: String
+    zipcode: {
+        type: String,
+        required: true,
+        validate: {
+            validator: function (i) {
+                var regex = /[0-9]{5,9}$/;
+                return regex.test(i);
+            }, message: 'Please enter a valid zip code'
+        }
     },
-    quotes: [quoteSchema]
 }, {
     collection: 'users'
 });
+
+var usernameValidator = [
+    { validator: function (i) {
+        var regex = /[a-zA-Z0-9\.\-\'\_]{6,30}$/;
+        return regex.test(i);
+    }, message: 'Please provide a proper username with at least 6 characters' }
+
+    /*{ validator: function(v, cb) {
+        User.find({name: v}, function(err,docs){
+           cb(docs.length == 0);
+        });
+      },
+      message: 'User already exists!' } */
+]
 
 // https://www.sitepoint.com/understanding-module-exports-exports-node-js/
 module.exports = mongoose.model('User', userSchema);

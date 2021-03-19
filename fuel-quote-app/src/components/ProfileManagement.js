@@ -36,12 +36,10 @@ function ProfileManagement() {
 
   const handleSubmit = (event) => {
     const form = event.currentTarget;
-      event.preventDefault();
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
     } else {
-    setValidated(true);
 
     const userObj = {
       fullname: fullname,
@@ -61,6 +59,8 @@ function ProfileManagement() {
 
     history.push("/getquote");
     }
+    setValidated(true);
+
   }
 
   return (
@@ -156,7 +156,7 @@ function ProfileManagement() {
           <Col md="2">
           <Form.Label> Zip code: </Form.Label>
           <Form.Control name="zip" 
-                        pattern="[0-9]{5,9}" 
+                        //pattern="[0-9]{5,9}" 
                         value={zip}
                         onChange={(e) => setZip(e.target.value)}
                         type="text" 

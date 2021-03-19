@@ -10,6 +10,7 @@ let quoteSchema = new Schema({
 }, {
     collection: 'quotes'
 });
+
 let userSchema = new Schema({
     //_id: mongoose.Schema.Types.ObjectId,
     username: {

@@ -29,12 +29,10 @@ const Login = () => {
 
   const handleSubmit = (event) => {
     const form = event.currentTarget;
-    event.preventDefault();
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
     } else {    
-       
       setValidated(true);
       const userObj = {
         username: username,
@@ -48,7 +46,7 @@ const Login = () => {
             console.log(error)
         });
 
-      history.push("/profilemanagement");
+      if (/*Correct login credentials */ true) history.push("/profilemanagement");
     }
   }
   

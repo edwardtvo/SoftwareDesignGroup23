@@ -10,6 +10,16 @@ let quoteSchema = new Schema({
 }, {
     collection: 'quotes'
 });
+let historySchema = new Schema({
+    //_id: {type: mongoose.Schema.Types.ObjectId},
+    gallons_requested: Number,
+    delivery_address: {type: String},
+    delivery_date: {type: Date},
+    price_per_gallon: Number,
+    amount_due: Number
+}, {
+    collection: 'history'
+});
 let userSchema = new Schema({
     //_id: mongoose.Schema.Types.ObjectId,
     username: {

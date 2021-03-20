@@ -160,7 +160,5 @@ router.route('/delete/:id').delete((req, res, next) => {
     })
 })
 
-module.exports = router;
-});
 
 module.exports = router;

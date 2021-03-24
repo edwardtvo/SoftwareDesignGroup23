@@ -10,40 +10,19 @@ require('../models/user-schema').registerModels();
 let user = mongoose.model('user');
 
 router.route('/create').post((req, res, next) => {
-   /* user.findOne({ username: req.body.username }).then(user => {
+    user.findOne({username: req.body.username}).then(user => {
         if (user) {
             return res.status(400).json({ username: "Username already exists" });
-        } else {
-            const newUser = new user({
-                email: req.body.username,
-                password: req.body.password
-            });
-            // Hash password before saving in database
-            bcrypt.genSalt(10, (err, salt) => {
-                bcrypt.hash(newUser.password, salt, (err, hash) => {
-                    if (err) throw err;
-                    newUser.password = hash;
-                    user.create(newUser, (error, data) => {
-                        if (error) {
-                            return next(error)
-                        } else {
-                            console.log(data)
-                            res.json(data)
-                        }
-                    })
-                });
-            });
         }
-        })*/
-
-         user.create(req.body, (error, data) => {
-             if (error) {
-                 return next(error)
-             } else {
-                 console.log(data)
-                 res.json(data)
-             }
-         })
+    })
+    user.create(req.body, (error, data) => {
+        if (error) {
+            return next(error)
+        } else {
+            console.log(data)
+            res.json(data)
+        }
+    })
 });
 
 router.route('/login').post((req,res) => {

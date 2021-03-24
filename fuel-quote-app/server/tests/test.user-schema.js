@@ -25,7 +25,7 @@ describe('Models', function() {
     describe('Lifecycle', function() {
 
         it('should be able to retrieve by id from database', function(done) {
-            let userid = '60552acdf6cd8196c6ad0269'
+            let userid = '605b8bbb430aa60c46d6f874'
             User.find({_id: userid}, (err, userid) => {
                 should.not.exist(err);
                 should.exist(userid);
@@ -47,7 +47,7 @@ describe('Models', function() {
 
 /*
         it('should not save invalid address', function(done) {
-            let userid = '60552acdf6cd8196c6ad0269'
+            let userid = '605b8bbb430aa60c46d6f874'
             User.find({_id: userid}, (err, user) => {
                 should.not.exist(err);
                 user.address1 = '??%'

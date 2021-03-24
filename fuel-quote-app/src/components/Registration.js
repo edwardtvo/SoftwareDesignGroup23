@@ -1,29 +1,17 @@
 import {Container, Button, Form, Row, Col} from 'react-bootstrap'
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import axios from 'axios';
 import NavBar from './NavBar'
 import { useHistory } from "react-router-dom";
 
-function simulateNetworkRequest() {
-    return new Promise((resolve) => setTimeout(resolve, 100));
-  }
 const Registration = () => {
   const [validated, setValidated] = useState(false);
-  const [isLoading, setLoading] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   let history=useHistory();
 
-  useEffect(() => {
-    if (isLoading) {
-      simulateNetworkRequest().then(() => {
-        setLoading(false);
-      });
-    }
-  }, [isLoading]);
 
-  const handleClick = () => setLoading(true);
 
   const handleSubmit = (event) => {
     const form = event.currentTarget;
@@ -39,11 +27,16 @@ const Registration = () => {
             .then((res) => {
                 console.log(res.data)
             }).catch((error) => {
-            console.log(error)
+                if (error) {
+                    console.log(error)
+                } else {
+                    setValidated(true);
+                    history.push("/login")
+                }
         });
-        
+        /*
         setValidated(true);
-        history.push("/login")
+        history.push("/login") */
     }
   }
   

@@ -33,9 +33,10 @@ describe('Models', function() {
             })
         });
 
-        it('should not save without password', function(done) {
+        it('should not save without password or less than 6 char', function(done) {
             let user = new User({
-                username: "unitTestUser"
+                username: "unit",
+                password: 'hellopw'
             });
             user.save(function(err) {
                 expect(err).to.exist

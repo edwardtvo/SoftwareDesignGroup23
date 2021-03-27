@@ -6,7 +6,7 @@ describe('Models', function() {
     let User;
 
     beforeEach(function(done) {
-        mongoose.connect('mongodb://localhost:27017/reactaxios');
+        mongoose.connect('mongodb+srv://sdgroup23username:sdgroup23pw@cluster0.4pi4i.mongodb.net/myFirstDatabase?retryWrites=true&w=majority');
         mongoose.connection.once('connected', () => {
             mongoose.connection.db.dropDatabase();
 

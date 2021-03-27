@@ -1,4 +1,4 @@
 module.exports = {
-    db: 'mongodb://localhost:27017/reactaxios',
+    db: 'mongodb+srv://sdgroup23username:sdgroup23pw@cluster0.4pi4i.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
     secretOrKey: "secret"
 };

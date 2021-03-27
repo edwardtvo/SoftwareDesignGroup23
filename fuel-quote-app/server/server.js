@@ -24,11 +24,11 @@ mongoose.connect(database.db, {
 // MongoDB connect //
 // mongoDB Schema - https://dbdiagram.io/d/6058c1e2ecb54e10c33cabc8
 /*-----------------*/
-const mongoDB_uri = "mongodb+srv://sdgroup23username:sdgroup23pw@cluster0.4pi4i.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+/* const mongoDB_uri = "mongodb+srv://sdgroup23username:sdgroup23pw@cluster0.4pi4i.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 const mongoDB_client = new MongoClient(mongoDB_uri, { useNewUrlParser: true, useUnifiedTopology: true });
 const dbName = "cluster0"; 
 
-mongoDB.mongoDB_run(dbName, mongoDB_client).catch(console.dir);
+mongoDB.mongoDB_run(dbName, mongoDB_client).catch(console.dir); */
 /*-----------------*/
 
 const app = express();

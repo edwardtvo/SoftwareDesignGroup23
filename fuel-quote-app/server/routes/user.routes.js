@@ -1,12 +1,13 @@
 let mongoose = require('mongoose')
 let express = require('express')
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const jsonwebtoken = require("jsonwebtoken");
+const jwt = require('express-jwt');
 const keys = require('../database/db')
 const mongoDB = require('../mongoconnect');
 const MongoClient = require('mongodb').MongoClient;
 
-
+const jwtSecret = 'secret123'
 
 let router = express.Router();
 require('../models/user-schema').registerModels();
@@ -18,55 +19,65 @@ function errorFunc(error) { console.log(error); }
 const mongoDB_uri = "mongodb+srv://sdgroup23username:sdgroup23pw@cluster0.4pi4i.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 const client = new MongoClient(mongoDB_uri, { useNewUrlParser: true, useUnifiedTopology: true });
 client.connect()
-  .then(client => {
-    const db = client.db("cluster0");
-    const user = db.collection("user");
-    console.log("MongoDB successfully connected! uwu");
+    .then(client => {
+        const db = client.db("cluster0");
+        const user = db.collection("user");
+        console.log("MongoDB successfully connected! uwu");
 
-    /* https://stackoverflow.com/questions/28715859/mongodb-nodejs-converting-circular-structure */
-    router.route('/').get((req, res, next) => {
-        user.find({}).toArray(function(error, data) {
-            if (error) throw error;
+        /* https://stackoverflow.com/questions/28715859/mongodb-nodejs-converting-circular-structure */
+        router.route('/').get((req, res, next) => {
+            user.find({}).toArray(function (error, data) {
+                if (error) throw error;
 
-            res.send(data);
-            console.log(data);
-        });
+                res.send(data);
+                console.log(data);
+            });
 
         })
 
-    /* profile management */
-    router.route('/update').post((req, res, next) => {
-        var filter = { username: req.body.username };
-        user.findOneAndUpdate( filter, {
-            $set:{
-            fullname: req.body.fullname,
-            address1: req.body.address1,
-            address2: req.body.address2,
-            city: req.body.city,
-            state: req.body.state,
-            zip: req.body.zip}
-        }, { strict: false }, (error, data) => {
-            if (error) {
-                console.log(error);
-                return next(error);
-            } else {
-                res.json(data)
-                console.log('User updated successfully !')
-            }
+        /* profile management */
+        router.route('/update').post((req, res, next) => {
+            var filter = {username: req.body.username};
+            user.findOneAndUpdate(filter, {
+                $set: {
+                    fullname: req.body.fullname,
+                    address1: req.body.address1,
+                    address2: req.body.address2,
+                    city: req.body.city,
+                    state: req.body.state,
+                    zip: req.body.zip
+                }
+            }, {strict: false}, (error, data) => {
+                if (error) {
+                    console.log(error);
+                    return next(error);
+                } else {
+                    res.json(data)
+                    console.log('User updated successfully !')
+                }
+            })
         })
-    })
 
-    /* registration */
-    router.route('/create').post((req,res,next) => {
-        user.insertOne( {
-            username: req.body.username,
-            password: req.body.password
-        } );
-    })
+        /* registration */
+        router.route('/create').post((req,res,next) => {
+            user.findOne({username: req.body.username }).then(existingUser => {
+                if (existingUser) {
+                    return res.status(400).json({ username: "Username already exists" });
+                } else {
+                    user.insertOne( {
+                        username: req.body.username,
+                        password: req.body.password
+                    } );
+                    res.json({
+                        token: jsonwebtoken.sign({ user: req.body.username }, jwtSecret)
+                    });
+                }
+            })
+        })
 
 
     })
-  client.close();
+client.close();
 
 
 
@@ -96,7 +107,6 @@ client.connect()
             });
         }
         })
-  /*
          user.create(req.body, (error, data) => {
              if (error) {
                  return next(error)
@@ -106,11 +116,9 @@ client.connect()
              }
          })
 });
-
 router.route('/login').post((req,res) => {
    const username =  req.body.username;
    const password = req.body.password;
-
    //find user by username
     user.findOne({username}).then(user => {
         //check if user exists
@@ -147,7 +155,6 @@ router.route('/login').post((req,res) => {
         }
     })
 });
-
 router.route('/').get((req, res, next) => {
     user.find((error, data) => {
         if (error) {
@@ -157,7 +164,6 @@ router.route('/').get((req, res, next) => {
         }
     })
 });
-
 router.route('/edit/:id').get((req, res, next) => {
     user.findById(req.params.id, (error, data) => {
         if (error) {
@@ -167,9 +173,8 @@ router.route('/edit/:id').get((req, res, next) => {
         }
     })
 });
-
 router.route('/update').post((req, res, next) => {
-    const filter = { username: req.body.username };
+    var filter = { username: req.body.username };
     user.findOneAndUpdate( filter, {
         $set:{
         fullname: req.body.fullname,
@@ -188,12 +193,11 @@ router.route('/update').post((req, res, next) => {
         }
     })
 });
-
 router.route('/createquote').post((req, res, next) => {
-    user.findOneAndUpdate( {username: req.body.username }, 
-            {  
+    user.findOneAndUpdate( {username: req.body.username },
+            {
             $push : {
-                quoteInfo : { 
+                quoteInfo : {
                     gallons_requested: req.body.gallons_requested,
                     delivery_date: req.body.delivery_date
                             }
@@ -208,7 +212,6 @@ router.route('/createquote').post((req, res, next) => {
             }
     })
 })
-
 router.route('/delete/:id').delete((req, res, next) => {
     user.findByIdAndRemove(req.params.id, (error, data) => {
         if (error) {

@@ -27,7 +27,6 @@ mongoose.connect(database.db, {
 /* const mongoDB_uri = "mongodb+srv://sdgroup23username:sdgroup23pw@cluster0.4pi4i.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 const mongoDB_client = new MongoClient(mongoDB_uri, { useNewUrlParser: true, useUnifiedTopology: true });
 const dbName = "cluster0"; 
-
 mongoDB.mongoDB_run(dbName, mongoDB_client).catch(console.dir); */
 /*-----------------*/
 

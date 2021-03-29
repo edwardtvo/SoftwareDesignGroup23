@@ -41,17 +41,12 @@ const Login = () => {
             .then((res) => {
                 console.log(res.data)
             }).catch((error) => {
-                if (error) {
-                    console.log(error)
-                } else {
-                    setValidated(true);
-                    history.push("/profilemanagement")
-                }
+            console.log(error)
         });
 
-     // if (/*Correct login credentials */ true) history.push("/profilemanagement");
+      if (/*Correct login credentials */ true) history.push("/profilemanagement");
     }
-   // setValidated(true);
+    setValidated(true);
 
   }
   

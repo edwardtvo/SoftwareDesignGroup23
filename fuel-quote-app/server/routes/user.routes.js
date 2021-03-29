@@ -9,6 +9,15 @@ require('../models/user-schema').registerModels();
 // This is the right model because ^registerModels set it up for us.
 let user = mongoose.model('user');
 
+// GET A JWT
+const jwtSecret = 'secret123';
+router.route('/jwt').get((req, res) => {
+
+})
+
+
+
+
 router.route('/create').post((req, res, next) => {
    /* user.findOne({ username: req.body.username }).then(user => {
         if (user) {
@@ -35,7 +44,6 @@ router.route('/create').post((req, res, next) => {
             });
         }
         })*/
-
          user.create(req.body, (error, data) => {
              if (error) {
                  return next(error)
@@ -73,6 +81,7 @@ router.route('/login').post((req,res) => {
                     expiresIn: 31556926 // 1 year in seconds
                 },
                 (err, token) => {
+                    console.log(token)
                     res.json({
                         success: true,
                         token: "Bearer " + token
@@ -108,7 +117,7 @@ router.route('/edit/:id').get((req, res, next) => {
 });
 
 router.route('/update').post((req, res, next) => {
-    var filter = { username: req.body.username };
+    const filter = { username: req.body.username };
     user.findOneAndUpdate( filter, {
         $set:{
         fullname: req.body.fullname,

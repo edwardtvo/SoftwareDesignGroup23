@@ -23,11 +23,62 @@ const History = () => {
     }
     componentDidMount()
 
+    const columns = useMemo(() => COLUMNS, [])
+    const data = useMemo(() => MOCK_DATA, [])
+
+    const tableInstance = useTable({
+        columns,
+        data
+    })
+
+    const { getTableProps,
+            getTableBodyProps, 
+            headerGroups, 
+            rows, 
+            prepareRow } = tableInstance 
+
     return (
         <div>
+
+            
             <NavBar loggedIn={true}/>
 
-            <Container>{userList.map((data, i) => {console.log(data.username); return <Row><Col>{data.username}</Col><Col>{data.password}</Col></Row>;})}</Container>
+            <Container>{userList.map((data, i) => {console.log(data.username); return <Row><Col>{data.username}</Col><Col>{data.password}</Col><Col>{data.address1}</Col></Row>;})}</Container>
+
+          {/* <table {...getTableProps()}>
+            <thead>
+                {
+                    headerGroups.map(headerGroup => (
+                        <tr {...headerGroup.getHeaderGroupProps()}>
+                            {
+                                headerGroup.headers.map( column => (
+                                    <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+                                ))
+                            }
+                        </tr>
+                    ))
+                }
+            </thead>
+            <tbody {...getTableBodyProps()}>
+                {
+                    rows.map(row => {
+                        prepareRow(row)
+                        return (
+                            <tr {...row.getRowProps()}>
+                                {
+                                    row.cells.map( cell => {
+                                        return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                                    })
+                                }
+                            </tr>
+                        )
+                    })
+                }
+            </tbody>
+            <h4>Version 1.0.0</h4>
+            <Link to='/'>Go Back</Link>
+            
+            </table> */ }
         </div>
     )
 /*

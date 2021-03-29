@@ -33,30 +33,85 @@ describe('Models', function() {
             })
         });
 
-        it('should not save without password or less than 6 char', function(done) {
+        it('should have a username and password', function(done) {
             let user = new User({
-                username: "unit",
-                password: 'hellopw'
+                username: "unitTestUser",
+                password: "unitTestPassword"
+            });
+            user.save(done);
+         });
+
+         it('should have a username with length greater than 5 and less than 31', function(done) {
+            let user = new User({
+                username: "unitTestUser"
+            });
+            user.save(function(err) {
+                expect(user.username).to.have.lengthOf.above(5).and.lengthOf.below(31);
+                  //.and.have.property('message', 'user validation failed');
+                done();
+              });
+         });
+
+         it('should not save without password', function(done) {
+            let user = new User({
+                username: "unitTestUser"
             });
             user.save(function(err) {
                 expect(err).to.exist
-                    .and.be.instanceof(Error);
-                    //.and.have.property('message', 'user validation failed');
+                  .and.be.instanceof(Error);
+                  //.and.have.property('message', 'user validation failed');
                 done();
-            });
-        });
+              });
+         });
 
-/*
+         it('should have a password with length greater than 5 and less than 31', function(done) {
+            let user = new User({
+                username: "unitTestUser",
+                password: "hellogreaterthan5andlessthan31"
+            });
+            user.save(function(err) {
+                expect(user.password).to.have.lengthOf.above(5).and.lengthOf.below(31);
+                  //.and.have.property('message', 'user validation failed');
+                done();
+              });
+         });
+
+         it('should have a fullname with length greater than 1 and less than 101', function(done) {
+            let user = new User({
+                username: "unitTestUser",
+                password: "hellogreaterthan5andlessthan31",
+                //fullname: "V"
+                fullname: "John Doe"
+            });
+            user.save(function(err) {
+                expect(user.fullname).to.have.lengthOf.above(1).and.lengthOf.below(101);
+                  //.and.have.property('message', 'user validation failed');
+                done();
+              });
+         });
+
+         it('should have state initials of length 2', function(done) {
+            let user = new User({
+                state: "TX"
+            });
+            user.save(function(err) {
+                expect(user.state).to.have.lengthOf(2);
+                  //.and.have.property('message', 'user validation failed');
+                done();
+              });
+         });
+
         it('should not save invalid address', function(done) {
             let userid = '60552acdf6cd8196c6ad0269'
             User.find({_id: userid}, (err, user) => {
                 should.not.exist(err);
                 user.address1 = '??%'
+                done();
             }
         )
 
 
-    });*/
+    });
 
 });
 

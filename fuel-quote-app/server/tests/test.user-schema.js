@@ -90,12 +90,68 @@ describe('Models', function() {
               });
          });
 
+         it('should have city of length greater than 1 and less than 101', function(done) {
+            let user = new User({
+                city: "Houston"
+            });
+            user.save(function(err) {
+                expect(user.city).to.have.lengthOf.above(1).and.lengthOf.below(101);
+                  //.and.have.property('message', 'user validation failed');
+                done();
+              });
+         });
+
          it('should have state initials of length 2', function(done) {
             let user = new User({
                 state: "TX"
             });
             user.save(function(err) {
                 expect(user.state).to.have.lengthOf(2);
+                  //.and.have.property('message', 'user validation failed');
+                done();
+              });
+         });
+
+         it('should have address1 with length greater than 1 and less than 201', function(done) {
+            let user = new User({
+                address1: "123 street"
+            });
+            user.save(function(err) {
+                expect(user.address1).to.have.lengthOf.above(1).and.lengthOf.below(201);
+                  //.and.have.property('message', 'user validation failed');
+                done();
+              });
+         });
+         
+         it('should have zipcode of length 5 to 7', function(done) {
+            let user = new User({
+                zipcode: "1234567"
+            });
+            user.save(function(err) {
+                expect(user.zipcode).to.have.lengthOf.above(4).and.lengthOf.below(8);
+                  //.and.have.property('message', 'user validation failed');
+                done();
+              });
+         });
+
+         it('should have username, password, full_name, address1, city, state, and zip', function(done) {
+            let user = new User({
+                username: "unitTestUser",
+                password: "thisisapassword",
+                fullname: "John Doe",
+                address1: "123 Street",
+                city: "Houston",
+                state: "TX",
+                zipcode: "1234567"
+            });
+            user.save(function(err) {
+                expect(user.username).to.have.lengthOf.above(5).and.lengthOf.below(31);
+                expect(user.password).to.have.lengthOf.above(5).and.lengthOf.below(31);
+                expect(user.fullname).to.have.lengthOf.above(1).and.lengthOf.below(101);
+                expect(user.address1).to.have.lengthOf.above(1).and.lengthOf.below(201);
+                expect(user.city).to.have.lengthOf.above(1).and.lengthOf.below(101);
+                expect(user.state).to.have.lengthOf(2);
+                expect(user.zipcode).to.have.lengthOf.above(4).and.lengthOf.below(8);
                   //.and.have.property('message', 'user validation failed');
                 done();
               });

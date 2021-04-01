@@ -21,7 +21,8 @@ client.connect()
   .then(client => {
     const db = client.db("cluster0");
     const user = db.collection("user");
-    console.log("MongoDB successfully connected! uwu");
+    const quotehistory = db.collection("quotehistory")
+    console.log("/ / / MongoDB successfully connected! u w u / / /");
 
     /* https://stackoverflow.com/questions/28715859/mongodb-nodejs-converting-circular-structure */
     router.route('/').get((req, res, next) => {
@@ -51,7 +52,7 @@ client.connect()
                 return next(error);
             } else {
                 res.json(data)
-                console.log('User updated successfully !')
+                console.log('/ / / User updated successfully ! / / /')
             }
         })
     })
@@ -62,6 +63,25 @@ client.connect()
             username: req.body.username,
             password: req.body.password
         } );
+    })
+
+    router.route('/quoteupdate').post((req,res,next) => {
+        quotehistory.insertOne( {
+            username: req.body.username,
+            gallons_requested: req.body.gallons_requested,
+            delivery_address: req.body.delivery_address,
+            delivery_date: req.body.delivery_date,
+            price_per_gallon: req.body.price_per_gallon,
+            amount_due: req.body.amount_due
+        }, { strict: false }, (error, data) => {
+            if (error) {
+                console.log(error);
+                return next(error);
+            } else {
+                res.json(data)
+                console.log('/ / / Quote updated successfully ! / / /')
+            }
+        })
     })
 
 

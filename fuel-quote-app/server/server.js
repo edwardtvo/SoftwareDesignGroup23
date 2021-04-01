@@ -7,6 +7,7 @@ const MongoClient = require('mongodb').MongoClient;
 const mongoDB = require('./mongoconnect');
 const createError = require('http-errors');
 const userRoute = require('./routes/user.routes')
+const jwt = require('express-jwt');
 
 
 /* mongoose.Promise = global.Promise;

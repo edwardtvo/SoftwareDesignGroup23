@@ -16,6 +16,26 @@ require('../models/user-schema').registerModels();
 function iterateFunc(doc) { console.log(JSON.stringify(doc, null, 4)); }
 function errorFunc(error) { console.log(error); }
 
+/* authenticate jwt */
+function authenticateJWT(req, res, next) {
+    const authHeader = req.headers.authorization;
+
+    if (authHeader) {
+        const token = authHeader.split(' ')[1];
+
+        jsonwebtoken.verify(token, jwtSecret, (err, user_name) => {
+            if (err) {
+                return res.sendStatus(403);
+            }
+
+            req.user = user_name;
+            next();
+        });
+    } else {
+        res.sendStatus(401);
+    }
+}
+
 const mongoDB_uri = "mongodb+srv://sdgroup23username:sdgroup23pw@cluster0.4pi4i.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 const client = new MongoClient(mongoDB_uri, { useNewUrlParser: true, useUnifiedTopology: true });
 client.connect()
@@ -36,7 +56,7 @@ client.connect()
         })
 
         /* profile management */
-        router.route('/update').post((req, res, next) => {
+        router.route('/update').post(authenticateJWT, (req, res, next) => {
             var filter = {username: req.body.username};
             user.findOneAndUpdate(filter, {
                 $set: {
@@ -68,9 +88,8 @@ client.connect()
                         username: req.body.username,
                         password: req.body.password
                     } );
-                    res.json({
-                        token: jsonwebtoken.sign({ user: req.body.username }, jwtSecret)
-                    });
+                    const token = jsonwebtoken.sign({ username: req.body.username }, jwtSecret)
+                    res.json({token});
                 }
             })
         })

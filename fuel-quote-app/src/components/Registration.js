@@ -43,7 +43,7 @@ const Registration = () => {
             });
 
             setValidated(true);
-            history.push("/login")
+            history.push("/profilemanagement")
 
         }
     }

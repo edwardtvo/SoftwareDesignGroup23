@@ -20,14 +20,14 @@ describe("server/client connections",function(){
             .expect(200, done);
     })
 
-    // #2 should show user collection
+    // #2 should connect to user collection
     it('responds to /users', function(done) {
         supertest(server)
             .get('/users')
             .expect(200, done);
     })
 
-    // #3 should show history collection
+    // #3 should connect to history collection
     it('responds to /history', function(done) {
         supertest(server)
             .get('/history')
@@ -41,7 +41,6 @@ describe("server/client connections",function(){
             .expect(404, done);
     })
 
-/*
     // #5 should return home page
     it("should return client home page",function(done){
         // This agent refers to PORT where client program is runninng.
@@ -59,7 +58,7 @@ describe("server/client connections",function(){
                 done();
             });
     });
-    */
+
 
 
 });

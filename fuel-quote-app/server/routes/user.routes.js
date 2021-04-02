@@ -59,32 +59,44 @@ client.connect()
 
     /* registration */
     router.route('/create').post((req,res,next) => {
+        const userExisted = false;
         user.findOne({ username: req.body.username }).then(user => {
             if (user) {
-                return res.status(400).json({ username: "Username already exists" });
-            } else {
-                const newUser = new user({
-                    email: req.body.username,
-                    password: req.body.password
-                });
-                // Hash password before saving in database
-                bcrypt.genSalt(10, (err, salt) => {
-                    bcrypt.hash(newUser.password, salt, (err, hash) => {
-                        if (err) throw err;
-                        newUser.password = hash;
+                userExisted = true;
+            }
+        });
+            if (!userExisted) {
+                const newUser = { username: req.body.username, password: req.body.password };
+                bcrypt.hash(newUser.password, 10, function(err, hashedPassword) {
+                    if (err) {
+                        next(err);
+                    }
+                    else {
+                        newUser.password = hashedPassword;
+                        next();
+                    }
+                })
 
-                        user.save(newUser, (error, data) => {
-                            if (error) {
-                                return next(error)
-                            } else {
-                                console.log(data)
-                                res.json(data)
-                            }
-                        })
-                    });
+                user.insertOne( {
+                    username: newUser.username,
+                    password: newUser.password
+                }, {strict: false}, (error, data) => {
+                    if (error) {
+                        console.log(error);
+                        return next(error);
+                    } else {
+                        res.json(data);
+                        console.log("/// New user registered! ///")
+                    }
+
                 });
             }
-    })
+            else {
+                console.log("ERROR: User already exists");
+            };
+        })
+    
+
 
     router.route('/quoteupdate').post((req,res,next) => {
         quotehistory.insertOne( {
@@ -106,8 +118,10 @@ client.connect()
     })
 
 
-    })
+    });
   client.close();
+module.exports = router;
+
   
 
 
@@ -265,4 +279,3 @@ router.route('/delete/:id').delete((req, res, next) => {
     })
 }) */
 
-module.exports = router;

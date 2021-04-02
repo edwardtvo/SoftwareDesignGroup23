@@ -1,5 +1,5 @@
 let supertest = require("supertest");
-let expect = require('chai').expect
+//let expect = require('chai').expect
 let should = require('chai').should()
 
 // UNIT test begin
@@ -58,7 +58,4 @@ describe("server/client connections",function(){
                 done();
             });
     });
-
-
-
 });

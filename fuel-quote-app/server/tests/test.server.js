@@ -2,20 +2,50 @@ let supertest = require("supertest");
 let expect = require('chai').expect
 let should = require('chai').should()
 
-
-const assert = require('assert');
-const user =  require('../server')
-
-// This agent refers to PORT where program is runninng.
-
-let client = supertest.agent("http://localhost:3000");
-
 // UNIT test begin
-describe("Check client/server connection",function(){
+describe("server/client connections",function(){
+    let server;
+    beforeEach(function (done) {
+        server = require('../server.js');
+        setTimeout(done,1000)
+    });
+    afterEach(function (done) {
+        server.close(setTimeout(done,1000));
+    });
 
-    // #1 should return home page
-    it("should return home page",function(done){
+    // #1 should show established connection
+    it('responds to /', function(done) {
+        supertest(server)
+            .get('/')
+            .expect(200, done);
+    })
 
+    // #2 should show user collection
+    it('responds to /users', function(done) {
+        supertest(server)
+            .get('/users')
+            .expect(200, done);
+    })
+
+    // #3 should show history collection
+    it('responds to /history', function(done) {
+        supertest(server)
+            .get('/history')
+            .expect(200, done);
+    })
+
+    // #4 should show error if route does not exist
+    it('responds 404 to anything else', function(done) {
+        supertest(server)
+            .get('/foo/bar')
+            .expect(404, done);
+    })
+
+/*
+    // #5 should return home page
+    it("should return client home page",function(done){
+        // This agent refers to PORT where client program is runninng.
+        let client = supertest.agent("http://localhost:3000");
         // calling home page api
         client
             .get("/")
@@ -29,5 +59,7 @@ describe("Check client/server connection",function(){
                 done();
             });
     });
+    */
+
 
 });

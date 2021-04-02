@@ -28,9 +28,8 @@ client.connect()
     router.route('/').get((req, res, next) => {
         user.find({}).toArray(function(error, data) {
             if (error) throw error;
-        
             res.send(data);
-            console.log(data);
+            //console.log(data);
         });
 
         })
@@ -59,7 +58,7 @@ client.connect()
 
     /* registration */
     router.route('/create').post((req,res,next) => {
-        const userExisted = false;
+        let userExisted = false;
         user.findOne({ username: req.body.username }).then(user => {
             if (user) {
                 userExisted = true;
@@ -93,7 +92,7 @@ client.connect()
             }
             else {
                 console.log("ERROR: User already exists");
-            };
+            }
         })
     
 

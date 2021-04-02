@@ -7,6 +7,7 @@ const MongoClient = require('mongodb').MongoClient;
 const mongoDB = require('./mongoconnect');
 const createError = require('http-errors');
 const userRoute = require('./routes/user.routes')
+const historyRoute = require('./routes/history.routes')
 const jwt = require('express-jwt');
 
 
@@ -38,7 +39,11 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(cors());
 app.use('/users', userRoute);
+app.use('/history', historyRoute);
 
+app.get('/', function (req, res) {
+    res.status(200).send('connection is good');
+});
 
 const port = process.env.PORT || 4000;
 const server = app.listen(port, () => {
@@ -55,3 +60,5 @@ app.use(function (err, req, res, next) {
     if (!err.statusCode) err.statusCode = 500;
     res.status(err.statusCode).send(err.message);
 });
+
+module.exports = server

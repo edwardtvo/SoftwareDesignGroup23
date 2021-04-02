@@ -12,7 +12,7 @@ import {Row, Col, Container} from 'react-bootstrap'
 const History = () => {
     const [userList, setUserList] = useState([])
     const componentDidMount = () => {
-        axios.get('http://localhost:4000/history')
+        axios.get('http://localhost:4000/users')
             .then(res => {
                 setUserList(res.data);
                 console.log(userList)
@@ -27,7 +27,7 @@ const History = () => {
         <div>
             <NavBar loggedIn={true}/>
 
-            <Container>{userList.map((data, i) => {console.log(data.username); return <Row><Col>{data.username}</Col><Col>{data.id}</Col></Row>;})}</Container>
+            <Container>{userList.map((data, i) => {console.log(data.username); return <Row><Col>{data.username}</Col><Col>{data.password}</Col></Row>;})}</Container>
         </div>
     )
 /*

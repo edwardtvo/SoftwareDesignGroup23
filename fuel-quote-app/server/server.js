@@ -7,7 +7,6 @@ const MongoClient = require('mongodb').MongoClient;
 const mongoDB = require('./mongoconnect');
 const createError = require('http-errors');
 const userRoute = require('./routes/user.routes')
-const historyRoute = require('./routes/history.routes')
 
 
 /* mongoose.Promise = global.Promise;
@@ -39,7 +38,6 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(cors());
 app.use('/users', userRoute);
-app.use('/history', historyRoute);
 
 
 const port = process.env.PORT || 4000;

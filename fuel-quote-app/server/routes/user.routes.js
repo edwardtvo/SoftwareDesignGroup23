@@ -1,13 +1,12 @@
 let mongoose = require('mongoose')
 let express = require('express')
 const bcrypt = require("bcryptjs");
-const jsonwebtoken = require("jsonwebtoken");
-const jwt = require('express-jwt');
+const jwt = require("jsonwebtoken");
 const keys = require('../database/db')
 const mongoDB = require('../mongoconnect');
 const MongoClient = require('mongodb').MongoClient;
 
-const jwtSecret = 'secret123'
+
 
 let router = express.Router();
 require('../models/user-schema').registerModels();
@@ -16,89 +15,114 @@ require('../models/user-schema').registerModels();
 function iterateFunc(doc) { console.log(JSON.stringify(doc, null, 4)); }
 function errorFunc(error) { console.log(error); }
 
-/* authenticate jwt */
-function authenticateJWT(req, res, next) {
-    const authHeader = req.headers.authorization;
-
-    if (authHeader) {
-        const token = authHeader.split(' ')[1];
-
-        jsonwebtoken.verify(token, jwtSecret, (err, user_name) => {
-            if (err) {
-                return res.sendStatus(403);
-            }
-
-            req.user = user_name;
-            next();
-        });
-    } else {
-        res.sendStatus(401);
-    }
-}
-
 const mongoDB_uri = "mongodb+srv://sdgroup23username:sdgroup23pw@cluster0.4pi4i.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 const client = new MongoClient(mongoDB_uri, { useNewUrlParser: true, useUnifiedTopology: true });
 client.connect()
-    .then(client => {
-        const db = client.db("cluster0");
-        const user = db.collection("user");
-        console.log("MongoDB successfully connected! uwu");
+  .then(client => {
+    const db = client.db("cluster0");
+    const user = db.collection("user");
+    const quotehistory = db.collection("quotehistory")
+    console.log("/ / / MongoDB successfully connected! u w u / / /");
 
-        /* https://stackoverflow.com/questions/28715859/mongodb-nodejs-converting-circular-structure */
-        router.route('/').get((req, res, next) => {
-            user.find({}).toArray(function (error, data) {
-                if (error) throw error;
-
-                res.send(data);
-                console.log(data);
-            });
-
+    /* https://stackoverflow.com/questions/28715859/mongodb-nodejs-converting-circular-structure */
+    router.route('/').get((req, res, next) => {
+        user.find({}).toArray(function(error, data) {
+            if (error) throw error;
+        
+            res.send(data);
+            console.log(data);
+        });
 
         })
-
-        /* profile management */
-        router.route('/update').post(authenticateJWT, (req, res, next) => {
-            var filter = {username: req.body.username};
-            user.findOneAndUpdate(filter, {
-                $set: {
-                    fullname: req.body.fullname,
-                    address1: req.body.address1,
-                    address2: req.body.address2,
-                    city: req.body.city,
-                    state: req.body.state,
-                    zip: req.body.zip
-                }
-            }, {strict: false}, (error, data) => {
-                if (error) {
-                    console.log(error);
-                    return next(error);
-                } else {
-                    res.json(data)
-                    console.log('User updated successfully !')
-                }
-            })
+    
+    /* profile management */
+    router.route('/update').post((req, res, next) => {
+        var filter = { username: req.body.username };
+        user.findOneAndUpdate( filter, {
+            $set:{
+            fullname: req.body.fullname,
+            address1: req.body.address1,
+            address2: req.body.address2,
+            city: req.body.city,
+            state: req.body.state,
+            zip: req.body.zip}
+        }, { strict: false }, (error, data) => {
+            if (error) {
+                console.log(error);
+                return next(error);
+            } else {
+                res.json(data)
+                console.log('/ / / User updated successfully ! / / /')
+            }
         })
-
-        /* registration */
-        router.route('/create').post((req,res,next) => {
-            user.findOne({username: req.body.username }).then(existingUser => {
-                if (existingUser) {
-                    return res.status(400).json({ username: "Username already exists" });
-                } else {
-                    user.insertOne( {
-                        username: req.body.username,
-                        password: req.body.password
-                    } );
-                    const token = jsonwebtoken.sign({ username: req.body.username }, jwtSecret)
-                    res.json({token});
-                }
-            })
-        })
-
-
     })
-client.close();
 
+    /* registration */
+    router.route('/create').post((req,res,next) => {
+        const userExisted = false;
+        user.findOne({ username: req.body.username }).then(user => {
+            if (user) {
+                userExisted = true;
+            }
+        });
+            if (!userExisted) {
+                const newUser = { username: req.body.username, password: req.body.password };
+                bcrypt.hash(newUser.password, 10, function(err, hashedPassword) {
+                    if (err) {
+                        next(err);
+                    }
+                    else {
+                        newUser.password = hashedPassword;
+                        next();
+                    }
+                })
+
+                user.insertOne( {
+                    username: newUser.username,
+                    password: newUser.password
+                }, {strict: false}, (error, data) => {
+                    if (error) {
+                        console.log(error);
+                        return next(error);
+                    } else {
+                        res.json(data);
+                        console.log("/// New user registered! ///")
+                    }
+
+                });
+            }
+            else {
+                console.log("ERROR: User already exists");
+            };
+        })
+    
+
+
+    router.route('/quoteupdate').post((req,res,next) => {
+        quotehistory.insertOne( {
+            username: req.body.username,
+            gallons_requested: req.body.gallons_requested,
+            delivery_address: req.body.delivery_address,
+            delivery_date: req.body.delivery_date,
+            price_per_gallon: req.body.price_per_gallon,
+            amount_due: req.body.amount_due
+        }, { strict: false }, (error, data) => {
+            if (error) {
+                console.log(error);
+                return next(error);
+            } else {
+                res.json(data)
+                console.log('/ / / Quote updated successfully ! / / /')
+            }
+        })
+    })
+
+
+    });
+  client.close();
+module.exports = router;
+
+  
 
 
 /* router.route('/create').post((req, res, next) => {
@@ -127,6 +151,7 @@ client.close();
             });
         }
         })
+
          user.create(req.body, (error, data) => {
              if (error) {
                  return next(error)
@@ -136,9 +161,11 @@ client.close();
              }
          })
 });
+
 router.route('/login').post((req,res) => {
    const username =  req.body.username;
    const password = req.body.password;
+
    //find user by username
     user.findOne({username}).then(user => {
         //check if user exists
@@ -175,6 +202,9 @@ router.route('/login').post((req,res) => {
         }
     })
 });
+
+
+
 router.route('/').get((req, res, next) => {
     user.find((error, data) => {
         if (error) {
@@ -183,7 +213,9 @@ router.route('/').get((req, res, next) => {
             res.json(data)
         }
     })
+
 });
+
 router.route('/edit/:id').get((req, res, next) => {
     user.findById(req.params.id, (error, data) => {
         if (error) {
@@ -193,6 +225,7 @@ router.route('/edit/:id').get((req, res, next) => {
         }
     })
 });
+
 router.route('/update').post((req, res, next) => {
     var filter = { username: req.body.username };
     user.findOneAndUpdate( filter, {
@@ -213,11 +246,12 @@ router.route('/update').post((req, res, next) => {
         }
     })
 });
+
 router.route('/createquote').post((req, res, next) => {
-    user.findOneAndUpdate( {username: req.body.username },
-            {
+    user.findOneAndUpdate( {username: req.body.username }, 
+            {  
             $push : {
-                quoteInfo : {
+                quoteInfo : { 
                     gallons_requested: req.body.gallons_requested,
                     delivery_date: req.body.delivery_date
                             }
@@ -232,6 +266,7 @@ router.route('/createquote').post((req, res, next) => {
             }
     })
 })
+
 router.route('/delete/:id').delete((req, res, next) => {
     user.findByIdAndRemove(req.params.id, (error, data) => {
         if (error) {
@@ -244,4 +279,3 @@ router.route('/delete/:id').delete((req, res, next) => {
     })
 }) */
 
-module.exports = router;

@@ -12,8 +12,6 @@ let router = express.Router();
 require('../models/user-schema').registerModels();
 // This is the right model because ^registerModels set it up for us.
 
-const User = require('../models/user-schema');
-
 function iterateFunc(doc) { console.log(JSON.stringify(doc, null, 4)); }
 function errorFunc(error) { console.log(error); }
 
@@ -74,7 +72,8 @@ client.connect()
                     bcrypt.hash(newUser.password, salt, (err, hash) => {
                         if (err) throw err;
                         newUser.password = hash;
-                        user.create(newUser, (error, data) => {
+
+                        user.save(newUser, (error, data) => {
                             if (error) {
                                 return next(error)
                             } else {
@@ -85,16 +84,6 @@ client.connect()
                     });
                 });
             }
-            })
-    
-             user.create(req.body, (error, data) => {
-                 if (error) {
-                     return next(error)
-                 } else {
-                     console.log(data)
-                     res.json(data)
-                 }
-             })
     })
 
     router.route('/quoteupdate').post((req,res,next) => {

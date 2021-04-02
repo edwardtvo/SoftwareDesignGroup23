@@ -12,6 +12,8 @@ let router = express.Router();
 require('../models/user-schema').registerModels();
 // This is the right model because ^registerModels set it up for us.
 
+const User = require('../models/user-schema');
+
 function iterateFunc(doc) { console.log(JSON.stringify(doc, null, 4)); }
 function errorFunc(error) { console.log(error); }
 
@@ -59,10 +61,40 @@ client.connect()
 
     /* registration */
     router.route('/create').post((req,res,next) => {
-        user.insertOne( {
-            username: req.body.username,
-            password: req.body.password
-        } );
+        user.findOne({ username: req.body.username }).then(user => {
+            if (user) {
+                return res.status(400).json({ username: "Username already exists" });
+            } else {
+                const newUser = new user({
+                    email: req.body.username,
+                    password: req.body.password
+                });
+                // Hash password before saving in database
+                bcrypt.genSalt(10, (err, salt) => {
+                    bcrypt.hash(newUser.password, salt, (err, hash) => {
+                        if (err) throw err;
+                        newUser.password = hash;
+                        user.create(newUser, (error, data) => {
+                            if (error) {
+                                return next(error)
+                            } else {
+                                console.log(data)
+                                res.json(data)
+                            }
+                        })
+                    });
+                });
+            }
+            })
+    
+             user.create(req.body, (error, data) => {
+                 if (error) {
+                     return next(error)
+                 } else {
+                     console.log(data)
+                     res.json(data)
+                 }
+             })
     })
 
     router.route('/quoteupdate').post((req,res,next) => {

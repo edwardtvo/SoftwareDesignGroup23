@@ -2,20 +2,22 @@ let supertest = require("supertest");
 let expect = require('chai').expect
 let should = require('chai').should()
 
+
+const assert = require('assert');
+const user =  require('../server')
+
 // This agent refers to PORT where program is runninng.
 
-let server = supertest.agent("http://localhost:3000");
+let client = supertest.agent("http://localhost:3000");
 
 // UNIT test begin
-
 describe("Check client/server connection",function(){
 
     // #1 should return home page
-
     it("should return home page",function(done){
 
         // calling home page api
-        server
+        client
             .get("/")
             .expect("Content-type",/json/)
             .expect(200) // THis is HTTP response

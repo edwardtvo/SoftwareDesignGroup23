@@ -1,4 +1,5 @@
 let express = require('express');
+const cookieParser = require('cookie-parser');
 let mongoose = require('mongoose');
 let cors = require('cors');
 let bodyParser = require('body-parser');
@@ -7,6 +8,9 @@ const MongoClient = require('mongodb').MongoClient;
 const mongoDB = require('./mongoconnect');
 const createError = require('http-errors');
 const userRoute = require('./routes/user.routes')
+const secret = require('./auth/secret');
+const withAuth = require('./routes/middleware');
+
 
 
 /* mongoose.Promise = global.Promise;
@@ -32,12 +36,19 @@ mongoDB.mongoDB_run(dbName, mongoDB_client).catch(console.dir); */
 /*-----------------*/
 
 const app = express();
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(cors());
 app.use('/users', userRoute);
+
+app.get('/checktoken', withAuth, (req,res,next) => {
+    console.log('token in /checktoken');
+    console.log(req.cookie.token);
+    res.sendStatus(200);
+})
 
 
 const port = process.env.PORT || 4000;

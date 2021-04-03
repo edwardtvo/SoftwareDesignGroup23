@@ -2,7 +2,7 @@ import {Container, Button, Form, Row, Col} from 'react-bootstrap'
 import React, { useEffect, useState } from "react";
 import NavBar from "./NavBar";
 import axios from 'axios';
-import { useHistory } from "react-router-dom";
+import { useHistory, Redirect } from "react-router-dom";
 const bcrypt = require('./custom-bcrypt');
 
 function simulateNetworkRequest() {
@@ -13,6 +13,7 @@ const Login = () => {
     const [isLoading, setLoading] = useState(false);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [redirect, setRedirect] = useState(false);
 
     let history=useHistory();
 
@@ -28,23 +29,49 @@ const Login = () => {
 
   const handleSubmit = (event) => {
     const form = event.currentTarget;
+    event.preventDefault();
+
+    /*check front-end validation */
     if (form.checkValidity() === false) {
-      event.preventDefault();
       event.stopPropagation();
     } else {    
       const userObj = {
         username: username,
-        password: bcrypt.hash(password)
+        password: /*bcrypt.hash(password)*/ password
       }
-                                            /* CHANGE /create TO /update */
+
+    
+
+      /* authenticate user credentials 
+      axios.post('http://localhost:4000/users/authenticate', userObj)*/
+      fetch('http://localhost:4000/users/authenticate', {
+        method: 'POST',
+        body: JSON.stringify(userObj),
+        headers: {
+          'Content-Type':'application/json'
+        },
+        withCredentials: true
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          //console.log('going to profman!');
+          history.push('/profilemanagement')
+        } else {
+          const error = new Error(res.error);
+          throw error;
+        }
+      }).catch((err) => {
+        console.log(err);
+        alert('Error logging in, please try again');
+      })
+      /*                                       
       axios.post('http://localhost:4000/users/create', userObj)
             .then((res) => {
                 console.log(res.data)
             }).catch((error) => {
             console.log(error)
-        });
+        }); */
 
-      if (/*Correct login credentials */ true) history.push("/profilemanagement");
     }
     setValidated(true);
 

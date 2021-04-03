@@ -5,6 +5,8 @@ const jwt = require("jsonwebtoken");
 const keys = require('../database/db')
 const mongoDB = require('../mongoconnect');
 const MongoClient = require('mongodb').MongoClient;
+const withAuth = require('./middleware');
+
 
 
 
@@ -12,8 +14,12 @@ let router = express.Router();
 require('../models/user-schema').registerModels();
 // This is the right model because ^registerModels set it up for us.
 
+
+const secret = 'group23secret';
 function iterateFunc(doc) { console.log(JSON.stringify(doc, null, 4)); }
 function errorFunc(error) { console.log(error); }
+
+
 
 const mongoDB_uri = "mongodb+srv://sdgroup23username:sdgroup23pw@cluster0.4pi4i.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 const client = new MongoClient(mongoDB_uri, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -57,6 +63,56 @@ client.connect()
         })
     })
 
+    /* after auth sample route */
+    router.get('/inside', withAuth, (req,res,next) => {
+        res.send('Password is potato');
+    })
+
+    /* router.get('/checktoken', withAuth, (req,res,next) => {
+        console.log('token in /checktoken');
+        console.log(req.cookie.token);
+        res.sendStatus(200);
+    }) */
+
+    /* login */
+    router.route('/authenticate').post((req,res,next) => {
+        const username = req.body.username;
+        const password = req.body.password;
+
+        user.findOne({ username: req.body.username }, (err, user) => {
+            if (err) {
+                console.error(err);
+                res.status(500)
+                .json({ error: '/// Internal error, please try again /// '});
+            }
+            else if (!user) {
+                res.status(601)
+                .json({ error: '/// Incorrect username or password ///' });
+            }
+            else {
+                bcrypt.compare(req.body.password, user.password, (err, data) => {
+                    if (err) {
+                        res.status(500)
+                        .json({ error: '/// Internal error, please try again ///'});
+                    } else if (!data) {
+                        res.status(401)
+                        .json({ error: '/// Incorrect username or password ///'});
+                    } else {
+                        /* Issue token */
+                        const payload = { username };
+                        const token = jwt.sign(payload, secret, {
+                            expiresIn: '1h',
+                        });
+                        console.log('Token in user.routes: ');
+                        console.log(JSON.stringify(token));
+                        res.cookie('token', token, {httpOnly: true, secure: false })
+                        .sendStatus(200);
+                    }
+                }) 
+            }
+        })
+    })
+
     /* registration */
     router.route('/create').post((req,res,next) => {
         const userExisted = false;
@@ -66,8 +122,8 @@ client.connect()
             }
         });
             if (!userExisted) {
-                const newUser = { username: req.body.username, password: req.body.password };
-                bcrypt.hash(newUser.password, 10, function(err, hashedPassword) {
+                let newUser = { username: req.body.username, password: req.body.password };
+                /*bcrypt.hash(newUser.password, 10, function(err, hashedPassword) {
                     if (err) {
                         next(err);
                     }
@@ -75,11 +131,33 @@ client.connect()
                         newUser.password = hashedPassword;
                         next();
                     }
+                })*/
+                bcrypt.genSalt(10)
+                .then((salt) => {
+                    console.log(`Salt: ${salt}`);
+                    return bcrypt.hash(newUser.password, salt);
+                }).then((hash) => {
+                    console.log(`Hash: ${hash}`);
+                    user.insertOne( {
+                        username: newUser.username,
+                        password: hash
+                    }, {strict: false}, (error, data) => {
+                        if (error) {
+                            console.log(error);
+                            return next(error);
+                        } else {
+                            res.json(data);
+                            console.log("/// New user registered! ///")
+                        }
+    
+                    });
                 })
 
-                user.insertOne( {
+                console.log(newUser.password);
+
+                /* user.insertOne( {
                     username: newUser.username,
-                    password: newUser.password
+                    password: 
                 }, {strict: false}, (error, data) => {
                     if (error) {
                         console.log(error);
@@ -89,7 +167,7 @@ client.connect()
                         console.log("/// New user registered! ///")
                     }
 
-                });
+                }); */
             }
             else {
                 console.log("ERROR: User already exists");

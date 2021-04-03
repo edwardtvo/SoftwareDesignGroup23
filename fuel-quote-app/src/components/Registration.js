@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import NavBar from './NavBar'
 import { useHistory } from "react-router-dom";
+const bcrypt = require('./custom-bcrypt');
+
 
 function simulateNetworkRequest() {
     return new Promise((resolve) => setTimeout(resolve, 100));

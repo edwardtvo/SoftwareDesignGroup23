@@ -10,6 +10,22 @@ function simulateNetworkRequest() {
     return new Promise((resolve) => setTimeout(resolve, 100));
   }
 
+const apiUrl = 'http://localhost:4000';
+axios.interceptors.request.use(
+    config => {
+        const { origin } = new URL(config.url);
+        const allowedOrigins = [apiUrl];
+        const token = localStorage.getItem('token');
+        if (allowedOrigins.includes(origin)) {
+            config.headers.authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    error => {
+        return Promise.reject(error);
+    }
+);
+
 const QuoteForm = () => {
     /*
     Form Validation https://react-bootstrap.netlify.app/components/forms/#forms-validation-input-group
@@ -23,10 +39,15 @@ const QuoteForm = () => {
     const [username, setUsername] = useState('')
     const [gallons, setGallons] = useState(0)
     const [checked, setChecked] = useState(false)
-    const price_per_gal = useState(1.50)
+    const [price_per_gallon, setPricePerGallon] = useState(1.50)
     const [show, setShow] = useState(false)
-    const [startDate, setStartDate] = useState(new Date())
+    const [delivery_date, setDeliveryDate] = useState(new Date())
     const [isLoading, setLoading] = useState(false);
+        /* address from token retrieved here */
+    const [delivery_address, getDeliveryAddress] =  useState('123 Houston St');
+
+
+
 
     useEffect(() => {
         if (isLoading) {
@@ -36,34 +57,40 @@ const QuoteForm = () => {
         }
       }, [isLoading]);
 
-      const handleClick = () => setLoading(true);
+    const handleClick = () => setLoading(true);
 
-
-    const calcQuote = (e) => {
-        const form = e.currentTarget
+    const calcQuote = (event) => {
+        const form = event.currentTarget;
         if (form.checkValidity() === false) {
-            e.preventDefault()
-            e.stopPropagation()
+            event.stopPropagation()
+            event.preventDefault()
+        }
+        else {
+            event.preventDefault();
             setShow(true)
             setValidated(true)
             const quoteObj = {
                 username: username,
                 gallons_requested: gallons,
-                delivery_date: startDate
+                delivery_address: delivery_address,
+                delivery_date: delivery_date,
+                price_per_gallon: price_per_gallon
                 }
             
-                axios.post('http://localhost:4000/users/createquote', quoteObj)
+                axios.post('http://localhost:4000/users/quoteupdate', quoteObj)
                 .then((res) => {
                     console.log(res.data)
                 }).catch((error) => {
                 console.log(error)
             });
+        
         }
     }
 
     const handleClose = () => {
-        setValidated(false)
-        setShow(false)
+        setValidated(false);
+        setShow(false);
+        window.location.reload();
     }
 
     return (
@@ -82,7 +109,8 @@ const QuoteForm = () => {
                                               value={username}
                                               onChange={(e) => {
                                                 setUsername((e.target.value))
-                                            }} />   
+                                            }} />
+                                <Form.Control.Feedback type="invalid">Please provide username</Form.Control.Feedback>   
                             </Col>                
 
                         </Row> 
@@ -110,7 +138,7 @@ const QuoteForm = () => {
                     {/*Verify Address*/}
                     <Form.Group controlId='validationAddress'>
                         <Row>
-                            <Col className='col-auto'><p>[This will be the delivery address]</p></Col>
+                            <Col className='col-auto'><p>{delivery_address}</p></Col>
                             <Col>
                                 <Form.Check required
                                             type='checkbox'
@@ -135,8 +163,9 @@ const QuoteForm = () => {
                         <Form.Label>Delivery Date: </Form.Label>
                         <DatePicker
                             className='delivDatePicker'
-                            selected={startDate}
-                            onChange={date => {setStartDate(date)}}
+                            selected={delivery_date}
+                            value={delivery_date}
+                            onChange={date => {setDeliveryDate(date)}}
                             minDate={new Date()}
                             showDisabledMonthNavigation
                         />
@@ -155,8 +184,8 @@ const QuoteForm = () => {
                         <Modal.Title>Calculated Cost</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <p>Price per gallon: $ {parseFloat(price_per_gal.toString()).toFixed(2)}</p>
-                        <p>Total cost: $ {(gallons * parseFloat(price_per_gal.toString())).toFixed(2)}</p>
+                        <p>Price per gallon: $ {parseFloat(price_per_gallon.toString()).toFixed(2)}</p>
+                        <p>Total cost: $ {(gallons * parseFloat(price_per_gallon.toString())).toFixed(2)}</p>
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant='danger' onClick={handleClose}>Get Another Quote</Button>

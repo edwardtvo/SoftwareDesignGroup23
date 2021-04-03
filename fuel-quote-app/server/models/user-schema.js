@@ -1,6 +1,9 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
+const bcrypt = require('bcrypt');
 // https://mongoosejs.com/docs/populate.html
+
+const saltRounds = 10;
 
 let quoteSchema = new Schema({
     //_id: {type: mongoose.Schema.Types.ObjectId},
@@ -10,26 +13,16 @@ let quoteSchema = new Schema({
 }, {
     collection: 'quotes'
 });
-let historySchema = new Schema({
-    //_id: {type: mongoose.Schema.Types.ObjectId},
-    gallons_requested: Number,
-    delivery_address: {type: String},
-    delivery_date: {type: Date},
-    price_per_gallon: Number,
-    amount_due: Number
-}, {
-    collection: 'history'
-});
 let userSchema = new Schema({
     //_id: mongoose.Schema.Types.ObjectId,
     username: {
         type: String,
         required: true,
         unique: true,
-        validate: { validator: function (i) {
+        /*validate: { validator: function (i) {
             var regex = /[a-zA-Z0-9\.\-\'\_]{6,30}$/;
             return regex.test(i);
-        }, message: 'Please provide a proper username with at least 6 characters' }
+        }, message: 'Please provide a proper username with at least 6 characters' }*/
     },
     password: {
         type: String,
@@ -91,19 +84,25 @@ let userSchema = new Schema({
     collection: 'users'
 });
 
-var usernameValidator = [
-    { validator: function (i) {
-        var regex = /[a-zA-Z0-9\.\-\'\_]{6,30}$/;
-        return regex.test(i);
-    }, message: 'Please provide a proper username with at least 6 characters' }
-
-    /*{ validator: function(v, cb) {
-        User.find({name: v}, function(err,docs){
-           cb(docs.length == 0);
-        });
-      },
-      message: 'User already exists!' } */
-]
+userSchema.pre('save', function(next) {
+    // Check if document is new or a new password has been set
+    if (this.isNew || this.isModified('password')) {
+      // Saving reference to this because of changing scopes
+      const document = this;
+      bcrypt.hash(document.password, saltRounds,
+        function(err, hashedPassword) {
+        if (err) {
+          next(err);
+        }
+        else {
+          document.password = hashedPassword;
+          next();
+        }
+      });
+    } else {
+      next();
+    }
+  });
 
 // https://www.sitepoint.com/understanding-module-exports-exports-node-js/
 //module.exports = mongoose.model('User', userSchema);

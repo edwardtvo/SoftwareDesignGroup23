@@ -6,7 +6,7 @@ describe('Models', function() {
     let User;
 
     beforeEach(function(done) {
-        mongoose.connect('mongodb://localhost:27017/reactaxios');
+        mongoose.connect('mongodb+srv://sdgroup23username:sdgroup23pw@cluster0.4pi4i.mongodb.net/myFirstDatabase?retryWrites=true&w=majority');
         mongoose.connection.once('connected', () => {
             mongoose.connection.db.dropDatabase();
 
@@ -25,7 +25,7 @@ describe('Models', function() {
     describe('Lifecycle', function() {
 
         it('should be able to retrieve by id from database', function(done) {
-            let userid = '60552acdf6cd8196c6ad0269'
+            let userid = '605b8bbb430aa60c46d6f874'
             User.find({_id: userid}, (err, userid) => {
                 should.not.exist(err);
                 should.exist(userid);
@@ -33,9 +33,10 @@ describe('Models', function() {
             })
         });
 
-        it('should not save without password', function(done) {
+        it('should not save without password or less than 6 char', function(done) {
             let user = new User({
-                username: "unitTestUser"
+                username: "unit",
+                password: ''
             });
             user.save(function(err) {
                 expect(err).to.exist
@@ -47,7 +48,7 @@ describe('Models', function() {
 
 /*
         it('should not save invalid address', function(done) {
-            let userid = '60552acdf6cd8196c6ad0269'
+            let userid = '605b8bbb430aa60c46d6f874'
             User.find({_id: userid}, (err, user) => {
                 should.not.exist(err);
                 user.address1 = '??%'

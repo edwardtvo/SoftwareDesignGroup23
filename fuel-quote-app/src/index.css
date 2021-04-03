@@ -28,7 +28,7 @@ img {
   height: 200px;
   vertical-align: middle;
 }
-
+/*
 .col {
   border: 1px solid #ddd;
   padding: 8px;
@@ -37,7 +37,7 @@ img {
 .row:nth-child(even) {
   background-color: #f2f2f2;
 }
-
+*/
 .table {
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;

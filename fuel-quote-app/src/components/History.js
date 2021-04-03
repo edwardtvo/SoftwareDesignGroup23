@@ -13,7 +13,7 @@ import * as ReactBootstrap from 'react-bootstrap'
 const History = () => {
     const [userList, setUserList] = useState([])
     const componentDidMount = () => {
-        axios.get('http://localhost:4000/history')
+        axios.get('http://localhost:4000/users')
             .then(res => {
                 setUserList(res.data);
                 console.log(userList)

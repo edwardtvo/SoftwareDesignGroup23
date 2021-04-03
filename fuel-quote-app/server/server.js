@@ -8,6 +8,7 @@ const mongoDB = require('./mongoconnect');
 const createError = require('http-errors');
 const userRoute = require('./routes/user.routes')
 const historyRoute = require('./routes/history.routes')
+const jwt = require('express-jwt');
 
 
 /* mongoose.Promise = global.Promise;
@@ -28,7 +29,6 @@ mongoose.connect(database.db, {
 /* const mongoDB_uri = "mongodb+srv://sdgroup23username:sdgroup23pw@cluster0.4pi4i.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 const mongoDB_client = new MongoClient(mongoDB_uri, { useNewUrlParser: true, useUnifiedTopology: true });
 const dbName = "cluster0"; 
-
 mongoDB.mongoDB_run(dbName, mongoDB_client).catch(console.dir); */
 /*-----------------*/
 
@@ -41,6 +41,9 @@ app.use(cors());
 app.use('/users', userRoute);
 app.use('/history', historyRoute);
 
+app.get('/', function (req, res) {
+    res.status(200).send('connection is good');
+});
 
 const port = process.env.PORT || 4000;
 const server = app.listen(port, () => {
@@ -57,3 +60,5 @@ app.use(function (err, req, res, next) {
     if (!err.statusCode) err.statusCode = 500;
     res.status(err.statusCode).send(err.message);
 });
+
+module.exports = server

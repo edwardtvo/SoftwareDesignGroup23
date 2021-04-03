@@ -10,6 +10,22 @@ function simulateNetworkRequest() {
     return new Promise((resolve) => setTimeout(resolve, 100));
   }
 
+const apiUrl = 'http://localhost:4000';
+axios.interceptors.request.use(
+    config => {
+        const { origin } = new URL(config.url);
+        const allowedOrigins = [apiUrl];
+        const token = localStorage.getItem('token');
+        if (allowedOrigins.includes(origin)) {
+            config.headers.authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    error => {
+        return Promise.reject(error);
+    }
+);
+
 const QuoteForm = () => {
     /*
     Form Validation https://react-bootstrap.netlify.app/components/forms/#forms-validation-input-group
@@ -29,6 +45,7 @@ const QuoteForm = () => {
     const [isLoading, setLoading] = useState(false);
         /* address from token retrieved here */
     const [delivery_address, getDeliveryAddress] =  useState('123 Houston St');
+
 
 
 

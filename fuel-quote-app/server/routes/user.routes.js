@@ -28,9 +28,8 @@ client.connect()
     router.route('/').get((req, res, next) => {
         user.find({}).toArray(function(error, data) {
             if (error) throw error;
-        
             res.send(data);
-            console.log(data);
+            //console.log(data);
         });
 
         })
@@ -59,11 +58,44 @@ client.connect()
 
     /* registration */
     router.route('/create').post((req,res,next) => {
-        user.insertOne( {
-            username: req.body.username,
-            password: req.body.password
-        } );
-    })
+        let userExisted = false;
+        user.findOne({ username: req.body.username }).then(user => {
+            if (user) {
+                userExisted = true;
+            }
+        });
+            if (!userExisted) {
+                const newUser = { username: req.body.username, password: req.body.password };
+                bcrypt.hash(newUser.password, 10, function(err, hashedPassword) {
+                    if (err) {
+                        next(err);
+                    }
+                    else {
+                        newUser.password = hashedPassword;
+                        next();
+                    }
+                })
+
+                user.insertOne( {
+                    username: newUser.username,
+                    password: newUser.password
+                }, {strict: false}, (error, data) => {
+                    if (error) {
+                        console.log(error);
+                        return next(error);
+                    } else {
+                        res.json(data);
+                        console.log("/// New user registered! ///")
+                    }
+
+                });
+            }
+            else {
+                console.log("ERROR: User already exists");
+            }
+        })
+    
+
 
     router.route('/quoteupdate').post((req,res,next) => {
         quotehistory.insertOne( {
@@ -85,8 +117,10 @@ client.connect()
     })
 
 
-    })
+    });
   client.close();
+module.exports = router;
+
   
 
 
@@ -244,4 +278,3 @@ router.route('/delete/:id').delete((req, res, next) => {
     })
 }) */
 
-module.exports = router;

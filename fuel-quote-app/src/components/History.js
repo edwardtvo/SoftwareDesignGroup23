@@ -8,6 +8,7 @@ import NavBar from './NavBar'
 import {useState} from 'react'
 import axios from 'axios'
 import {Row, Col, Container} from 'react-bootstrap'
+import * as ReactBootstrap from 'react-bootstrap'
 
 const History = () => {
     const [userList, setUserList] = useState([])
@@ -23,11 +24,42 @@ const History = () => {
     }
     componentDidMount()
 
+    const renderHistory = (data, index) => {
+        return(
+            <tr>
+                <td>{data.username}</td>
+                <td>{data.gallons_requested}</td>
+                <td>{data.delivery_address}</td>
+                <td>{data.delivery_date}</td>
+                <td>{data.price_per_gallon}</td>
+                <td>{data.amount_due}</td>
+            </tr>
+        )
+    }
+
     return (
         <div>
             <NavBar loggedIn={true}/>
 
-            <Container>{userList.map((data, i) => {console.log(data.username); return <Row><Col>{data.username}</Col><Col>{data.password}</Col></Row>;})}</Container>
+            <ReactBootstrap.Table striped bordered hover>
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Gallons Requested</th>
+                        <th>Delivery Address</th>
+                        <th>Delivery Date</th>
+                        <th>Price Per Gallon</th>
+                        <th>Amount Due</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {userList.map(renderHistory)}
+                </tbody>
+            </ReactBootstrap.Table>
+
+            {/*
+            <Container>{userList.map((data, i) => {console.log(data.username); return <Row><Col>{data.username}</Col><Col>{data.gallons_requested}</Col></Row>;})}</Container>
+            */}
         </div>
     )
 /*

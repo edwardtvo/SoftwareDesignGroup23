@@ -45,6 +45,18 @@ const QuoteForm = () => {
     const [isLoading, setLoading] = useState(false);
         /* address from token retrieved here */
     const [delivery_address, getDeliveryAddress] =  useState('123 Houston St');
+    
+    const [User, setUser] = useState({
+        username: '',
+        firstname: '',
+        lastname: '',
+        address1: '',
+        address2: '',
+        city: '',
+        zipcode: '',
+        state: '',
+        inState: false,
+    });
 
 
 
@@ -86,6 +98,19 @@ const QuoteForm = () => {
         
         }
     }
+    // Check if user is in Texas to receive the "inState" price modifier
+    /*
+    const checkUser = axios.get('http://localhost:4000/users');
+
+    if(checkUser){
+        setUser({
+            state: checkUser.state,
+        })
+
+        if (checkUser.state === 'TX') {
+            User.inState = true;
+        }
+    }*/
 
     const handleClose = () => {
         setValidated(false);

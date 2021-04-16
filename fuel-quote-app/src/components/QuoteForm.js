@@ -67,6 +67,27 @@ const QuoteForm = () => {
             setLoading(false);
           });
         }
+
+        const Page = async() => {
+            const checkUser = await axios.get('http://localhost:4000/users');
+
+            if (checkUser) {
+                setUser({
+                    state: checkUser.state
+                });
+
+                if (checkUser.data.state === "TX") {
+                    User.inState = true;
+                } else {
+                    User.inState = false;
+                }
+                console.log(User.inState);
+            }
+            else {
+                alert("User not found");
+            }
+            
+        }
       }, [isLoading]);
 
     const handleClick = () => setLoading(true);

@@ -105,7 +105,7 @@ client.connect()
                         });
                         console.log('Token in user.routes: ');
                         console.log(JSON.stringify(token));
-                        res.cookie('token', token, {httpOnly: true, secure: false })
+                        res.cookie('token', token, {httpOnly: false, secure: false })
                         .sendStatus(200);
                     }
                 }) 

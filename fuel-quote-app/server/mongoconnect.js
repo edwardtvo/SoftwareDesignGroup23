@@ -3,7 +3,7 @@ async function mongoDB_run(dbName, mgclient) {
 
         try {
             await mgclient.connect();
-            console.log("\n MongoDB datatbase connected !\n");
+            console.log("\n MongoDB database connected !\n");
             const db = mgclient.db(dbName);
 
             /* add collection people */

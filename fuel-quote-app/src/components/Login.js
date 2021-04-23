@@ -41,10 +41,10 @@ const Login = () => {
       }
 
     
-
+      
       /* authenticate user credentials 
       axios.post('http://localhost:4000/users/authenticate', userObj)*/
-      fetch('http://localhost:4000/users/authenticate', {
+      fetch('http://localhost:4000/users/passportlogin', {
         method: 'POST',
         body: JSON.stringify(userObj),
         credentials: 'include',
@@ -54,7 +54,8 @@ const Login = () => {
         withCredentials: true
       })
       .then((res) => {
-        if (res.status === 200) {
+        console.log('inside res of Login axios call')
+        if (res.data.message.validPassword === true) {
           //console.log('going to profman!');
           history.push('/profilemanagement')
         } else {

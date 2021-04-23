@@ -10,6 +10,11 @@ const createError = require('http-errors');
 const userRoute = require('./routes/user.routes')
 const secret = require('./auth/secret');
 const withAuth = require('./routes/middleware');
+const passport = require('passport')
+const flash = require('connect-flash');
+var session = require('express-session');
+
+
 
 
 
@@ -38,6 +43,14 @@ mongoDB.mongoDB_run(dbName, mongoDB_client).catch(console.dir); */
 const app = express();
 app.use(cookieParser());
 app.use(bodyParser.json());
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(session({
+    resave: false,
+    saveUninitialized: false,
+    secret: 'group23secret'
+}));
+app.use(flash());
 app.use(bodyParser.urlencoded({
     extended: true
 }));

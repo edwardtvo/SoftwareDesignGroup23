@@ -6,6 +6,9 @@ const keys = require('../database/db')
 const mongoDB = require('../mongoconnect');
 const MongoClient = require('mongodb').MongoClient;
 const withAuth = require('./middleware');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+
 
 
 
@@ -28,7 +31,38 @@ client.connect()
     const db = client.db("cluster0");
     const user = db.collection("user");
     const quotehistory = db.collection("quotehistory")
-    console.log("/ / / MongoDB successfully connected! u w u / / /");
+    console.log("MongoDB successfully connected!");
+
+
+    passport.use('local', new LocalStrategy(
+        function(username, password, done) {
+            user.findOne({ username: username }, (error, user) => {
+                if (error) { return done(error); }
+                if (!user) { 
+                    return done(null, false, { message: 'Incorrect username' })}
+
+                bcrypt.compare(password, user.password, (err, data) => {
+                        if (!data) {
+                            return done(null, false, { message: 'Incorrect password'})
+                        } else {
+                return done(null, user);
+                        }
+            })
+        })
+        }))
+
+    passport.serializeUser(function(user, done) {
+        done(null, user.username);
+      });
+
+    passport.deserializeUser(function(username, done) {
+        user.findOne({username : username}, (err, results) => {
+            if (err)
+                return done(err);
+            
+            return done(null, results);
+        })
+    })
 
     /* https://stackoverflow.com/questions/28715859/mongodb-nodejs-converting-circular-structure */
     router.route('/').get((req, res, next) => {
@@ -64,7 +98,7 @@ client.connect()
     })
 
     /* after auth sample route */
-    router.get('/inside', withAuth, (req,res,next) => {
+    /* router.get('/inside', withAuth, (req,res,next) => {
         res.send('Password is potato');
     })
 
@@ -72,12 +106,26 @@ client.connect()
         await console.log('token in /checktoken');
         await console.log(req.cookies.token);
         res.sendStatus(200);
-    }) 
+    })  */
 
 
 
     /* login */
-    router.post('/authenticate', async (req,res,next) => {
+    router.post('/passportlogin', (req,res,next) => {
+        console.log('inside /passportlogin');
+        passport.authenticate('local', function(err, user, info) {
+            if (err) { console.log('inside error'); return next(err) }
+            if (!user) { console.log('inside !user'); return res.json( { message: { validPassword: false } })}
+            console.log('user is correct??')
+            res.json( { message: { validPassword: true }})
+        }) (req,res,next);
+    });
+
+    router.post('/passportlogin/callback', (req,res,next) => {
+        passport.authenticate('local') (req,res,next)
+    })
+
+    /*router.post('/authenticate', async (req,res,next) => {
         const username = req.body.username;
         const password = req.body.password;
 
@@ -100,7 +148,7 @@ client.connect()
                         res.status(401)
                         .json({ error: '/// Incorrect username or password ///'});
                     } else {
-                        /* Issue token */
+                        // Issue token 
                         const payload = { username };
                         const token = jwt.sign(payload, secret, {
                             expiresIn: '1h',
@@ -114,7 +162,7 @@ client.connect()
             }
         })
 
-    })
+    })*/
 
     /* registration */
     router.route('/create').post((req,res,next) => {

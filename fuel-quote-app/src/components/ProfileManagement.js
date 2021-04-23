@@ -1,6 +1,8 @@
 import {Container, Button, Form, Row, Col} from 'react-bootstrap'
 import React, { useEffect, useState } from "react";
 import NavBar from "./NavBar";
+import { connect } from 'react-redux'
+import * as actions from '../store/actions/index.js'
 import { useHistory } from "react-router-dom";
 import axios from 'axios';
 

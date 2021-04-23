@@ -30,7 +30,7 @@ const App = () => {
                     <Route exact path="/" component={Login} />
                     <Route exact path="/home" component={Home} />
                     <Route path="/getquote" component={withAuthorization(QuoteForm)} />
-                    <Route path="/profilemanagement" component={withAuthorization(ProfileManagement)} />
+                    <Route path="/profilemanagement" component={ProfileManagement/* withAuthorization(ProfileManagement) */} />
                     <Route path="/login" component={Login} />
                     <Route path="/registration" component={Registration} />
                     <Route path="/quotehistory" component={withAuthorization(History)} />

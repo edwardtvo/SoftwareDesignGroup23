@@ -55,7 +55,7 @@ const Login = () => {
       })
       .then((res) => {
         console.log('inside res of Login axios call')
-        if (res.data.message.validPassword === true) {
+        if (res.status === 200) {
           //console.log('going to profman!');
           history.push('/profilemanagement')
         } else {

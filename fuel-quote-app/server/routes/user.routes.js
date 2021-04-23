@@ -115,9 +115,9 @@ client.connect()
         console.log('inside /passportlogin');
         passport.authenticate('local', function(err, user, info) {
             if (err) { console.log('inside error'); return next(err) }
-            if (!user) { console.log('inside !user'); return res.json( { message: { validPassword: false } })}
+            if (!user) { console.log('inside !user'); return res.status(500).json({message: 'User not found'}) }
             console.log('user is correct??')
-            res.json( { message: { validPassword: true }})
+            res.status(200).json({message: 'User authenticated!'})
         }) (req,res,next);
     });
 

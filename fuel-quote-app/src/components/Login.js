@@ -47,6 +47,7 @@ const Login = () => {
       fetch('http://localhost:4000/users/authenticate', {
         method: 'POST',
         body: JSON.stringify(userObj),
+        credentials: 'include',
         headers: {
           'Content-Type':'application/json'
         },

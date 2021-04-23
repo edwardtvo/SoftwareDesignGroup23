@@ -68,14 +68,16 @@ client.connect()
         res.send('Password is potato');
     })
 
-    /* router.get('/checktoken', withAuth, (req,res,next) => {
-        console.log('token in /checktoken');
-        console.log(req.cookie.token);
+    router.get('/checktoken', withAuth, async (req,res,next) => {
+        await console.log('token in /checktoken');
+        await console.log(req.cookies.token);
         res.sendStatus(200);
-    }) */
+    }) 
+
+
 
     /* login */
-    router.route('/authenticate').post((req,res,next) => {
+    router.post('/authenticate', async (req,res,next) => {
         const username = req.body.username;
         const password = req.body.password;
 
@@ -105,12 +107,13 @@ client.connect()
                         });
                         console.log('Token in user.routes: ');
                         console.log(JSON.stringify(token));
-                        res.cookie('token', token, {httpOnly: false, secure: false })
-                        .sendStatus(200);
+                        res.cookie('token', token, {httpOnly: true, secure: false });
+                        res.sendStatus(200);
                     }
                 }) 
             }
         })
+
     })
 
     /* registration */

@@ -104,6 +104,12 @@ const QuoteForm = () => {
             event.preventDefault();
             setShow(true)
             setValidated(true)
+            if (User.inState === false) {
+                const location_factor = 0.04
+            }
+            else {
+                const location_factor = 0.02
+            }
             const quoteObj = {
                 username: username,
                 gallons_requested: gallons,

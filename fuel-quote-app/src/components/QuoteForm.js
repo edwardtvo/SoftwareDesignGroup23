@@ -88,6 +88,8 @@ const QuoteForm = () => {
             }
             
         }
+
+        Page();
       }, [isLoading]);
 
     const handleClick = () => setLoading(true);

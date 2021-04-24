@@ -55,6 +55,7 @@ const QuoteForm = () => {
         city: '',
         zipcode: '',
         state: '',
+        gallon: '',
         inState: false,
         returnee: false
     });
@@ -108,7 +109,7 @@ const QuoteForm = () => {
 
             const price_per_gallon = 1.5;
             const company_factor = 0.1;
-            var location_factor, rate_history_factor
+            var location_factor, rate_history_factor, gallons_requested_factor, margin, suggested_price, final_price
 
             if (User.inState === false) {
                 location_factor = 0.04
@@ -123,7 +124,21 @@ const QuoteForm = () => {
             else {
                 rate_history_factor = 0.01;
             }
-            
+
+            if (User.gallon < 1000) {
+                gallons_requested_factor = 0.03;
+            }
+            else {
+                gallons_requested_factor = 0.02;
+            }
+
+            margin = price_per_gallon * (location_factor - rate_history_factor + gallons_requested_factor + company_factor);
+
+            suggested_price = price_per_gallon + margin;
+
+            final_price = User.gallon * suggested_price;
+
+            console.log(margin)
             const quoteObj = {
                 username: username,
                 gallons_requested: gallons,

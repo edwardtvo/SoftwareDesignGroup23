@@ -56,6 +56,7 @@ const QuoteForm = () => {
         zipcode: '',
         state: '',
         inState: false,
+        returnee: false
     });
 
 
@@ -104,12 +105,25 @@ const QuoteForm = () => {
             event.preventDefault();
             setShow(true)
             setValidated(true)
+
+            const price_per_gallon = 1.5;
+            const company_factor = 0.1;
+            var location_factor, rate_history_factor
+
             if (User.inState === false) {
-                const location_factor = 0.04
+                location_factor = 0.04
             }
             else {
-                const location_factor = 0.02
+                location_factor = 0.02
             }
+
+            if (User.returnee === false) {
+                rate_history_factor = 0;
+            }
+            else {
+                rate_history_factor = 0.01;
+            }
+            
             const quoteObj = {
                 username: username,
                 gallons_requested: gallons,

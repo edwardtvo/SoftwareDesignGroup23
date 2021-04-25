@@ -5,6 +5,9 @@ import { connect } from 'react-redux'
 import * as actions from '../store/actions/index.js'
 import { useHistory } from "react-router-dom";
 import axios from 'axios';
+import { withCookies, useCookies } from 'react-cookie';
+import './ProfileManagement.css'
+
 
 
 
@@ -13,7 +16,7 @@ function simulateNetworkRequest() {
 }
 
 
-function ProfileManagement() {
+function ProfileManagement(props,auth) {
 
   const [isLoading, setLoading] = useState(false);
   const [validated, setValidated] = useState(false)
@@ -25,9 +28,12 @@ function ProfileManagement() {
   const [state, setState] = useState('');
   const [zip, setZip] = useState('');
 
+
   let history=useHistory();
 
     useEffect(() => {
+
+        //props.updateUser();
         if (isLoading) {
           simulateNetworkRequest().then(() => {
             setLoading(false);
@@ -68,7 +74,8 @@ function ProfileManagement() {
   }
 
   return (
-    <>
+    <div>
+        <div><h1></h1></div>
         <NavBar loggedIn={true}/>
     <Container fluid className='profman-padding'>
 
@@ -200,8 +207,9 @@ function ProfileManagement() {
       
 
     </Container>
-    </>
+    </div>
   );
 }
+
 
 export default ProfileManagement;

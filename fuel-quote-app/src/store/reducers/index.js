@@ -1,4 +1,6 @@
-import { UPDATE_USER } from '../constants/action-types'
+import { UPDATE_USER } from '../constant/action-types'
+import { AuthReducer } from './auth_reducers'
+import { combineReducers } from 'redux'
 
 const initialState = {
     userInfo: {
@@ -7,11 +9,8 @@ const initialState = {
     }
 }
 
-function rootReducer(state = initialState, action) {
-    if (action.type === UPDATE_USER) {
-        return action.payload || false 
-    }
-    return state;
-}
+const rootReducer = combineReducers({
+    AuthReducer
+});
 
 export default rootReducer;

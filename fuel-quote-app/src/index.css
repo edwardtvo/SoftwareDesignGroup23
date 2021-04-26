@@ -119,3 +119,13 @@ img {
   src: local('NotoSansSC'), url('./fonts/NotoSansSC-Bold.otf') format('truetype');
 }
 
+.display-on 
+{
+    display: initial
+}
+
+.display-off
+{
+    display: none
+}
+

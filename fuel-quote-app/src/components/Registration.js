@@ -52,7 +52,6 @@ const Registration = () => {
     return (
         <>
 
-        <NavBar loggedIn={false}/>
         
         <Container fluid className="title-padding">
             

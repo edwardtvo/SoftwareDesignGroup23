@@ -49,26 +49,18 @@ const Login = (props) => {
 
     
       
-      /* authenticate user credentials 
-      axios.post('http://localhost:4000/users/authenticate', userObj)*/
-      fetch('http://localhost:4000/users/passportlogin', {
-        method: 'POST',
-        body: JSON.stringify(userObj),
-        withCredentials: true,
-        credentials: "same-origin",
-        headers: {
-          'Content-Type':'application/json'
-        }
-      })
+      /* authenticate user credentials */
+      axios.post('http://localhost:4000/users/authenticate', userObj)
       .then((res) => {
-        //console.log('inside res of Login axios call')
-        /* setCookie('user', username, {
+        setCookie('user', userObj.username, {
           path: '/'
-        }) */
-        history.push('/profilemanagement')
+        });
+        console.log(cookies.user)
+        window.location.reload();
+        history.push('/home')
         
       }).catch((err) => {
-        console.log(err);
+        console.log('Error in catch block of Login axios.post: ', err);
         alert('Error logging in, please try again');
       })
       /*                                       

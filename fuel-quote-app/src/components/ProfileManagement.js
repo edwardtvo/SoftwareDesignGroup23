@@ -27,13 +27,31 @@ function ProfileManagement(props,auth) {
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
   const [zip, setZip] = useState('');
+  const [cookies, setCookie] = useCookies(['user'])
+  const [userData, setUserData] = useState({});
+
 
 
   let history=useHistory();
 
     useEffect(() => {
 
-        //props.updateUser();
+      console.log('inside useEffect: cookies.user: ', cookies.user)
+
+        // get user info from cookies.user as axios.post
+        axios.post('http://localhost:4000/users/current_user', {username: cookies.user})
+        .then((res) => {
+          if (res.status === 200) {
+          setUserData(res.data);
+          }
+          else if (res.status === 404) {
+            console.log('res.status: ', res.status)
+            history.push('/')
+          }
+        }).catch((error) => {
+          console.log('Error trying to fetch user data from cookie',error);
+        })
+
         if (isLoading) {
           simulateNetworkRequest().then(() => {
             setLoading(false);
@@ -75,8 +93,6 @@ function ProfileManagement(props,auth) {
 
   return (
     <div>
-        <div><h1></h1></div>
-        <NavBar loggedIn={true}/>
     <Container fluid className='profman-padding'>
 
     <h1 className="title-page">Profile Management</h1>
@@ -99,6 +115,7 @@ function ProfileManagement(props,auth) {
                           pattern="/[a-zA-Z0-9\.\-\'\_]{6,30}$/"
                           type="text"
                           value={username}
+                          placeholder={userData.username}
                           onChange={(e) => setUsername(e.target.value)}
                           required/>
             <Form.Control.Feedback type="invalid">Please enter the same username from Registration</Form.Control.Feedback>

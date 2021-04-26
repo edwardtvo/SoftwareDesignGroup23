@@ -156,51 +156,61 @@ client.connect()
         }) (req,res,next)
     }) */
 
-    /* router.get('/current_user', (req, res) => {
-        console.log('inside /current_user')
-        console.log("req.session.passport.user: ")
-        console.log(req.session.passport.user);
-        res.send(req.session.passport.user);
-    }) */
+    router.post('/current_user', (req, res) => {
+        //console.log("req.body.username: ",req.body.username);
 
-    /*router.post('/authenticate', async (req,res,next) => {
+        if (req.body.username === '' || req.body.username === undefined) {
+            console.log('Not logged in. req.body.username: ',req.body.username);
+            res.status(404).json({ error: `Not loggedin. req.body.username: ${req.body.username}`})
+        } else {
+
+        user.findOne({ username: req.body.username }, (err, user) => {
+            if (err) {
+                console.log("Error inside /current_user route: ", err)
+                res.status(500).json({ error: 'Internal error, please try again'})
+            } else if (!user) {
+                console.log("Why did you successfully log in? Who are you ",req.body.username, "?")
+                res.status(600).json({ error: 'Illegal login; user not found in database' })
+            } else {
+                console.log('User ',req.body.username, ' has successfully logged in!')
+                res.status(200).json(user)
+            }
+
+        })
+        }
+    })
+
+    router.post('/authenticate', async (req,res,next) => {
         const username = req.body.username;
         const password = req.body.password;
+        console.log('username in /authenticate route: ',username);
 
         user.findOne({ username: req.body.username }, (err, user) => {
             if (err) {
                 console.error(err);
                 res.status(500)
-                .json({ error: '/// Internal error, please try again /// '});
+                .json({ error: 'Internal error, please try again'});
             }
             else if (!user) {
                 res.status(601)
-                .json({ error: '/// Incorrect username or password ///' });
+                .json({ error: 'No user with given username found in database' });
             }
             else {
                 bcrypt.compare(req.body.password, user.password, (err, data) => {
                     if (err) {
                         res.status(500)
-                        .json({ error: '/// Internal error, please try again ///'});
+                        .json({ error: 'Internal error, please try again'});
                     } else if (!data) {
                         res.status(401)
-                        .json({ error: '/// Incorrect username or password ///'});
+                        .json({ error: 'Incorrect password to given username'});
                     } else {
-                        // Issue token 
-                        const payload = { username };
-                        const token = jwt.sign(payload, secret, {
-                            expiresIn: '1h',
-                        });
-                        console.log('Token in user.routes: ');
-                        console.log(JSON.stringify(token));
-                        res.cookie('token', token, {httpOnly: true, secure: false });
                         res.sendStatus(200);
                     }
                 }) 
             }
         })
 
-    })*/
+    })
 
     /* registration */
     router.route('/create').post((req,res,next) => {
@@ -284,7 +294,7 @@ client.connect()
         })
     })
 
-    passport.serializeUser((user, done)=> {
+    /* passport.serializeUser((user, done)=> {
         //console.log("inside serialize");
         done(null, user._id);
         //console.log("user._id = ",user._id);
@@ -295,7 +305,7 @@ client.connect()
         user.findById(_id, function(err, user) {
          done(err, {username: 'test', password: 'testpass'});
         });
-      });
+      }); */
 
 
 

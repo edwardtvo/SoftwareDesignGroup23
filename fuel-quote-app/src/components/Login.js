@@ -137,8 +137,9 @@ const Login = (props) => {
     )
 }
 
-const mapStateToProps = state => ({
+/* const mapStateToProps = state => ({
   auth: state.AuthReducer
-});
+}); */
 
-export default connect(mapStateToProps, actions)(Login);
+//export default connect(mapStateToProps, actions)(Login);
+export default Login;

@@ -69,7 +69,8 @@ client.connect()
     
     /* profile management */
     router.route('/update').post((req, res, next) => {
-        var filter = { username: req.body.username };
+        var filter = { username: req.body.cookie_username };
+        console.log('req.body: ',req.body)
         user.findOneAndUpdate( filter, {
             $set:{
             fullname: req.body.fullname,
@@ -78,13 +79,13 @@ client.connect()
             city: req.body.city,
             state: req.body.state,
             zip: req.body.zip}
-        }, { strict: false }, (error, data) => {
+        }, { strict: true }, (error, data) => {
             if (error) {
                 console.log(error);
                 return next(error);
             } else {
                 res.json(data)
-                console.log('User updated successfully !')
+                console.log(`User ${req.body.username} updated successfully !`)
             }
         })
     })
@@ -172,7 +173,7 @@ client.connect()
                 console.log("Why did you successfully log in? Who are you ",req.body.username, "?")
                 res.status(600).json({ error: 'Illegal login; user not found in database' })
             } else {
-                console.log('User ',req.body.username, ' has successfully logged in!')
+                console.log('User ',req.body.username, ' information fetched successfully')
                 res.status(200).json(user)
             }
 

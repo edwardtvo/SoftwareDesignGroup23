@@ -9,7 +9,6 @@ const MongoClient = require('mongodb').MongoClient;
 const mongoDB = require('./mongoconnect');
 const createError = require('http-errors');
 const userRoute = require('./routes/user.routes')
-const secret = require('./auth/secret');
 const withAuth = require('./routes/middleware');
 const passport = require('passport')
 const flash = require('connect-flash');

@@ -2,7 +2,10 @@ import {Container, Button, Form, Row, Col, Modal} from 'react-bootstrap'
 import React, { useEffect, useState } from "react";
 import DatePicker from 'react-datepicker'
 import NavBar from './NavBar'
+import { withCookies, useCookies } from 'react-cookie';
+import { useHistory } from "react-router-dom";
 import axios from 'axios';
+import './QuoteForm.css'
 
 require('react-datepicker/dist/react-datepicker.css')
 
@@ -28,11 +31,44 @@ const QuoteForm = () => {
     const [delivery_date, setDeliveryDate] = useState(new Date())
     const [isLoading, setLoading] = useState(false);
         /* address from token retrieved here */
-    const [delivery_address, getDeliveryAddress] =  useState('123 Houston St');
+    const [delivery_address, setDeliveryAddress] =  useState('');
+    const [address1, setAddress1] = useState('');
+    const [address2, setAddress2] = useState('');
+    const [cookies, setCookie] = useCookies(['user'])
+    const [userData, setUserData] = useState({});
+
+    let history=useHistory();
 
 
 
     useEffect(() => {
+        console.log('username: ',cookies.user);
+        axios.post('http://localhost:4000/users/current_user', { username: cookies.user })
+        .then((res) => {
+          if (res.status === 200) {
+          setUserData(res.data);
+          console.log('res.data: ',res.data);
+          if (res.data.address2 === null || res.data.address2 === undefined) {
+              console.log('address2 is undefined');
+              setDeliveryAddress(res.data.address1);
+              console.log('address1: ',address1);
+              console.log('delivery_address: ',delivery_address);
+          } else {
+              console.log('address2: ',res.data.address2);
+              let combined_address = res.data.address1 + ', ' + res.data.address2;
+              console.log('combined_address: ',combined_address)
+              setDeliveryAddress(combined_address);
+          }
+            console.log(delivery_address);
+          }
+          else if (res.status === 404) {
+            console.log('res.status: ', res.status)
+            history.push('/')
+          }
+        }).catch((error) => {
+          console.log('Error trying to fetch user data from cookie',error);
+        })
+
         if (isLoading) {
           simulateNetworkRequest().then(() => {
             setLoading(false);
@@ -40,7 +76,7 @@ const QuoteForm = () => {
         }
       }, [isLoading]);
 
-    const handleClick = () => setLoading(true);
+    //const handleClick = () => setLoading(true);
 
     const calcQuote = (event) => {
         const form = event.currentTarget;
@@ -77,27 +113,18 @@ const QuoteForm = () => {
     }
 
     return (
-        <>
-            <Container fluid className='profman-padding'>
+        <div>
+            <Container className='profman-padding'>
                 <h1 className="title-page">Get a Quote:</h1>
+                <Row>
+                    <Col md="4"/>
+                    <Col style={{"paddingTop":"50px"}}>
                 <Form noValidate validated={validated} onSubmit={calcQuote}>
                     {/*Gallon Request*/}
                     <Form.Group controlId='validationGallonReq'>
-                    <Row className="quoteform-padding">
-                            <Col md="4">
-                           <Form.Label>Insert username to archive this quote: </Form.Label>
-                                <Form.Control required
-                                              type='text'
-                                              value={username}
-                                              onChange={(e) => {
-                                                setUsername((e.target.value))
-                                            }} />
-                                <Form.Control.Feedback type="invalid">Please provide username</Form.Control.Feedback>   
-                            </Col>                
-
-                        </Row> 
+                     
                         <Row>
-                            <Col className='col-auto'>
+                            <Col className='col-auto' style={{"paddingLeft":"40px", "paddingTop":"0.5em"}}>
                                 <Form.Label>Gallons Requested:</Form.Label>
                             </Col>
                             <Col className='col-auto'>
@@ -120,11 +147,11 @@ const QuoteForm = () => {
                     {/*Verify Address*/}
                     <Form.Group controlId='validationAddress'>
                         <Row>
-                            <Col className='col-auto'><p>{delivery_address}</p></Col>
-                            <Col>
+                            <Col md="auto" className="address-box"><p style={{"font-weight":"bold"}}>{delivery_address}</p></Col>
+                            <Col style={{"paddingTop":"20px"}}>
                                 <Form.Check required
                                             type='checkbox'
-                                            label='Delivery Address Verified'
+                                            label='Correct Delivery Address?'
                                             feedback='Please verify address'
                                             onChange={() => {
                                                 setChecked(!checked)
@@ -142,7 +169,8 @@ const QuoteForm = () => {
                 possible alt date picker https://getdatepicker.com/4/
                 */}
                     <Form.Group>
-                        <Form.Label>Delivery Date: </Form.Label>
+                        <Col>
+                        <Form.Label style={{"paddingLeft":"4.2em", "paddingRight":"0.8em"}}>Delivery Date: </Form.Label>
                         <DatePicker
                             className='delivDatePicker'
                             selected={delivery_date}
@@ -151,10 +179,13 @@ const QuoteForm = () => {
                             minDate={new Date()}
                             showDisabledMonthNavigation
                         />
+                        </Col>
                     </Form.Group>
 
-                    <Button variant='danger' type='submit'>Calculate</Button>
+                    <div style={{"paddingLeft":"140px"}}><Button variant='danger' type='submit'>Calculate</Button></div>
                 </Form>
+                </Col>
+                </Row>
 
                 <Modal
                     show={show}
@@ -174,7 +205,7 @@ const QuoteForm = () => {
                     </Modal.Footer>
                 </Modal>
             </Container>
-        </>
+        </div>
     )
 }
 

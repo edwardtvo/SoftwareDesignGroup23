@@ -27,6 +27,7 @@ function ProfileManagement(props,auth) {
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
   const [zip, setZip] = useState('');
+  const [cookie_username, setCookieusername] = useState('');
   const [cookies, setCookie] = useCookies(['user'])
   const [userData, setUserData] = useState({});
 
@@ -39,10 +40,18 @@ function ProfileManagement(props,auth) {
       console.log('inside useEffect: cookies.user: ', cookies.user)
 
         // get user info from cookies.user as axios.post
-        axios.post('http://localhost:4000/users/current_user', {username: cookies.user})
+        axios.post('http://localhost:4000/users/current_user', { username: cookies.user })
         .then((res) => {
           if (res.status === 200) {
           setUserData(res.data);
+          setCookieusername(cookies.user);
+          setUsername(userData.username);
+          setFullname(userData.fullname);
+          setAddress1(userData.address1);
+          setAddress2(userData.address2);
+          setCity(userData.city);
+          setState(userData.state);
+          setZip(userData.zip);
           }
           else if (res.status === 404) {
             console.log('res.status: ', res.status)
@@ -57,9 +66,9 @@ function ProfileManagement(props,auth) {
             setLoading(false);
           });
         }
-      }, [isLoading]);
+      }, [cookies.user, history, isLoading, userData.address1, userData.address2, userData.city, userData.fullname, userData.state, userData.username, userData.zip]);
 
-  const handleClick = () => setLoading(true);
+  //const handleClick = () => setLoading(true);
 
   const handleSubmit = (event) => {
     const form = event.currentTarget;
@@ -69,6 +78,7 @@ function ProfileManagement(props,auth) {
     } else {
 
     const userObj = {
+      cookie_username: cookies.user,
       username: username,
       fullname: fullname,
       address1: address1,
@@ -96,10 +106,12 @@ function ProfileManagement(props,auth) {
     <Container fluid className='profman-padding'>
 
     <h1 className="title-page">Profile Management</h1>
+    <div style={{"paddingTop":"50px"}}/>
 
         <Form noValidate validated={validated} onSubmit={handleSubmit}>
         <Row>
-          <Col md="4">
+          <Col md="3"/>
+          <Col md="3">
             <Form.Label>Full Name: </Form.Label>
             <Form.Control name="fullname" 
                           pattern="[A-Za-z0-9'\.\-\s]{1,100}$"
@@ -114,8 +126,7 @@ function ProfileManagement(props,auth) {
             <Form.Control name="username"
                           pattern="/[a-zA-Z0-9\.\-\'\_]{6,30}$/"
                           type="text"
-                          value={username}
-                          placeholder={userData.username}
+                          value={userData.username}
                           onChange={(e) => setUsername(e.target.value)}
                           required/>
             <Form.Control.Feedback type="invalid">Please enter the same username from Registration</Form.Control.Feedback>
@@ -124,7 +135,9 @@ function ProfileManagement(props,auth) {
         
  
         <Row>
-          <Col md="7">
+
+          <Col md="3"/>
+          <Col md="4" style={{"paddingTop":"10px"}}>
             <Form.Label>Address: </Form.Label>
             <Form.Control name="address" 
                           type="text" 
@@ -136,7 +149,7 @@ function ProfileManagement(props,auth) {
 
             
           </Col>
-          <Col sm="3">
+          <Col md="2" style={{"paddingTop":"10px"}}>
             <Form.Label> Address 2 (optional) : </Form.Label>
             <Form.Control name="address" 
                           type="text" 
@@ -149,7 +162,8 @@ function ProfileManagement(props,auth) {
           
 
         <Row>
-          <Col md="3">
+          <Col md="3"/>
+          <Col md="2" style={{"paddingTop":"10px"}}>
           <Form.Label>City: </Form.Label>
           <Form.Control name="city" 
                         type="text" 
@@ -161,7 +175,7 @@ function ProfileManagement(props,auth) {
           </Col>
         
 
-          <Col md="1">
+          <Col md="1" style={{"paddingTop":"10px"}}>
           <Form.Label>State: </Form.Label>
           <Form.Control name = "state" as="select" 
                         value={state} 
@@ -191,7 +205,7 @@ function ProfileManagement(props,auth) {
           </Col>
 
           
-          <Col md="2">
+          <Col md="1" style={{"paddingTop":"10px"}}>
           <Form.Label> Zip code: </Form.Label>
           <Form.Control name="zip" 
                         //pattern="[0-9]{5,9}" 
@@ -208,7 +222,7 @@ function ProfileManagement(props,auth) {
         <br />
 
         {/* figure out validation before submitting */}
-      <Button variant="danger" type="submit">Submit</Button>
+      <Row><Col md="5"/><Col md="2" style={{"paddingTop":"1em"}}><Button variant="danger" type="submit">Submit</Button></Col></Row>
 
               {/*disabled={isLoading} 
               onClick={!isLoading ? handleClick : null}

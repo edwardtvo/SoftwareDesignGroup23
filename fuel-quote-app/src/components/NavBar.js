@@ -28,6 +28,7 @@ const NavBar = (props) => {
                     {/*<Nav.Link className='nav-link ml-auto' href='/home'>Home</Nav.Link>*/}
                     {/*<Nav.Link className='nav-link ml-auto' href='/login'>Login</Nav.Link>*/}
                     {/*<Nav.Link className='nav-link ml-auto' href='/registration'>Registration</Nav.Link>*/}
+                    <Nav.Link className={is_logged_in ? 'nav-link ml-auto display-on' : 'display-off'}  href='/home'>Home</Nav.Link>
                     <Nav.Link className={is_logged_in ? 'nav-link ml-auto display-on' : 'display-off'}  href='/profilemanagement'>Profile Management</Nav.Link>
                     <Nav.Link className={is_logged_in ? 'nav-link ml-auto display-on' : 'display-off'}  href='/getquote' >Get Quote</Nav.Link>
                     <Nav.Link className={is_logged_in ? 'nav-link ml-auto display-on' : 'display-off'}  href='/quotehistory' >Quote History</Nav.Link>

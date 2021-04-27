@@ -38,11 +38,18 @@ const QuoteForm = () => {
     To fix immediate refresh on click/submit https://github.com/react-bootstrap/react-bootstrap/issues/1510
     Stop modal from appearing if validation check fails https://stackoverflow.com/questions/58753515/bootstrap-4-validation-disable-submit-button-until-form-validated
     */
+    const company_factor = 0.1;
+    const [price_per_gallon, setPricePerGallon] = useState(1.50)
+    const [location_factor, setLocation_factor] = useState(0.02)
+    const [rate_history_factor, setRate_history_factor] = useState(0.01)
+    const [gallons_requested_factor, setGallons_requested_factor] = useState(0.02)
+    const [margin, setMargin] = useState(0.00)
+    const [suggested_price, setSuggestedPrice] = useState(0.00)
+    const [final_price, setFinal_price] = useState(0.00)
     const [validated, setValidated] = useState(false)
     const [username, setUsername] = useState('')
     const [gallons, setGallons] = useState(0)
     const [checked, setChecked] = useState(false)
-    const [price_per_gallon, setPricePerGallon] = useState(1.50)
     const [show, setShow] = useState(false)
     const [delivery_date, setDeliveryDate] = useState(new Date())
     const [isLoading, setLoading] = useState(false);
@@ -143,54 +150,43 @@ const QuoteForm = () => {
             setShow(true)
             setValidated(true)
 
-            const price_per_gallon = 1.5;
-            const company_factor = 0.1;
-            var location_factor, rate_history_factor, gallons_requested_factor, margin, suggested_price, final_price
-
             if (User.inState === false) {
-                location_factor = 0.04
-            }
-            else {
-                location_factor = 0.02
+                setLocation_factor(0.04);
             }
 
             if (User.returnee === false) {
-                rate_history_factor = 0;
-            }
-            else {
-                rate_history_factor = 0.01;
+                setRate_history_factor(0);
             }
 
             if (User.gallon < 1000) {
-                gallons_requested_factor = 0.03;
-            }
-            else {
-                gallons_requested_factor = 0.02;
+                setGallons_requested_factor(0.03);
             }
 
-            margin = price_per_gallon * (location_factor - rate_history_factor + gallons_requested_factor + company_factor);
+            setMargin(price_per_gallon * (location_factor - rate_history_factor + gallons_requested_factor + company_factor));
 
-            suggested_price = price_per_gallon + margin;
+            setSuggestedPrice(price_per_gallon + margin);
 
-            final_price = User.gallon * suggested_price;
+            setFinal_price(User.gallon * suggested_price);
 
             console.log(margin)
-            const quoteObj = {
-                username: username,
-                gallons_requested: gallons,
-                delivery_address: delivery_address,
-                delivery_date: delivery_date,
-                price_per_gallon: price_per_gallon
-                }
-            
-                axios.post('http://localhost:4000/users/quoteupdate', quoteObj)
-                .then((res) => {
-                    console.log(res.data)
-                }).catch((error) => {
-                console.log(error)
-            });
-        
+
         }
+    }
+
+    const submitQuote = (event) => {
+        const quoteObj = {
+            username: username,
+            gallons_requested: gallons,
+            delivery_address: delivery_address,
+            delivery_date: delivery_date,
+            price_per_gallon: suggested_price
+        }
+        axios.post('http://localhost:4000/users/quoteupdate', quoteObj)
+            .then((res) => {
+                console.log(res.data)
+            }).catch((error) => {
+            console.log(error)
+        });
     }
     // Check if user is in Texas to receive the "inState" price modifier
     /*
@@ -205,6 +201,10 @@ const QuoteForm = () => {
             User.inState = true;
         }
     }*/
+
+    const handleSubmit = () => {
+
+    }
 
     const handleClose = () => {
         setValidated(false);
@@ -282,7 +282,7 @@ const QuoteForm = () => {
                         </Col>
                     </Form.Group>
 
-                    <div style={{"paddingLeft":"140px"}}><Button variant='danger' type='submit'>Calculate</Button></div>
+                    <div style={{"paddingLeft":"140px"}}><Button variant='danger' type='submit'>Get Quote</Button></div>
                 </Form>
                 </Col>
                 </Row>
@@ -301,6 +301,7 @@ const QuoteForm = () => {
                         <p>Total cost: $ {(gallons * parseFloat(price_per_gallon.toString())).toFixed(2)}</p>
                     </Modal.Body>
                     <Modal.Footer>
+                        <Button variant='danger' onClick={handleSubmit}>Submit Confirmation</Button>
                         <Button variant='danger' onClick={handleClose}>Get Another Quote</Button>
                     </Modal.Footer>
                 </Modal>

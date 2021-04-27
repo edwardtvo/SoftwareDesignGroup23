@@ -11,7 +11,6 @@ const createError = require('http-errors');
 const userRoute = require('./routes/user.routes')
 const historyRoute = require('./routes/history.routes')
 const jwt = require('express-jwt');
-const secret = require('./auth/secret');
 const withAuth = require('./routes/middleware');
 const passport = require('passport')
 const flash = require('connect-flash');

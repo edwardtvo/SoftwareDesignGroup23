@@ -6,8 +6,8 @@ const keys = require('../database/db')
 const mongoDB = require('../mongoconnect');
 const MongoClient = require('mongodb').MongoClient;
 const withAuth = require('./middleware');
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
+//const passport = require('passport');
+//const LocalStrategy = require('passport-local').Strategy;
 
 
 
@@ -34,7 +34,7 @@ client.connect()
     console.log("MongoDB successfully connected!");
 
 
-    passport.use('local', new LocalStrategy(
+    /* passport.use('local', new LocalStrategy(
         function(username, password, done) {
             user.findOne({ username: username }, (error, user) => {
                 if (error) { return done(error); }
@@ -52,7 +52,7 @@ client.connect()
                         }
             })
         })
-        }))
+        })) */
 
     
 
@@ -103,11 +103,11 @@ client.connect()
 
 
     /* login */
-    router.post('/passportlogin', (req,res,next) => {
+    /* router.post('/passportlogin', (req,res,next) => {
         console.log('inside /passportlogin');
+         */
         
-        
-        passport.authenticate('local', function(err, user, info) {
+        /* passport.authenticate('local', function(err, user, info) {
             if (err) { console.log('inside error'); return next(err) }
             if (!user) { console.log('inside !user'); return res.status(500).json({message: 'User not found'}) }
             req.logIn(user, function(err) {
@@ -130,10 +130,10 @@ client.connect()
             
             
             
-        }) (req,res,next);
+        }) (req,res,next); 
 
         
-    });
+    }); */
 
    /*  router.post('/passportlogin/callback', (req,res,next) => {
         console.log("inside passportlogin/callback")

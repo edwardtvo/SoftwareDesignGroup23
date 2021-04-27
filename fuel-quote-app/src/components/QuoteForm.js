@@ -1,4 +1,4 @@
-import {Container, Button, Form, Row, Col, Modal} from 'react-bootstrap'
+import {Container, Button, Form, Row, Col, Modal, InputGroup} from 'react-bootstrap'
 import React, {useEffect, useState} from "react";
 import DatePicker from 'react-datepicker'
 import NavBar from './NavBar'
@@ -50,6 +50,7 @@ const QuoteForm = () => {
     const [validated, setValidated] = useState(false)
     const [username, setUsername] = useState('')
     const [gallons, setGallons] = useState(0)
+    const [gallonsInvalid, setGallonsInvalid] = useState(1);
     const [checked, setChecked] = useState(false)
     const [show, setShow] = useState(false)
     const [delivery_date, setDeliveryDate] = useState(new Date())
@@ -92,7 +93,6 @@ const QuoteForm = () => {
                     console.log(username)
                     axios.post('http://localhost:4000/users/history', {username: cookies.user})
                         .then((res) => {
-                            console.log(`JSON DATA: ${res.data}`)
                             if (res.data === "") setRate_history_factor(0.01)
                             else setRate_history_factor(0)
                         })
@@ -185,7 +185,9 @@ const QuoteForm = () => {
                                         <Form.Label>Gallons Requested:</Form.Label>
                                     </Col>
                                     <Col className='col-auto'>
+                                        <InputGroup hasValidation>
                                         <Form.Control required
+                                                      isInvalid={gallonsInvalid}
                                                       className='gallonReq'
                                                       type='number'
                                                       placeholder='0'
@@ -200,10 +202,14 @@ const QuoteForm = () => {
                                                           } else {
                                                               setGallons_requested_factor(0.02)
                                                           }
+                                                          if (gallons > 0) {
+                                                              setGallonsInvalid(0)
+                                                          } else {setGallonsInvalid(1)}
                                                       }}
                                         />
-                                        <Form.Control.Feedback type='invalid'>Please provide a valid
-                                            number</Form.Control.Feedback>
+                                        <Form.Control.Feedback type='invalid'>!! Please provide a
+                                            number greater than zero !!</Form.Control.Feedback>
+                                        </InputGroup>
                                     </Col>
                                 </Row>
 
@@ -215,7 +221,9 @@ const QuoteForm = () => {
                                     <Col md="auto" className="address-box"><p
                                         style={{"font-weight": "bold"}}>{deliveryAddress}</p></Col>
                                     <Col style={{"paddingTop": "20px"}}>
+                                        {/*<InputGroup hasValidation>*/}
                                         <Form.Check required
+                                                    isInvalid={!checked}
                                                     type='checkbox'
                                                     label='Correct Delivery Address?'
                                                     feedback='Please verify address'
@@ -223,6 +231,7 @@ const QuoteForm = () => {
                                                         setChecked(!checked)
                                                     }}
                                         />
+                                        {/*</InputGroup>*/}
                                     </Col>
                                 </Row>
                             </Form.Group>

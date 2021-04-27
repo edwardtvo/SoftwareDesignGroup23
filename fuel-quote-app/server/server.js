@@ -73,7 +73,7 @@ app.get('/current_user', (req,res) => {
     res.send(req.session.passport.user);
 })
 app.use('/users', userRoute);
-app.use('/history', historyRoute);
+//app.use('/history', historyRoute);
 
 app.get('/checktoken', withAuth, (req,res,next) => {
     console.log('token in /checktoken');

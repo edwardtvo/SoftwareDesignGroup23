@@ -6,6 +6,9 @@ const keys = require('../database/db')
 const mongoDB = require('../mongoconnect');
 const MongoClient = require('mongodb').MongoClient;
 const withAuth = require('./middleware');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+
 
 
 
@@ -28,7 +31,30 @@ client.connect()
     const db = client.db("cluster0");
     const user = db.collection("user");
     const quotehistory = db.collection("quotehistory")
-    console.log("/ / / MongoDB successfully connected! u w u / / /");
+    console.log("MongoDB successfully connected!");
+
+
+    passport.use('local', new LocalStrategy(
+        function(username, password, done) {
+            user.findOne({ username: username }, (error, user) => {
+                if (error) { return done(error); }
+                if (!user) { 
+                    console.log('Inside !user')
+                    return done(null, false, { message: 'Incorrect username' })}
+
+                bcrypt.compare(password, user.password, (err, data) => {
+                        if (!data) {
+                            console.log('Inside !data')
+                            return done(null, false, { message: 'Incorrect password'})
+                        } else {
+                console.log(user);
+                return done(null, user);
+                        }
+            })
+        })
+        }))
+
+    
 
     /* https://stackoverflow.com/questions/28715859/mongodb-nodejs-converting-circular-structure */
     router.route('/').get((req, res, next) => {
@@ -42,7 +68,8 @@ client.connect()
     
     /* profile management */
     router.route('/update').post((req, res, next) => {
-        var filter = { username: req.body.username };
+        var filter = { username: req.body.cookie_username };
+        console.log('req.body: ',req.body)
         user.findOneAndUpdate( filter, {
             $set:{
             fullname: req.body.fullname,
@@ -51,65 +78,138 @@ client.connect()
             city: req.body.city,
             state: req.body.state,
             zip: req.body.zip}
-        }, { strict: false }, (error, data) => {
+        }, { strict: true }, (error, data) => {
             if (error) {
                 console.log(error);
                 return next(error);
             } else {
                 res.json(data)
-                console.log('/ / / User updated successfully ! / / /')
+                console.log(`User ${req.body.username} updated successfully !`)
             }
         })
     })
 
     /* after auth sample route */
-    router.get('/inside', withAuth, (req,res,next) => {
+    /* router.get('/inside', withAuth, (req,res,next) => {
         res.send('Password is potato');
     })
 
-    /* router.get('/checktoken', withAuth, (req,res,next) => {
-        console.log('token in /checktoken');
-        console.log(req.cookie.token);
+    router.get('/checktoken', withAuth, async (req,res,next) => {
+        await console.log('token in /checktoken');
+        await console.log(req.cookies.token);
         res.sendStatus(200);
-    }) */
+    })  */
+
+
 
     /* login */
-    router.route('/authenticate').post((req,res,next) => {
+    router.post('/passportlogin', (req,res,next) => {
+        console.log('inside /passportlogin');
+        
+        
+        passport.authenticate('local', function(err, user, info) {
+            if (err) { console.log('inside error'); return next(err) }
+            if (!user) { console.log('inside !user'); return res.status(500).json({message: 'User not found'}) }
+            req.logIn(user, function(err) {
+                console.log("inside login")
+                console.log('User: ',user)
+                if (err) {
+                    console.log(err);
+                    return res.status(500).json({message: "Can't logIn"})
+                }
+                
+                    console.log('user is correct??')
+                    console.log("req.user: ",req.user)
+                    req.session.user = req.user;
+                    console.log("req.session.passport.user:",req.session.passport.user)
+                    res.status(200).json({ message: 'User authenticated!' })
+                
+                console.log("req.isAuthenticated(): ",req.isAuthenticated())
+            
+            })
+            
+            
+            
+        }) (req,res,next);
+
+        
+    });
+
+   /*  router.post('/passportlogin/callback', (req,res,next) => {
+        console.log("inside passportlogin/callback")
+        passport.authenticate('local', function(err, user, info) {
+            if (err) { console.log('inside error'); return next(err) }
+            if (!user) { console.log('inside !user'); return res.status(500).json({message: 'User not found'}) }
+            req.logIn(user, function(err) {
+                console.log("inside callback logIn")
+                if (err) {
+                    console.log(err);
+                    return res.status(500).json({message: "Can't logIn"})
+                } else {
+                    console.log('user is correct??')
+                    res.status(200).json({ message: 'User authenticated!' })
+                }
+            })
+            
+            
+            
+        }) (req,res,next)
+    }) */
+
+    router.post('/current_user', (req, res) => {
+        //console.log("req.body.username: ",req.body.username);
+
+        if (req.body.username === '' || req.body.username === undefined) {
+            console.log('Not logged in. req.body.username: ',req.body.username);
+            res.status(404).json({ error: `Not loggedin. req.body.username: ${req.body.username}`})
+        } else {
+
+        user.findOne({ username: req.body.username }, (err, user) => {
+            if (err) {
+                console.log("Error inside /current_user route: ", err)
+                res.status(500).json({ error: 'Internal error, please try again'})
+            } else if (!user) {
+                console.log("Why did you successfully log in? Who are you ",req.body.username, "?")
+                res.status(600).json({ error: 'Illegal login; user not found in database' })
+            } else {
+                console.log('User ',req.body.username, ' information fetched successfully')
+                res.status(200).json(user)
+            }
+
+        })
+        }
+    })
+
+    router.post('/authenticate', async (req,res,next) => {
         const username = req.body.username;
         const password = req.body.password;
+        console.log('username in /authenticate route: ',username);
 
         user.findOne({ username: req.body.username }, (err, user) => {
             if (err) {
                 console.error(err);
                 res.status(500)
-                .json({ error: '/// Internal error, please try again /// '});
+                .json({ error: 'Internal error, please try again'});
             }
             else if (!user) {
                 res.status(601)
-                .json({ error: '/// Incorrect username or password ///' });
+                .json({ error: 'No user with given username found in database' });
             }
             else {
                 bcrypt.compare(req.body.password, user.password, (err, data) => {
                     if (err) {
                         res.status(500)
-                        .json({ error: '/// Internal error, please try again ///'});
+                        .json({ error: 'Internal error, please try again'});
                     } else if (!data) {
                         res.status(401)
-                        .json({ error: '/// Incorrect username or password ///'});
+                        .json({ error: 'Incorrect password to given username'});
                     } else {
-                        /* Issue token */
-                        const payload = { username };
-                        const token = jwt.sign(payload, secret, {
-                            expiresIn: '1h',
-                        });
-                        console.log('Token in user.routes: ');
-                        console.log(JSON.stringify(token));
-                        res.cookie('token', token, {httpOnly: true, secure: false })
-                        .sendStatus(200);
+                        res.sendStatus(200);
                     }
                 }) 
             }
         })
+
     })
 
     /* registration */
@@ -194,8 +294,30 @@ client.connect()
         })
     })
 
+    /* passport.serializeUser((user, done)=> {
+        //console.log("inside serialize");
+        done(null, user._id);
+        //console.log("user._id = ",user._id);
+    });
+
+    passport.deserializeUser(function(_id, done) {
+        console.log('inside deserialize');
+        user.findById(_id, function(err, user) {
+         done(err, {username: 'test', password: 'testpass'});
+        });
+      }); */
+
+
 
     });
+
+
+   
+
+
+
+
+
   client.close();
 module.exports = router;
 

@@ -3,17 +3,24 @@ import React, { useEffect, useState } from "react";
 import NavBar from "./NavBar";
 import axios from 'axios';
 import { useHistory, Redirect } from "react-router-dom";
+import { connect } from 'react-redux'
+import * as actions from '../store/actions/index.js';
+import { withCookies, useCookies } from 'react-cookie';
+
 const bcrypt = require('./custom-bcrypt');
 
 function simulateNetworkRequest() {
     return new Promise((resolve) => setTimeout(resolve, 100));
   }
-const Login = () => {
+const Login = (props) => {
   const [validated, setValidated] = useState(false);
     const [isLoading, setLoading] = useState(false);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [redirect, setRedirect] = useState(false);
+
+    const [cookies, setCookie] = useCookies(['user'])
+
 
     let history=useHistory();
 
@@ -41,27 +48,19 @@ const Login = () => {
       }
 
     
-
-      /* authenticate user credentials 
-      axios.post('http://localhost:4000/users/authenticate', userObj)*/
-      fetch('http://localhost:4000/users/authenticate', {
-        method: 'POST',
-        body: JSON.stringify(userObj),
-        headers: {
-          'Content-Type':'application/json'
-        },
-        withCredentials: true
-      })
+      
+      /* authenticate user credentials */
+      axios.post('http://localhost:4000/users/authenticate', userObj)
       .then((res) => {
-        if (res.status === 200) {
-          //console.log('going to profman!');
-          history.push('/profilemanagement')
-        } else {
-          const error = new Error(res.error);
-          throw error;
-        }
+        setCookie('user', userObj.username, {
+          path: '/'
+        });
+        console.log(cookies.user)
+        window.location.reload();
+        history.push('/home')
+        
       }).catch((err) => {
-        console.log(err);
+        console.log('Error in catch block of Login axios.post: ', err);
         alert('Error logging in, please try again');
       })
       /*                                       
@@ -138,4 +137,9 @@ const Login = () => {
     )
 }
 
-export default Login
+/* const mapStateToProps = state => ({
+  auth: state.AuthReducer
+}); */
+
+//export default connect(mapStateToProps, actions)(Login);
+export default Login;

@@ -1,4 +1,5 @@
 let express = require('express');
+var cookieSession = require('cookie-session')
 const cookieParser = require('cookie-parser');
 let mongoose = require('mongoose');
 let cors = require('cors');
@@ -12,6 +13,12 @@ const historyRoute = require('./routes/history.routes')
 const jwt = require('express-jwt');
 const secret = require('./auth/secret');
 const withAuth = require('./routes/middleware');
+const passport = require('passport')
+const flash = require('connect-flash');
+var session = require('express-session');
+
+
+
 
 
 
@@ -37,18 +44,38 @@ mongoDB.mongoDB_run(dbName, mongoDB_client).catch(console.dir); */
 /*-----------------*/
 
 const app = express();
+app.use(express.static("public"));
 app.use(cookieParser());
 app.use(bodyParser.json());
+app.use(session({
+    resave: false,
+    saveUninitialized: false,
+    keys:'asdfa',
+    secret: 'group23secret',
+    cookie: { path: '/',httpOnly: false, maxAge: 30*25*60*1000, secure: false }
+}))
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+app.use(flash());
 app.use(bodyParser.urlencoded({
     extended: true
 }));
-app.use(cors());
+app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
+
+app.get('/current_user', (req,res) => {
+    console.log('inside /current_user')
+    console.log("req.user: ",req.user);
+    console.log("req.session: ",req.session)
+    console.log("req.session.passport.user: ")
+    console.log(req.session.passport.user);
+    res.send(req.session.passport.user);
+})
 app.use('/users', userRoute);
 app.use('/history', historyRoute);
 
-app.get('/', function (req, res) {
-    res.status(200).send('connection is good');
-});
 app.get('/checktoken', withAuth, (req,res,next) => {
     console.log('token in /checktoken');
     console.log(req.cookie.token);

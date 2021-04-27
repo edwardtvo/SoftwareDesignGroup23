@@ -39,7 +39,6 @@ const History = () => {
 
     return (
         <div>
-            <NavBar loggedIn={true}/>
 
             <ReactBootstrap.Table striped bordered hover>
                 <thead>

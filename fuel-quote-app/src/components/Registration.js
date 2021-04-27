@@ -53,58 +53,57 @@ const Registration = () => {
     return (
         <>
 
-            <NavBar loggedIn={false}/>
+        
+        <Container fluid className="title-padding">
+            
+            <Row>
+                <Col md="5"></Col>
+                <Col md="auto">
+                    <h1 className="title-page">Registration</h1>
+                </Col>
+                <Col md="5"></Col>
+            </Row>
 
-            <Container fluid className="title-padding">
-
-                <Row>
-                    <Col md="5"></Col>
-                    <Col md="auto">
-                        <h1 className="title-page">Registration</h1>
-                    </Col>
-                    <Col md="5"></Col>
-                </Row>
-
-                <Form   noValidate
-                        validated={validated}
-                        onSubmit={handleSubmit}>
-                    <Row>
-                        <Col md="4"></Col>
-                        <Col md="4">
-                            <Form.Label>Username</Form.Label>
-                            <Form.Control type="text"
-                                          value={username}
-                                          onChange={(e) => setUsername(e.target.value)}
-                                          required/>
-                            <Form.Control.Feedback type="invalid">Please provide a username</Form.Control.Feedback>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col md="4"></Col>
-                        <Col>
-                            <Form.Label>Password</Form.Label>
-                            <Form.Control type="password"
-                                          value={password}
-                                          onChange={(e) => setPassword(e.target.value)}
-                                          required/>
-                            <Form.Control.Feedback type="invalid">Please provide a password</Form.Control.Feedback>
-                        </Col>
-                        <Col md="4"></Col>
-                    </Row>
-                    <br />
-                    <Row>
-                        <Col md="6"></Col>
-                        <Col md="auto">
-                            <Button variant="danger" type="submit">Sign up</Button>{' '}
-                        </Col>
-                        <Col></Col>
-                    </Row>
-                </Form>
-
+            <Form   noValidate 
+                    validated={validated} 
+                    onSubmit={handleSubmit}>
+            <Row>
+                <Col md="4"></Col>
+                <Col md="4">
+                    <Form.Label>Username</Form.Label>
+                    <Form.Control type="text"
+                                  value={username}
+                                  onChange={(e) => setUsername(e.target.value)}
+                                  required/>
+                    <Form.Control.Feedback type="invalid">Please provide a username</Form.Control.Feedback>
+                </Col>
+            </Row>
+            <Row>
+                <Col md="4"></Col>
+                <Col>
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control type="password"
+                                  value={password}
+                                  onChange={(e) => setPassword(e.target.value)}
+                                  required/>
+                    <Form.Control.Feedback type="invalid">Please provide a password</Form.Control.Feedback>
+                </Col>
+                <Col md="4"></Col>
+            </Row>
+        <br />
+        <Row>
+            <Col md="6"></Col>
+            <Col md="auto">    
+                <Button variant="danger" type="submit">Sign up</Button>{' '}
+            </Col>
+            <Col></Col>
+        </Row>
+        </Form>
 
 
+        
 
-            </Container>
+        </Container>
         </>
 
     )

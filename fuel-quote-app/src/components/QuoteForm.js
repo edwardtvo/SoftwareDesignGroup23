@@ -38,6 +38,7 @@ const QuoteForm = () => {
     To fix immediate refresh on click/submit https://github.com/react-bootstrap/react-bootstrap/issues/1510
     Stop modal from appearing if validation check fails https://stackoverflow.com/questions/58753515/bootstrap-4-validation-disable-submit-button-until-form-validated
     */
+
     const company_factor = 0.1;
     const price_per_gallon = 1.50;
     const [location_factor, setLocation_factor] = useState(0.00)
@@ -52,32 +53,13 @@ const QuoteForm = () => {
     const [checked, setChecked] = useState(false)
     const [show, setShow] = useState(false)
     const [delivery_date, setDeliveryDate] = useState(new Date())
+    const [disableButton, setDisableButton] = useState('true');
     const [isLoading, setLoading] = useState(false);
-    const [disableButton, setDisableButton] = useState(true);
         /* address from token retrieved here */
-    /*
-    const [User, setUser] = useState({
-        username: '',
-        firstname: '',
-        lastname: '',
-        address1: '',
-        address2: '',
-        city: '',
-        zipcode: '',
-        state: '',
-        gallon: '',
-        inState: false,
-        returnee: false
-    });
-*/
     const [deliveryAddress, setDeliveryAddress] =  useState('');
-    const [address1, setAddress1] = useState('');
-    const [address2, setAddress2] = useState('');
     const [cookies, setCookie] = useCookies(['user'])
-    const [userData, setUserData] = useState({});
 
     let history=useHistory();
-
 
 
     useEffect(() => {
@@ -85,37 +67,37 @@ const QuoteForm = () => {
         axios.post('http://localhost:4000/users/current_user', { username: cookies.user })
         .then((res) => {
           if (res.status === 200) {
-          //setUserData(res.data);
-          console.log('res.data: ',res.data);
+              console.log('res.data: ', res.data);
+              // Set username
+              setUsername(cookies.user)
+              // Get user address info
+              if (res.data.address2 === null || res.data.address2 === undefined) {
+                  console.log('address2 is undefined');
+                  setDeliveryAddress(res.data.address1);
+                  console.log('address1: ', res.data.address1);
+              } else {
+                  console.log('address2: ', res.data.address2);
+                  let combined_address = res.data.address1 + ', ' + res.data.address2;
+                  console.log('combined_address: ', combined_address)
+                  setDeliveryAddress(res.data.address1 + ', ' + res.data.address2);
+              }
 
-          // Get user address info
-          if (res.data.address2 === null || res.data.address2 === undefined) {
-              console.log('address2 is undefined');
-              setDeliveryAddress(res.data.address1);
-              console.log('address1: ', res.data.address1);
-          } else {
-              console.log('address2: ',res.data.address2);
-              let combined_address = res.data.address1 + ', ' + res.data.address2;
-              console.log('combined_address: ', combined_address)
-              setDeliveryAddress(res.data.address1 + ', ' + res.data.address2);
-          }
-
-          // Determine location factor
+              // Determine location factor
               console.log(res.data.state)
-          if (res.data.state === "TX") {
-              setLocation_factor(0.02)
-          }
-          else {
-              setLocation_factor(0.04)
-          }
-          // Determine rate history factor
-          axios.get('http://localhost:4000/users/history/find', {data: {username: cookies.user}})
-              .then((res) => {
-                  if (!res.data.hasQuoteHistory) setRate_history_factor(0)
-                  else setRate_history_factor(0.01)
-              })
-          }
+              if (res.data.state === "TX") {
+                  setLocation_factor(0.02)
+              } else {
+                  setLocation_factor(0.04)
+              }
+              console.log(username)
+              axios.post('http://localhost:4000/users/history', {username: cookies.user})
+                  .then((res) => {
+                      console.log(`JSON DATA: ${res.data}`)
+                      if (res.data === "") setRate_history_factor(0.01)
+                      else setRate_history_factor(0)
+                  })
 
+          }
           else if (res.status === 404) {
             console.log('res.status: ', res.status)
             history.push('/')
@@ -129,51 +111,26 @@ const QuoteForm = () => {
             setLoading(false);
           });
         }
-/*
-        const Page = async() => {
-            const checkUser = await axios.get('http://localhost:4000/users');
-
-            if (checkUser) {
-                setUser({
-                    state: checkUser.state
-                });
-
-                if (checkUser.data.state === "TX") {
-                    User.inState = true;
-                } else {
-                    User.inState = false;
-                }
-                console.log(User.inState);
-            }
-            else {
-                alert("User not found");
-            }
-            
-        }
-
-        Page();*/
       }, [isLoading]);
 
-    //const handleClick = () => setLoading(true);
-
+    /* Ensure that factors are updated before margin and price are calculated */
     useEffect(() => {
-        console.log(location_factor)
-        console.log(rate_history_factor)
-        console.log(gallons_requested_factor)
+        console.log(`location factor: ${location_factor}`)
+        console.log(`rate history factor: ${rate_history_factor}`)
+        console.log(`gallons requested factor: ${gallons_requested_factor}`)
 
         setMargin(price_per_gallon * (location_factor - rate_history_factor + gallons_requested_factor + company_factor));
-
         setSuggestedPrice(price_per_gallon + margin);
-
         setFinal_price(gallons * suggested_price);
 
-        console.log(margin)
-        console.log(suggested_price)
-        console.log(final_price)
+        console.log(`calculated margin: ${margin}`)
+        console.log(`calculated suggested price: ${suggested_price}`)
+        console.log(`calculated final price: ${final_price}`)
 
-        setDisableButton(false);
+        // Enable "Get Quote" button
+        setDisableButton('false');
 
-    }, [location_factor, rate_history_factor, gallons_requested_factor])
+    }, [location_factor, rate_history_factor, gallons_requested_factor, gallons])
 
     const calcQuote = (event) => {
             const form = event.currentTarget;
@@ -183,10 +140,9 @@ const QuoteForm = () => {
             }
             else {
                 event.preventDefault();
-
                 setShow(true)
                 setValidated(true)
-                setDisableButton(true);
+                setDisableButton('true');
             }
     }
 
@@ -204,25 +160,15 @@ const QuoteForm = () => {
             }).catch((error) => {
             console.log(error)
         });
+
+        setValidated(false);
+        setShow(false);
     }
-    // Check if user is in Texas to receive the "inState" price modifier
-    /*
-    const checkUser = axios.get('http://localhost:4000/users');
-
-    if(checkUser){
-        setUser({
-            state: checkUser.state,
-        })
-
-        if (checkUser.state === 'TX') {
-            User.inState = true;
-        }
-    }*/
 
     const handleClose = () => {
         setValidated(false);
         setShow(false);
-        window.location.reload();
+        //window.location.reload();
     }
 
     return (
@@ -248,6 +194,7 @@ const QuoteForm = () => {
                                               min='1'
                                               value={gallons}
                                               onChange={(e) => {
+                                                  setDisableButton('true');
                                                   setGallons(parseInt(e.target.value))
                                                   // Determine gallons requested factor
                                                   if (gallons < 1000) {

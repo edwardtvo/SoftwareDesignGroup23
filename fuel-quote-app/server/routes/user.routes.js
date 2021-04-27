@@ -53,9 +53,6 @@ client.connect()
             if (error) {
                 console.log(`Error trying to find user with username: ${req.body.username} quote history`);
                 res.status(500).json({ error: `Error trying to find user with username: ${req.body.username} quote history` })
-            } else if (!result) {
-                console.log(`No quote history found w/ username: ${req.body.username}`)
-                res.status(600).json({ error: `No quote history found w/ username: ${req.body.username}` })
             } else {
             console.log(`Quote history found for username: ${req.body.username}`);
             res.status(200).json(result);
@@ -154,22 +151,23 @@ client.connect()
         })
     })
 
-      /* check for quote history */
+      /* check for quote history
       router.route('/history/find').get((req,res,next) => {
-          quotehistory.find({username: req.body.username}, (err, result) => {
+          quotehistory.find({username: req.params.username}, (err, result) => {
               if (err) {
-                  console.log(`Error trying to find user with username: ${req.body.username} quote history`);
-                  res.status(500).json({ error: `Error trying to find user with username: ${req.body.username} quote history` })
-              } else if (!result) {
-                  console.log(`No quote history found w/ username: ${req.body.username}`)
+                  console.log(`Error trying to find user with username: ${req.params.username} quote history`);
+                  res.status(500).json({ error: `Error trying to find user with username: ${req.params.username} quote history` })
+              } else if (result.length < 1) {
+                  console.log(`No quote history found w/ username: ${req.params.username}`)
                   res.json({hasQuoteHistory: false})
               }
               else {
+                  console.log(`Quote history found w/ username: ${req.body.username}`)
                   res.json({hasQuoteHistory: true})
               }
           })
       })
-
+*/
     router.route('/quoteupdate').post((req,res,next) => {
         quotehistory.insertOne( {
             username: req.body.username,

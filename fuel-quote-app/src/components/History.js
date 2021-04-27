@@ -5,24 +5,28 @@ import { COLUMNS } from './Columns'
 import './History.css'
 import { Link } from 'react-router-dom'
 import NavBar from './NavBar'
-import {useState} from 'react'
+import {useState, useEffect } from 'react'
 import axios from 'axios'
 import {Row, Col, Container} from 'react-bootstrap'
+import { withCookies, useCookies } from 'react-cookie';
 import * as ReactBootstrap from 'react-bootstrap'
 
 const History = () => {
-    const [userList, setUserList] = useState([])
-    const componentDidMount = () => {
-        axios.get('http://localhost:4000/history')
+    const [userList, setUserList] = useState([]);
+    const [cookies, setCookie] = useCookies(['user']);
+    const number = 1;
+
+    useEffect(() => {
+        axios.post('http://localhost:4000/users/history', {username: cookies.user})
             .then(res => {
                 setUserList(res.data);
-                console.log(userList)
+                console.log('userList: ', userList);
+                
             })
             .catch(function (error) {
-                console.log(error);
+                console.log('Error: ',error);
             })
-    }
-    componentDidMount()
+    }, [cookies.user]);
 
     const renderHistory = (data, index) => {
         return(
@@ -52,7 +56,18 @@ const History = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {userList.map(renderHistory)}
+                    {userList.map(data => {
+                        return(
+                            <tr>
+                                <td>{data.username}</td>
+                                <td>{data.gallons_requested}</td>
+                                <td>{data.delivery_address}</td>
+                                <td>{data.delivery_date}</td>
+                                <td>{data.price_per_gallon}</td>
+                                <td>{data.amount_due}</td>
+                            </tr>
+                        )
+                    })}
                 </tbody>
             </ReactBootstrap.Table>
 

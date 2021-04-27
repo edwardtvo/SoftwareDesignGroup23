@@ -15,7 +15,7 @@ const Home = () => {
                         <Col md="3"/>
                         <Col>
                         <t3 style={{"alignContent":"center"}}>Click an option on the Navigation Bar above to navigate to a page</t3> <br/>
-                        <t3 style={{"alignText":"center"}}>Go to <a href='/profilemanagement'>Profile Management</a> if you haven't set up your profile</t3>
+                        <t3 style={{"alignText":"center"}}>Go to <a href='/profilemanagement' style={{"color":"red"}}>Profile Management</a> if you haven't set up your profile</t3>
                         </Col>
                         <Col md="auto"></Col>
                     </Row>

@@ -39,7 +39,14 @@ const App = () => {
     return (
         <div>
             <div className={!is_logged_in ? "table display-on" : "table display-off"}>
-                <Login/>
+            <Router>
+                <Switch>
+                    <Route exact path="/" component={Login} />
+                    <Route exact path="/registration" component={Registration} />
+                    <Route exact path="/login" component={Login} />
+                </Switch>
+            </Router>
+                
             </div>
 
             <div className={is_logged_in ? "table display-on" : "table display-off"}>
@@ -51,7 +58,6 @@ const App = () => {
                     <Route path="/getquote" component={QuoteForm} />
                     <Route path="/profilemanagement" component={ProfileManagement}/>
                     {/* <Route path="/login" component={Login} /> */}
-                    <Route path="/registration" component={Registration} />
                     <Route path="/quotehistory" component={History} />
                     <Route path="/accountdetails" component={AccountDetails} />
                 </Switch>

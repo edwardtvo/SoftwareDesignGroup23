@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useHistory, Redirect } from "react-router-dom";
 import { connect } from 'react-redux'
 import * as actions from '../store/actions/index.js';
+import logo from '../images/cougar-gas.png'
 import { withCookies, useCookies } from 'react-cookie';
 
 const bcrypt = require('./custom-bcrypt');
@@ -56,7 +57,6 @@ const Login = (props) => {
           path: '/'
         });
         console.log(cookies.user)
-        window.location.reload();
         history.push('/home')
         
       }).catch((err) => {
@@ -82,14 +82,17 @@ const Login = (props) => {
         
         
         <Container fluid className="title-padding">
+
+            <div style={{"alignContent":"center"}}>
+                <img src={logo} alt="Cougar Gas Logo"/>
+            </div>
+            <div style={{"alignContent":"center", "paddingBottom":"30px"}}>
+            <h1 className="title-page">Welcome to COUGAR GAS INC.!</h1>
+            </div>
+
+
             
-            <Row>
-                <Col md="5"></Col>
-                <Col md="auto">
-                    <h1 className="title-page">Welcome!</h1>
-                </Col>
-                <Col md="5"></Col>
-            </Row>
+           
 
             <Form noValidate 
                   validated={validated}
@@ -119,10 +122,9 @@ const Login = (props) => {
             </Row>
         <br />
         <Row>
-            <Col md="6"></Col>
-            <Col md="auto"><Button variant="light" href="/Registration">Sign up</Button></Col>
-            <Col md="auto">    {/* TODO: redirect AND validate at the same time */}
-                                {/* can't redirect at the moment */}
+            <Col md="5"></Col>
+            <Col md="auto"><Button variant="light" href="/registration">Sign up</Button></Col>
+            <Col md="auto">    
                 <Button variant="danger" type="submit">Log in</Button>{' '}
             </Col>
             <Col></Col>

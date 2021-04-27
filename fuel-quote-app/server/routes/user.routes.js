@@ -89,6 +89,23 @@ client.connect()
         })
     })
 
+    router.post('/history', (req,res,next) => {
+        quotehistory.find({ username: req.body.username }).limit(0).toArray((error, result) => {
+            if (error) {
+                console.log(`Error trying to find user with username: ${req.body.username} quote history`);
+                res.status(500).json({ error: `Error trying to find user with username: ${req.body.username} quote history` })
+            } else if (!result) {
+                console.log(`No quote history found w/ username: ${req.body.username}`)
+                res.status(600).json({ error: `No quote history found w/ username: ${req.body.username}` })
+            } else {
+            console.log(`Quote history found for username: ${req.body.username}`);
+            res.status(200).json(result);
+            }
+        });
+
+        
+    })  
+
     /* after auth sample route */
     /* router.get('/inside', withAuth, (req,res,next) => {
         res.send('Password is potato');
@@ -214,29 +231,16 @@ client.connect()
 
     /* registration */
     router.route('/create').post((req,res,next) => {
-        let userExisted = false;
-        user.findOne({ username: req.body.username }).then(user => {
-            if (user) {
-                userExisted = true;
-            }
-        });
-            if (!userExisted) {
+        user.findOne({ username: req.body.username }).then(account => {
+            if (account) {
+                console.log(`User ${req.body.username} existed!`)
+                res.json('USER_EXISTED')
+            } else {
                 let newUser = { username: req.body.username, password: req.body.password };
-                /*bcrypt.hash(newUser.password, 10, function(err, hashedPassword) {
-                    if (err) {
-                        next(err);
-                    }
-                    else {
-                        newUser.password = hashedPassword;
-                        next();
-                    }
-                })*/
                 bcrypt.genSalt(10)
                 .then((salt) => {
-                    console.log(`Salt: ${salt}`);
                     return bcrypt.hash(newUser.password, salt);
                 }).then((hash) => {
-                    console.log(`Hash: ${hash}`);
                     user.insertOne( {
                         username: newUser.username,
                         password: hash
@@ -246,32 +250,18 @@ client.connect()
                             return next(error);
                         } else {
                             res.json(data);
-                            console.log("/// New user registered! ///")
+                            console.log(`New user ${newUser.username} registered!`)
                         }
     
                     });
                 })
 
                 console.log(newUser.password);
-
-                /* user.insertOne( {
-                    username: newUser.username,
-                    password: 
-                }, {strict: false}, (error, data) => {
-                    if (error) {
-                        console.log(error);
-                        return next(error);
-                    } else {
-                        res.json(data);
-                        console.log("/// New user registered! ///")
-                    }
-
-                }); */
+                
             }
-            else {
-                console.log("ERROR: User already exists");
-            }
+        
         })
+    })
     
 
 

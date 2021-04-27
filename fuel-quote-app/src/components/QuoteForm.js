@@ -45,6 +45,20 @@ const QuoteForm = () => {
     const [isLoading, setLoading] = useState(false);
         /* address from token retrieved here */
     const [delivery_address, getDeliveryAddress] =  useState('123 Houston St');
+    
+    const [User, setUser] = useState({
+        username: '',
+        firstname: '',
+        lastname: '',
+        address1: '',
+        address2: '',
+        city: '',
+        zipcode: '',
+        state: '',
+        gallon: '',
+        inState: false,
+        returnee: false
+    });
 
 
 
@@ -55,6 +69,29 @@ const QuoteForm = () => {
             setLoading(false);
           });
         }
+
+        const Page = async() => {
+            const checkUser = await axios.get('http://localhost:4000/users');
+
+            if (checkUser) {
+                setUser({
+                    state: checkUser.state
+                });
+
+                if (checkUser.data.state === "TX") {
+                    User.inState = true;
+                } else {
+                    User.inState = false;
+                }
+                console.log(User.inState);
+            }
+            else {
+                alert("User not found");
+            }
+            
+        }
+
+        Page();
       }, [isLoading]);
 
     const handleClick = () => setLoading(true);
@@ -69,6 +106,39 @@ const QuoteForm = () => {
             event.preventDefault();
             setShow(true)
             setValidated(true)
+
+            const price_per_gallon = 1.5;
+            const company_factor = 0.1;
+            var location_factor, rate_history_factor, gallons_requested_factor, margin, suggested_price, final_price
+
+            if (User.inState === false) {
+                location_factor = 0.04
+            }
+            else {
+                location_factor = 0.02
+            }
+
+            if (User.returnee === false) {
+                rate_history_factor = 0;
+            }
+            else {
+                rate_history_factor = 0.01;
+            }
+
+            if (User.gallon < 1000) {
+                gallons_requested_factor = 0.03;
+            }
+            else {
+                gallons_requested_factor = 0.02;
+            }
+
+            margin = price_per_gallon * (location_factor - rate_history_factor + gallons_requested_factor + company_factor);
+
+            suggested_price = price_per_gallon + margin;
+
+            final_price = User.gallon * suggested_price;
+
+            console.log(margin)
             const quoteObj = {
                 username: username,
                 gallons_requested: gallons,
@@ -86,6 +156,19 @@ const QuoteForm = () => {
         
         }
     }
+    // Check if user is in Texas to receive the "inState" price modifier
+    /*
+    const checkUser = axios.get('http://localhost:4000/users');
+
+    if(checkUser){
+        setUser({
+            state: checkUser.state,
+        })
+
+        if (checkUser.state === 'TX') {
+            User.inState = true;
+        }
+    }*/
 
     const handleClose = () => {
         setValidated(false);

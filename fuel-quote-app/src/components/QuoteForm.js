@@ -1,9 +1,9 @@
 import {Container, Button, Form, Row, Col, Modal} from 'react-bootstrap'
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import DatePicker from 'react-datepicker'
 import NavBar from './NavBar'
-import { withCookies, useCookies } from 'react-cookie';
-import { useHistory } from "react-router-dom";
+import {withCookies, useCookies} from 'react-cookie';
+import {useHistory} from "react-router-dom";
 import axios from 'axios';
 import './QuoteForm.css'
 
@@ -11,12 +11,12 @@ require('react-datepicker/dist/react-datepicker.css')
 
 function simulateNetworkRequest() {
     return new Promise((resolve) => setTimeout(resolve, 100));
-  }
+}
 
 const apiUrl = 'http://localhost:4000';
 axios.interceptors.request.use(
     config => {
-        const { origin } = new URL(config.url);
+        const {origin} = new URL(config.url);
         const allowedOrigins = [apiUrl];
         const token = localStorage.getItem('token');
         if (allowedOrigins.includes(origin)) {
@@ -55,63 +55,62 @@ const QuoteForm = () => {
     const [delivery_date, setDeliveryDate] = useState(new Date())
     const [disableButton, setDisableButton] = useState('true');
     const [isLoading, setLoading] = useState(false);
-        /* address from token retrieved here */
-    const [deliveryAddress, setDeliveryAddress] =  useState('');
+    /* address from token retrieved here */
+    const [deliveryAddress, setDeliveryAddress] = useState('');
     const [cookies, setCookie] = useCookies(['user'])
 
-    let history=useHistory();
+    let history = useHistory();
 
 
     useEffect(() => {
-        console.log('username: ',cookies.user);
-        axios.post('http://localhost:4000/users/current_user', { username: cookies.user })
-        .then((res) => {
-          if (res.status === 200) {
-              console.log('res.data: ', res.data);
-              // Set username
-              setUsername(cookies.user)
-              // Get user address info
-              if (res.data.address2 === null || res.data.address2 === undefined) {
-                  console.log('address2 is undefined');
-                  setDeliveryAddress(res.data.address1);
-                  console.log('address1: ', res.data.address1);
-              } else {
-                  console.log('address2: ', res.data.address2);
-                  let combined_address = res.data.address1 + ', ' + res.data.address2;
-                  console.log('combined_address: ', combined_address)
-                  setDeliveryAddress(res.data.address1 + ', ' + res.data.address2);
-              }
+        console.log('username: ', cookies.user);
+        axios.post('http://localhost:4000/users/current_user', {username: cookies.user})
+            .then((res) => {
+                if (res.status === 200) {
+                    console.log('res.data: ', res.data);
+                    // Set username
+                    setUsername(cookies.user)
+                    // Get user address info
+                    if (res.data.address2 === null || res.data.address2 === undefined) {
+                        console.log('address2 is undefined');
+                        setDeliveryAddress(res.data.address1);
+                        console.log('address1: ', res.data.address1);
+                    } else {
+                        console.log('address2: ', res.data.address2);
+                        let combined_address = res.data.address1 + ', ' + res.data.address2;
+                        console.log('combined_address: ', combined_address)
+                        setDeliveryAddress(res.data.address1 + ', ' + res.data.address2);
+                    }
 
-              // Determine location factor
-              console.log(res.data.state)
-              if (res.data.state === "TX") {
-                  setLocation_factor(0.02)
-              } else {
-                  setLocation_factor(0.04)
-              }
-              console.log(username)
-              axios.post('http://localhost:4000/users/history', {username: cookies.user})
-                  .then((res) => {
-                      console.log(`JSON DATA: ${res.data}`)
-                      if (res.data === "") setRate_history_factor(0.01)
-                      else setRate_history_factor(0)
-                  })
+                    // Determine location factor
+                    console.log(res.data.state)
+                    if (res.data.state === "TX") {
+                        setLocation_factor(0.02)
+                    } else {
+                        setLocation_factor(0.04)
+                    }
+                    console.log(username)
+                    axios.post('http://localhost:4000/users/history', {username: cookies.user})
+                        .then((res) => {
+                            console.log(`JSON DATA: ${res.data}`)
+                            if (res.data === "") setRate_history_factor(0.01)
+                            else setRate_history_factor(0)
+                        })
 
-          }
-          else if (res.status === 404) {
-            console.log('res.status: ', res.status)
-            history.push('/')
-          }
-        }).catch((error) => {
-          console.log('Error trying to fetch user data from cookie',error);
+                } else if (res.status === 404) {
+                    console.log('res.status: ', res.status)
+                    history.push('/')
+                }
+            }).catch((error) => {
+            console.log('Error trying to fetch user data from cookie', error);
         })
 
         if (isLoading) {
-          simulateNetworkRequest().then(() => {
-            setLoading(false);
-          });
+            simulateNetworkRequest().then(() => {
+                setLoading(false);
+            });
         }
-      }, [isLoading]);
+    }, [isLoading]);
 
     /* Ensure that factors are updated before margin and price are calculated */
     useEffect(() => {
@@ -133,17 +132,16 @@ const QuoteForm = () => {
     }, [location_factor, rate_history_factor, gallons_requested_factor, gallons])
 
     const calcQuote = (event) => {
-            const form = event.currentTarget;
-            if (form.checkValidity() === false) {
-                event.stopPropagation()
-                event.preventDefault()
-            }
-            else {
-                event.preventDefault();
-                setShow(true)
-                setValidated(true)
-                setDisableButton('true');
-            }
+        const form = event.currentTarget;
+        if (form.checkValidity() === false) {
+            event.stopPropagation()
+            event.preventDefault()
+        } else {
+            event.preventDefault();
+            setShow(true)
+            setValidated(true)
+            setDisableButton('true');
+        }
     }
 
     const submitQuote = (event) => {
@@ -177,81 +175,87 @@ const QuoteForm = () => {
                 <h1 className="title-page">Get a Quote:</h1>
                 <Row>
                     <Col md="4"/>
-                    <Col style={{"paddingTop":"50px"}}>
-                <Form noValidate validated={validated} onSubmit={calcQuote}>
-                    {/*Gallon Request*/}
-                    <Form.Group controlId='validationGallonReq'>
-                     
-                        <Row>
-                            <Col className='col-auto' style={{"paddingLeft":"40px", "paddingTop":"0.5em"}}>
-                                <Form.Label>Gallons Requested:</Form.Label>
-                            </Col>
-                            <Col className='col-auto'>
-                                <Form.Control required
-                                              className='gallonReq'
-                                              type='number'
-                                              placeholder='0'
-                                              min='1'
-                                              value={gallons}
-                                              onChange={(e) => {
-                                                  setDisableButton('true');
-                                                  setGallons(parseInt(e.target.value))
-                                                  // Determine gallons requested factor
-                                                  if (gallons < 1000) {
-                                                      setGallons_requested_factor(0.03);
-                                                  }
-                                                  else {
-                                                      setGallons_requested_factor(0.02)
-                                                  }
-                                              }}
-                                />
-                                <Form.Control.Feedback type='invalid'>Please provide a valid number</Form.Control.Feedback>
-                            </Col>
-                        </Row>
-                        
-                    </Form.Group>
+                    <Col style={{"paddingTop": "50px"}}>
+                        <Form noValidate validated={validated} onSubmit={calcQuote}>
+                            {/*Gallon Request*/}
+                            <Form.Group controlId='validationGallonReq'>
 
-                    {/*Verify Address*/}
-                    <Form.Group controlId='validationAddress'>
-                        <Row>
-                            <Col md="auto" className="address-box"><p style={{"font-weight":"bold"}}>{deliveryAddress}</p></Col>
-                            <Col style={{"paddingTop":"20px"}}>
-                                <Form.Check required
-                                            type='checkbox'
-                                            label='Correct Delivery Address?'
-                                            feedback='Please verify address'
-                                            onChange={() => {
-                                                setChecked(!checked)
-                                            }}
-                                />
-                            </Col>
-                        </Row>
-                    </Form.Group>
+                                <Row>
+                                    <Col className='col-auto' style={{"paddingLeft": "40px", "paddingTop": "0.5em"}}>
+                                        <Form.Label>Gallons Requested:</Form.Label>
+                                    </Col>
+                                    <Col className='col-auto'>
+                                        <Form.Control required
+                                                      className='gallonReq'
+                                                      type='number'
+                                                      placeholder='0'
+                                                      min='1'
+                                                      value={gallons}
+                                                      onChange={(e) => {
+                                                          setDisableButton('true');
+                                                          setGallons(parseInt(e.target.value))
+                                                          // Determine gallons requested factor
+                                                          if (gallons < 1000) {
+                                                              setGallons_requested_factor(0.03);
+                                                          } else {
+                                                              setGallons_requested_factor(0.02)
+                                                          }
+                                                      }}
+                                        />
+                                        <Form.Control.Feedback type='invalid'>Please provide a valid
+                                            number</Form.Control.Feedback>
+                                    </Col>
+                                </Row>
 
-                    {/*Delivery Date*/}
-                    {/* Delivery Date validated using react-datepicker DatePicker
+                            </Form.Group>
+
+                            {/*Verify Address*/}
+                            <Form.Group controlId='validationAddress'>
+                                <Row>
+                                    <Col md="auto" className="address-box"><p
+                                        style={{"font-weight": "bold"}}>{deliveryAddress}</p></Col>
+                                    <Col style={{"paddingTop": "20px"}}>
+                                        <Form.Check required
+                                                    type='checkbox'
+                                                    label='Correct Delivery Address?'
+                                                    feedback='Please verify address'
+                                                    onChange={() => {
+                                                        setChecked(!checked)
+                                                    }}
+                                        />
+                                    </Col>
+                                </Row>
+                            </Form.Group>
+
+                            {/*Delivery Date*/}
+                            {/* Delivery Date validated using react-datepicker DatePicker
                 https://reactdatepicker.com/
                 https://github.com/Hacker0x01/react-datepicker/issues/879
 
                 possible alt date picker https://getdatepicker.com/4/
                 */}
-                    <Form.Group>
-                        <Col>
-                        <Form.Label style={{"paddingLeft":"4.2em", "paddingRight":"0.8em"}}>Delivery Date: </Form.Label>
-                        <DatePicker
-                            className='delivDatePicker'
-                            selected={delivery_date}
-                            value={delivery_date}
-                            onChange={date => {setDeliveryDate(date)}}
-                            minDate={new Date()}
-                            showDisabledMonthNavigation
-                        />
-                        </Col>
-                    </Form.Group>
+                            <Form.Group>
+                                <Col>
+                                    <Form.Label style={{"paddingLeft": "4.2em", "paddingRight": "0.8em"}}>Delivery
+                                        Date: </Form.Label>
+                                    <DatePicker
+                                        className='delivDatePicker'
+                                        selected={delivery_date}
+                                        value={delivery_date}
+                                        onChange={date => {
+                                            setDeliveryDate(date)
+                                        }}
+                                        minDate={new Date()}
+                                        showDisabledMonthNavigation
+                                    />
+                                </Col>
+                            </Form.Group>
 
-                    <div style={{"paddingLeft":"140px"}}><Button variant='danger' type='submit' disable={disableButton}>Get Quote</Button></div>
-                </Form>
-                </Col>
+                            <div style={{"paddingLeft": "140px"}}><Button variant='danger' type='submit'
+                                                                          disable={disableButton}>Get Quote</Button>
+                            </div>
+                        </Form>
+                    </Col>
                 </Row>
 
                 <Modal
@@ -269,7 +273,7 @@ const QuoteForm = () => {
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant='danger' onClick={submitQuote}>Submit Confirmation</Button>
-                        <Button variant='danger' onClick={handleClose}>Get Another Quote</Button>
+                        <Button variant='secondary' onClick={handleClose}>Get Another Quote</Button>
                     </Modal.Footer>
                 </Modal>
             </Container>

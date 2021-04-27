@@ -144,7 +144,7 @@ const QuoteForm = () => {
         }
     }
 
-    const submitQuote = (event) => {
+    const submitQuote = () => {
         const quoteObj = {
             username: username,
             gallons_requested: gallons,

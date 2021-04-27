@@ -39,10 +39,10 @@ const QuoteForm = () => {
     Stop modal from appearing if validation check fails https://stackoverflow.com/questions/58753515/bootstrap-4-validation-disable-submit-button-until-form-validated
     */
     const company_factor = 0.1;
-    const [price_per_gallon, setPricePerGallon] = useState(1.50)
-    const [location_factor, setLocation_factor] = useState(0.02)
-    const [rate_history_factor, setRate_history_factor] = useState(0.01)
-    const [gallons_requested_factor, setGallons_requested_factor] = useState(0.02)
+    const price_per_gallon = 1.50;
+    const [location_factor, setLocation_factor] = useState(0.00)
+    const [rate_history_factor, setRate_history_factor] = useState(0.00)
+    const [gallons_requested_factor, setGallons_requested_factor] = useState(0.00)
     const [margin, setMargin] = useState(0.00)
     const [suggested_price, setSuggestedPrice] = useState(0.00)
     const [final_price, setFinal_price] = useState(0.00)
@@ -53,8 +53,9 @@ const QuoteForm = () => {
     const [show, setShow] = useState(false)
     const [delivery_date, setDeliveryDate] = useState(new Date())
     const [isLoading, setLoading] = useState(false);
+    const [disableButton, setDisableButton] = useState(true);
         /* address from token retrieved here */
-    
+    /*
     const [User, setUser] = useState({
         username: '',
         firstname: '',
@@ -68,8 +69,8 @@ const QuoteForm = () => {
         inState: false,
         returnee: false
     });
-
-    const [delivery_address, setDeliveryAddress] =  useState('');
+*/
+    const [deliveryAddress, setDeliveryAddress] =  useState('');
     const [address1, setAddress1] = useState('');
     const [address2, setAddress2] = useState('');
     const [cookies, setCookie] = useCookies(['user'])
@@ -84,21 +85,37 @@ const QuoteForm = () => {
         axios.post('http://localhost:4000/users/current_user', { username: cookies.user })
         .then((res) => {
           if (res.status === 200) {
-          setUserData(res.data);
+          //setUserData(res.data);
           console.log('res.data: ',res.data);
+
+          // Get user address info
           if (res.data.address2 === null || res.data.address2 === undefined) {
               console.log('address2 is undefined');
               setDeliveryAddress(res.data.address1);
-              console.log('address1: ',address1);
-              console.log('delivery_address: ',delivery_address);
+              console.log('address1: ', res.data.address1);
           } else {
               console.log('address2: ',res.data.address2);
               let combined_address = res.data.address1 + ', ' + res.data.address2;
-              console.log('combined_address: ',combined_address)
-              setDeliveryAddress(combined_address);
+              console.log('combined_address: ', combined_address)
+              setDeliveryAddress(res.data.address1 + ', ' + res.data.address2);
           }
-            console.log(delivery_address);
+
+          // Determine location factor
+              console.log(res.data.state)
+          if (res.data.state === "TX") {
+              setLocation_factor(0.02)
           }
+          else {
+              setLocation_factor(0.04)
+          }
+          // Determine rate history factor
+          axios.get('http://localhost:4000/users/history/find', {data: {username: cookies.user}})
+              .then((res) => {
+                  if (!res.data.hasQuoteHistory) setRate_history_factor(0)
+                  else setRate_history_factor(0.01)
+              })
+          }
+
           else if (res.status === 404) {
             console.log('res.status: ', res.status)
             history.push('/')
@@ -112,7 +129,7 @@ const QuoteForm = () => {
             setLoading(false);
           });
         }
-
+/*
         const Page = async() => {
             const checkUser = await axios.get('http://localhost:4000/users');
 
@@ -134,50 +151,50 @@ const QuoteForm = () => {
             
         }
 
-        Page();
+        Page();*/
       }, [isLoading]);
 
     //const handleClick = () => setLoading(true);
 
+    useEffect(() => {
+        console.log(location_factor)
+        console.log(rate_history_factor)
+        console.log(gallons_requested_factor)
+
+        setMargin(price_per_gallon * (location_factor - rate_history_factor + gallons_requested_factor + company_factor));
+
+        setSuggestedPrice(price_per_gallon + margin);
+
+        setFinal_price(gallons * suggested_price);
+
+        console.log(margin)
+        console.log(suggested_price)
+        console.log(final_price)
+
+        setDisableButton(false);
+
+    }, [location_factor, rate_history_factor, gallons_requested_factor])
+
     const calcQuote = (event) => {
-        const form = event.currentTarget;
-        if (form.checkValidity() === false) {
-            event.stopPropagation()
-            event.preventDefault()
-        }
-        else {
-            event.preventDefault();
-            setShow(true)
-            setValidated(true)
-
-            if (User.inState === false) {
-                setLocation_factor(0.04);
+            const form = event.currentTarget;
+            if (form.checkValidity() === false) {
+                event.stopPropagation()
+                event.preventDefault()
             }
+            else {
+                event.preventDefault();
 
-            if (User.returnee === false) {
-                setRate_history_factor(0);
+                setShow(true)
+                setValidated(true)
+                setDisableButton(true);
             }
-
-            if (User.gallon < 1000) {
-                setGallons_requested_factor(0.03);
-            }
-
-            setMargin(price_per_gallon * (location_factor - rate_history_factor + gallons_requested_factor + company_factor));
-
-            setSuggestedPrice(price_per_gallon + margin);
-
-            setFinal_price(User.gallon * suggested_price);
-
-            console.log(margin)
-
-        }
     }
 
     const submitQuote = (event) => {
         const quoteObj = {
             username: username,
             gallons_requested: gallons,
-            delivery_address: delivery_address,
+            delivery_address: deliveryAddress,
             delivery_date: delivery_date,
             price_per_gallon: suggested_price
         }
@@ -201,10 +218,6 @@ const QuoteForm = () => {
             User.inState = true;
         }
     }*/
-
-    const handleSubmit = () => {
-
-    }
 
     const handleClose = () => {
         setValidated(false);
@@ -236,6 +249,13 @@ const QuoteForm = () => {
                                               value={gallons}
                                               onChange={(e) => {
                                                   setGallons(parseInt(e.target.value))
+                                                  // Determine gallons requested factor
+                                                  if (gallons < 1000) {
+                                                      setGallons_requested_factor(0.03);
+                                                  }
+                                                  else {
+                                                      setGallons_requested_factor(0.02)
+                                                  }
                                               }}
                                 />
                                 <Form.Control.Feedback type='invalid'>Please provide a valid number</Form.Control.Feedback>
@@ -247,7 +267,7 @@ const QuoteForm = () => {
                     {/*Verify Address*/}
                     <Form.Group controlId='validationAddress'>
                         <Row>
-                            <Col md="auto" className="address-box"><p style={{"font-weight":"bold"}}>{delivery_address}</p></Col>
+                            <Col md="auto" className="address-box"><p style={{"font-weight":"bold"}}>{deliveryAddress}</p></Col>
                             <Col style={{"paddingTop":"20px"}}>
                                 <Form.Check required
                                             type='checkbox'
@@ -282,7 +302,7 @@ const QuoteForm = () => {
                         </Col>
                     </Form.Group>
 
-                    <div style={{"paddingLeft":"140px"}}><Button variant='danger' type='submit'>Get Quote</Button></div>
+                    <div style={{"paddingLeft":"140px"}}><Button variant='danger' type='submit' disable={disableButton}>Get Quote</Button></div>
                 </Form>
                 </Col>
                 </Row>
@@ -297,11 +317,11 @@ const QuoteForm = () => {
                         <Modal.Title>Calculated Cost</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <p>Price per gallon: $ {parseFloat(price_per_gallon.toString()).toFixed(2)}</p>
-                        <p>Total cost: $ {(gallons * parseFloat(price_per_gallon.toString())).toFixed(2)}</p>
+                        <p>Price per gallon: $ {parseFloat(suggested_price.toString()).toFixed(2)}</p>
+                        <p>Total cost: $ {parseFloat(final_price.toString()).toFixed(2)}</p>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant='danger' onClick={handleSubmit}>Submit Confirmation</Button>
+                        <Button variant='danger' onClick={submitQuote}>Submit Confirmation</Button>
                         <Button variant='danger' onClick={handleClose}>Get Another Quote</Button>
                     </Modal.Footer>
                 </Modal>

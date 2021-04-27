@@ -153,8 +153,22 @@ client.connect()
         
         })
     })
-    
 
+      /* check for quote history */
+      router.route('/history/find').get((req,res,next) => {
+          quotehistory.find({username: req.body.username}, (err, result) => {
+              if (err) {
+                  console.log(`Error trying to find user with username: ${req.body.username} quote history`);
+                  res.status(500).json({ error: `Error trying to find user with username: ${req.body.username} quote history` })
+              } else if (!result) {
+                  console.log(`No quote history found w/ username: ${req.body.username}`)
+                  res.json({hasQuoteHistory: false})
+              }
+              else {
+                  res.json({hasQuoteHistory: true})
+              }
+          })
+      })
 
     router.route('/quoteupdate').post((req,res,next) => {
         quotehistory.insertOne( {

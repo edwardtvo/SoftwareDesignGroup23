@@ -212,7 +212,6 @@ const QuoteForm = () => {
                                         </InputGroup>
                                     </Col>
                                 </Row>
-
                             </Form.Group>
 
                             {/*Verify Address*/}
@@ -221,7 +220,6 @@ const QuoteForm = () => {
                                     <Col md="auto" className="address-box"><p
                                         style={{"font-weight": "bold"}}>{deliveryAddress}</p></Col>
                                     <Col style={{"paddingTop": "20px"}}>
-                                        {/*<InputGroup hasValidation>*/}
                                         <Form.Check required
                                                     isInvalid={!checked}
                                                     type='checkbox'
@@ -231,7 +229,6 @@ const QuoteForm = () => {
                                                         setChecked(!checked)
                                                     }}
                                         />
-                                        {/*</InputGroup>*/}
                                     </Col>
                                 </Row>
                             </Form.Group>

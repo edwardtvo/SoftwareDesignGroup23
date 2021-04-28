@@ -169,7 +169,8 @@ const QuoteForm = () => {
             gallons_requested: gallons,
             delivery_address: deliveryAddress,
             delivery_date: delivery_date,
-            price_per_gallon: suggested_price
+            price_per_gallon: suggested_price,
+            amount_due: final_price
         }
         axios.post('http://localhost:4000/users/quoteupdate', quoteObj)
             .then((res) => {

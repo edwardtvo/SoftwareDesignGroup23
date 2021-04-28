@@ -15,6 +15,8 @@ const withAuth = require('./routes/middleware');
 const passport = require('passport')
 const flash = require('connect-flash');
 var session = require('express-session');
+const path = require('path')
+
 
 
 
@@ -94,5 +96,13 @@ app.use(function (err, req, res, next) {
     if (!err.statusCode) err.statusCode = 500;
     res.status(err.statusCode).send(err.message);
 });
+
+// Serve static files from the React frontend app
+app.use(express.static(path.join(__dirname, '../build')))
+
+// Anything that doesn't match the above, send back index.html
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname + '../build/index.html'))
+  })
 
 module.exports = server

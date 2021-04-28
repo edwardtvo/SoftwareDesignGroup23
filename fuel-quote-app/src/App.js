@@ -54,6 +54,8 @@ const App = () => {
             <Router>
                 <Switch>
                     <Route exact path="/" component={Home} />
+                    <Route exact path="/login" component={Home}/>
+                    <Route exact path="/register" component={Home}/>
                     <Route exact path="/home" component={Home} />
                     <Route path="/getquote" component={QuoteForm} />
                     <Route path="/profilemanagement" component={ProfileManagement}/>

@@ -7,3 +7,11 @@
 {
     display: none
 }
+
+.logo-size {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    left: -5px;
+    background-size: contain;
+  }

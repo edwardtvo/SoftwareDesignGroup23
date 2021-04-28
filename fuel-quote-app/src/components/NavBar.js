@@ -2,6 +2,7 @@ import {Nav, Navbar} from "react-bootstrap"
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { withCookies, useCookies } from 'react-cookie';
+import logo from '../images/cougar-gas.jpeg'
 import './NavBar.css'
 
 const NavBar = (props) => {
@@ -16,11 +17,13 @@ const NavBar = (props) => {
             path: '/'
         });
         setLoggedIn(false);
+        window.location.reload();
         history.push('/');
     }
     return (
     <div>
         <Navbar bg='navbar-color' variant='dark' sticky='top' expand='xl'>
+            <img className="logo-size" src={logo} alt="Logo"/>
             <Navbar.Brand href='/home' className='cougar-gas'>COUGAR GAS INC.</Navbar.Brand>
             <Navbar.Toggle aria-controls='basic-navbar-nav'/>
             <Navbar.Collapse id='basic-navbar-nav'>

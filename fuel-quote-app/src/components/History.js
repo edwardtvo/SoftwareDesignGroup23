@@ -31,7 +31,7 @@ const History = () => {
     const renderHistory = (data, index) => {
         return(
             <tr>
-                <td>{data.username}</td>
+                {/*<td>{data.username}</td>*/}
                 <td>{data.gallons_requested}</td>
                 <td>{data.delivery_address}</td>
                 <td>{data.delivery_date}</td>
@@ -43,11 +43,12 @@ const History = () => {
 
     return (
         <div>
+            {/*<h1 id = 'title'>Hello there</h1>*/}
 
             <ReactBootstrap.Table striped bordered hover>
                 <thead>
                     <tr>
-                        <th>Username</th>
+                        {/*<th>Username</th>*/}
                         <th>Gallons Requested</th>
                         <th>Delivery Address</th>
                         <th>Delivery Date</th>
@@ -59,7 +60,7 @@ const History = () => {
                     {userList.map(data => {
                         return(
                             <tr>
-                                <td>{data.username}</td>
+                                {/*<td>{data.username}</td>*/}
                                 <td>{data.gallons_requested}</td>
                                 <td>{data.delivery_address}</td>
                                 <td>{data.delivery_date}</td>

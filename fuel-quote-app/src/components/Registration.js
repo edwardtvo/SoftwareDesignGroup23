@@ -32,10 +32,19 @@ const Registration = () => {
 
     const handleModalClose = () => setModalShow(false);
 
+    const handleRegexValidation = (userObj) => {
+        if ((userObj.password.match(/^((?=.*[A-Z])(?=.*[0-9]).{5,50})$/) != null) &&
+            (userObj.username.match(/^(\w{3,30})$/) != null))
+            return true;
+        else 
+          return false;
+      }
+
     const goToLogin = () => history.push('/login');
 
     const handleSubmit = (event) => {
         const form = event.currentTarget;
+        setValidated(false);
         event.preventDefault();
 
         if (form.checkValidity() === false) {
@@ -45,7 +54,9 @@ const Registration = () => {
                 username: username,
                 password: password
             }
-            axios.post('http://localhost:4000/users/create', userObj)
+
+            if (handleRegexValidation(userObj)) {
+                axios.post('http://localhost:4000/users/create', userObj)
                 .then((res) => {
                     if (res.data === 'USER_EXISTED') {
                         alert('Username already existed!');
@@ -55,11 +66,13 @@ const Registration = () => {
                         setValidated(true);
                     }
                 }).catch((error) => {
+                    alert('Error when trying to register new user')
                     console.log(error)
-            });
-
-            
-
+                });
+            } else {
+                setValidated(false);
+                alert('Username must be between 3 and 30 characters.\nPassword must be between 5 and 50 characters with at least one uppercase & one number')
+              }
 
         }
     }

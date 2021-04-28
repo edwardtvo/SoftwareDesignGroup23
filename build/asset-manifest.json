@@ -1,0 +1,28 @@
+{
+  "files": {
+    "main.css": "/static/css/main.099b798e.chunk.css",
+    "main.js": "/static/js/main.0d6d58c1.chunk.js",
+    "main.js.map": "/static/js/main.0d6d58c1.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.3e6683e9.js",
+    "runtime-main.js.map": "/static/js/runtime-main.3e6683e9.js.map",
+    "static/css/2.01ca705e.chunk.css": "/static/css/2.01ca705e.chunk.css",
+    "static/js/2.ea0a5eb0.chunk.js": "/static/js/2.ea0a5eb0.chunk.js",
+    "static/js/2.ea0a5eb0.chunk.js.map": "/static/js/2.ea0a5eb0.chunk.js.map",
+    "static/js/3.708d962f.chunk.js": "/static/js/3.708d962f.chunk.js",
+    "static/js/3.708d962f.chunk.js.map": "/static/js/3.708d962f.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/2.01ca705e.chunk.css.map": "/static/css/2.01ca705e.chunk.css.map",
+    "static/css/main.099b798e.chunk.css.map": "/static/css/main.099b798e.chunk.css.map",
+    "static/js/2.ea0a5eb0.chunk.js.LICENSE.txt": "/static/js/2.ea0a5eb0.chunk.js.LICENSE.txt",
+    "static/media/index.css": "/static/media/NotoSansSC-Medium.682b4b8d.otf",
+    "static/media/cougar-gas.0b6a0bb4.jpeg": "/static/media/cougar-gas.0b6a0bb4.jpeg",
+    "static/media/cougar-gas.0b6a0bb4.png": "/static/media/cougar-gas.0b6a0bb4.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.3e6683e9.js",
+    "static/css/2.01ca705e.chunk.css",
+    "static/js/2.ea0a5eb0.chunk.js",
+    "static/css/main.099b798e.chunk.css",
+    "static/js/main.0d6d58c1.chunk.js"
+  ]
+}

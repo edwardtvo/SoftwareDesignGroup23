@@ -93,6 +93,7 @@ const QuoteForm = () => {
                     console.log(username)
                     axios.post('http://localhost:4000/users/history', {username: cookies.user})
                         .then((res) => {
+                            console.log(`DATA: ${res.data} ! `)
                             if (res.data === "") setRate_history_factor(0)
                             else setRate_history_factor(0.01)
                         })

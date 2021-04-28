@@ -3,7 +3,6 @@ const bcrypt = require("bcryptjs");
 const MongoClient = require('mongodb').MongoClient;
 
 let router = express.Router();
-require('../models/user-schema').registerModels();
 // This is the right model because ^registerModels set it up for us.
 
 const mongoDB_uri = "mongodb+srv://sdgroup23username:sdgroup23pw@cluster0.4pi4i.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
@@ -50,7 +49,6 @@ client.connect()
             }, {strict: true}, (error, data) => {
                 if (error) {
                     res.status(500);
-                    console.log(error);
                     return next(error);
                 } else {
                     res.status(200).json(data)
@@ -62,7 +60,6 @@ client.connect()
         router.post('/history', (req, res, next) => {
             quotehistory.find({username: req.body.username}).limit(0).toArray((error, result) => {
                 if (error) {
-                    console.log(`Error trying to find user with username: ${req.body.username} quote history`);
                     res.status(500).json({error: `Error trying to find user with username: ${req.body.username} quote history`})
                 } else {
                     console.log(`Quote history found for username: ${req.body.username}`);
@@ -83,7 +80,6 @@ client.connect()
 
                 user.findOne({username: req.body.username}, (err, user) => {
                     if (err) {
-                        console.log("Error inside /current_user route: ", err)
                         res.status(500).json({error: 'Internal error, please try again'})
                     } else if (!user) {
                         console.log("Why did you successfully log in? Who are you ", req.body.username, "?")
@@ -103,7 +99,6 @@ client.connect()
 
             user.findOne({username: req.body.username}, (err, user) => {
                 if (err) {
-                    console.error(err);
                     res.status(500)
                         .json({error: 'Internal error, please try again'});
                 } else if (!user) {
@@ -143,7 +138,6 @@ client.connect()
                             password: hash
                         }, {strict: false}, (error, data) => {
                             if (error) {
-                                console.log(error);
                                 return next(error);
                             } else {
                                 res.sendStatus(200)
@@ -170,7 +164,6 @@ client.connect()
                 amount_due: req.body.amount_due
             }, {strict: false}, (error, data) => {
                 if (error) {
-                    console.log(error);
                     return next(error);
                 } else {
                     res.status(200).json(data);

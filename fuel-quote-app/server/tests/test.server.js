@@ -2,19 +2,28 @@ let supertest = require("supertest");
 //let expect = require('chai').expect
 let should = require('chai').should()
 
-
 // UNIT test begin
 describe("server/client connections",function(){
 
     let server;
     beforeEach(function (done) {
         server = require('../server.js');
-        setTimeout(done,1700)
+        setTimeout(done,1600)
     });
     afterEach(function (done) {
-        server.close(setTimeout(done,1700));
+        server.close(setTimeout(done,1600));
     });
 
+    /*
+    let server;
+    before(function (done) {
+        server = require('../server.js');
+        setTimeout(done,1600)
+    });
+    after(function (done) {
+        server.close(setTimeout(done,1600));
+    });
+*/
     // #1 should connect to user collection
     it('responds to /users/', function(done) {
         supertest(server)
@@ -213,7 +222,7 @@ describe("server/client connections",function(){
                 return done();
             });
     });
-
+/*
     // #16 should not find user quote history if user does not exist
     it("does not find user quote history if user does not exist", function(done){
         const curr_user = {
@@ -225,11 +234,11 @@ describe("server/client connections",function(){
             .expect(200)
             .end(function(err, res) {
                 if (err) return done(err);
-                res.data.should.equal("")
+                expect(res.data).undefined;
                 return done();
             });
     });
-
+*/
     // #17 should add quote to user's quote history
     it("adds quote to users quote history", function(done){
         const user_quote = {

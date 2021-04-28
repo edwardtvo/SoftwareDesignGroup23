@@ -93,8 +93,8 @@ const QuoteForm = () => {
                     console.log(username)
                     axios.post('http://localhost:4000/users/history', {username: cookies.user})
                         .then((res) => {
-                            if (res.data === "") setRate_history_factor(0.01)
-                            else setRate_history_factor(0)
+                            if (res.data === "") setRate_history_factor(0)
+                            else setRate_history_factor(0.01)
                         })
 
                 } else if (res.status === 404) {
@@ -112,6 +112,15 @@ const QuoteForm = () => {
         }
     }, [isLoading]);
 
+    useEffect(() => {
+        // Determine gallons requested factor
+        if (gallons < 1000) {
+            setGallons_requested_factor(0.03);
+        } else {
+            setGallons_requested_factor(0.02);
+        }
+    }, [gallons])
+
     /* Ensure that factors are updated before margin and price are calculated */
     useEffect(() => {
         console.log(`location factor: ${location_factor}`)
@@ -119,8 +128,8 @@ const QuoteForm = () => {
         console.log(`gallons requested factor: ${gallons_requested_factor}`)
 
         setMargin(price_per_gallon * (location_factor - rate_history_factor + gallons_requested_factor + company_factor));
-        setSuggestedPrice(price_per_gallon + margin);
-        setFinal_price(gallons * suggested_price);
+        setSuggestedPrice(price_per_gallon + (price_per_gallon * (location_factor - rate_history_factor + gallons_requested_factor + company_factor)));
+        setFinal_price(gallons * (price_per_gallon + (price_per_gallon * (location_factor - rate_history_factor + gallons_requested_factor + company_factor))));
 
         console.log(`calculated margin: ${margin}`)
         console.log(`calculated suggested price: ${suggested_price}`)
@@ -129,7 +138,7 @@ const QuoteForm = () => {
         // Enable "Get Quote" button
         setDisableButton('false');
 
-    }, [location_factor, rate_history_factor, gallons_requested_factor, gallons])
+    }, [location_factor, rate_history_factor, gallons_requested_factor])
 
     const calcQuote = (event) => {
         const form = event.currentTarget;
@@ -195,15 +204,11 @@ const QuoteForm = () => {
                                                       onChange={(e) => {
                                                           setDisableButton('true');
                                                           setGallons(parseInt(e.target.value))
-                                                          // Determine gallons requested factor
-                                                          if (gallons < 1000) {
-                                                              setGallons_requested_factor(0.03);
-                                                          } else {
-                                                              setGallons_requested_factor(0.02)
-                                                          }
                                                           if (gallons > 0) {
                                                               setGallonsInvalid(0)
-                                                          } else {setGallonsInvalid(1)}
+                                                          } else {
+                                                              setGallonsInvalid(1)
+                                                          }
                                                       }}
                                         />
                                         <Form.Control.Feedback type='invalid'>Please provide a

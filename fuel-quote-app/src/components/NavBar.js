@@ -17,9 +17,8 @@ const NavBar = (props) => {
             path: '/'
         });
         setLoggedIn(false);
-        history.push('/');
         window.location.reload();
-
+        history.push('/');
     }
     return (
     <div>

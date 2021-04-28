@@ -127,18 +127,28 @@ const QuoteForm = () => {
         console.log(`rate history factor: ${rate_history_factor}`)
         console.log(`gallons requested factor: ${gallons_requested_factor}`)
 
-        setMargin(price_per_gallon * (location_factor - rate_history_factor + gallons_requested_factor + company_factor));
-        setSuggestedPrice(price_per_gallon + (price_per_gallon * (location_factor - rate_history_factor + gallons_requested_factor + company_factor)));
-        setFinal_price(gallons * (price_per_gallon + (price_per_gallon * (location_factor - rate_history_factor + gallons_requested_factor + company_factor))));
-
-        console.log(`calculated margin: ${margin}`)
-        console.log(`calculated suggested price: ${suggested_price}`)
-        console.log(`calculated final price: ${final_price}`)
+        let factors = location_factor - rate_history_factor + gallons_requested_factor + company_factor
+        let marg = price_per_gallon * factors
+        let sugg_price = price_per_gallon + marg
+        let total = gallons * sugg_price
+        setMargin(marg);
+        setSuggestedPrice(sugg_price);
+        setFinal_price(total);
 
         // Enable "Get Quote" button
         setDisableButton('false');
 
-    }, [location_factor, rate_history_factor, gallons_requested_factor])
+    }, [location_factor, rate_history_factor, gallons_requested_factor, gallons])
+
+    const changeGallons = (e) => {
+        setDisableButton('true');
+        setGallons(parseInt(e.target.value))
+        if (gallons > 0) {
+            setGallonsInvalid(0)
+        } else {
+            setGallonsInvalid(1)
+        }
+    }
 
     const calcQuote = (event) => {
         const form = event.currentTarget;
@@ -201,15 +211,7 @@ const QuoteForm = () => {
                                                       placeholder='0'
                                                       min='1'
                                                       value={gallons}
-                                                      onChange={(e) => {
-                                                          setDisableButton('true');
-                                                          setGallons(parseInt(e.target.value))
-                                                          if (gallons > 0) {
-                                                              setGallonsInvalid(0)
-                                                          } else {
-                                                              setGallonsInvalid(1)
-                                                          }
-                                                      }}
+                                                      onChange={changeGallons}
                                         />
                                         <Form.Control.Feedback type='invalid'>Please provide a
                                             number greater than zero</Form.Control.Feedback>

@@ -68,9 +68,6 @@ app.get('/current_user', (req,res) => {
     console.log('inside /current_user')
     console.log("req.user: ",req.user);
     console.log("req.session: ",req.session)
-    console.log("req.session.passport.user: ")
-    console.log(req.session.passport.user);
-    res.send(req.session.passport.user);
 })
 app.use('/users', userRoute);
 //app.use('/history', historyRoute);

@@ -39,7 +39,7 @@ client.connect()
 
         /* registration */
 
-
+/*
         router.route('/quotecreate').post((req,res,next) => {
             quotehistory.insertOne( {
                 username: req.body.username,
@@ -58,7 +58,7 @@ client.connect()
                 }
             })
         })
-
+*/
 
     })
 client.close();

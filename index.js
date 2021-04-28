@@ -31,7 +31,7 @@ app.use(flash());
 app.use(bodyParser.urlencoded({
     extended: true
 }));
-app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
+app.use(cors({credentials: true, origin: 'cougar-gas-inc.herokuapp.com'}));
 /*
 app.get('/current_user', (req,res) => {
     console.log('inside /current_user')
@@ -57,12 +57,16 @@ app.use(function (err, req, res, next) {
     res.status(err.statusCode).send(err.message);
 });
 
-// Serve static files from the React frontend app
-app.use(express.static(path.join(__dirname, '../build')))
+app.get('/', function(req, res){
+    res.redirect('/login');
+ });
+
+/* // Serve static files from the React frontend app
+app.use(express.static(path.join(__dirname, './build')))
 
 // Anything that doesn't match the above, send back index.html
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname + '../build/index.html'))
-  })
+    res.sendFile(path.join(__dirname + './build/index.html'))
+  }) */
 
 module.exports = server

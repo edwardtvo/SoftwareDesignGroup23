@@ -40,6 +40,6 @@
   "scripts": {
     "test": "nyc --reporter=html --reporter=text mocha --timeout 10000",
     "start": "node index.js",
-    "heroku-postbuild":"cd fuel-quote-ap && npm run build"
+    "heroku-postbuild":"cd fuel-quote-app && npm run build"
   }
 }

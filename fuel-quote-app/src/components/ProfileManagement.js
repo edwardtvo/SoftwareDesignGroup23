@@ -1,4 +1,4 @@
-import {Container, Button, Form, Row, Col} from 'react-bootstrap'
+import { Container, Button, Form, Row, Col, Modal } from 'react-bootstrap'
 import React, { useEffect, useState } from "react";
 import NavBar from "./NavBar";
 import { connect } from 'react-redux'
@@ -30,14 +30,13 @@ function ProfileManagement(props,auth) {
   const [cookie_username, setCookieusername] = useState('');
   const [cookies, setCookie] = useCookies(['user'])
   const [userData, setUserData] = useState({});
-
+  const [modal_show, setModalShow] = useState(false);
+  const [modal_show_validation, setModalShowValidation] = useState(false);
 
 
   let history=useHistory();
 
     useEffect(() => {
-
-      console.log('inside useEffect: cookies.user: ', cookies.user)
 
         // get user info from cookies.user as axios.post
         axios.post('http://localhost:4000/users/current_user', { username: cookies.user })
@@ -70,16 +69,38 @@ function ProfileManagement(props,auth) {
 
   //const handleClick = () => setLoading(true);
 
+  const goToGetQuote = () => history.push('/getquote');
+  const handleModalClose = () => setModalShow(false);
+  const handleModal2Close = () => setModalShowValidation(false);
+
+
+  const handleRegexValidation = (userObj) => {
+    if ( (userObj.fullname.match(/^(.{2,100})$/) != null) &&
+        (userObj.address1.match(/^(.{2,200})$/) != null) &&
+        (userObj.city.match(/^(.{2,100})$/) != null) &&
+        (userObj.state.match(/^([A-Z]{2,2})$/) != null) &&
+        (userObj.zip.match(/^([0-9]{5,7})$/) != null) ) 
+        {
+        console.log('all fields matched validation!')
+        return true;
+        }
+    else 
+      return false;
+
+  }
+
   const handleSubmit = (event) => {
     const form = event.currentTarget;
+    setValidated(false);
+    event.preventDefault();
+
     if (form.checkValidity() === false) {
-      event.preventDefault();
       event.stopPropagation();
     } else {
 
     const userObj = {
       cookie_username: cookies.user,
-      username: username,
+      username: cookies.user,
       fullname: fullname,
       address1: address1,
       address2: address2,
@@ -87,17 +108,27 @@ function ProfileManagement(props,auth) {
       state: state,
       zip: zip
     }
-                                          /* CHANGE /create TO /update */
-    axios.post('http://localhost:4000/users/update', userObj)
+
+    console.log(userObj);
+
+      if (handleRegexValidation(userObj)) {
+        console.log('handlRegexValidation: true');
+          axios.post('http://localhost:4000/users/update', userObj)
           .then((res) => {
               console.log(res.data)
           }).catch((error) => {
           console.log(error)
-      });
+          });
+          setValidated(true);
+          setModalShow(true);
+          //history.push("/getquote");
+      } else {
+        console.log('handlRegexValidation: false');
+        setValidated(false);
+        setModalShowValidation(true);
+      }
 
-    history.push("/getquote");
     }
-    setValidated(true);
 
   }
 
@@ -114,7 +145,6 @@ function ProfileManagement(props,auth) {
           <Col md="3">
             <Form.Label>Full Name: </Form.Label>
             <Form.Control name="fullname" 
-                          pattern="[A-Za-z0-9'\.\-\s]{1,100}$"
                           type="text"
                           value={fullname}
                           onChange={(e) => setFullname(e.target.value)}
@@ -124,7 +154,6 @@ function ProfileManagement(props,auth) {
           <Col md="3">
             <Form.Label>Username: </Form.Label>
             <Form.Control name="username"
-                          pattern="/[a-zA-Z0-9\.\-\'\_]{6,30}$/"
                           type="text"
                           value={userData.username}
                           onChange={(e) => setUsername(e.target.value)}
@@ -143,7 +172,6 @@ function ProfileManagement(props,auth) {
                           type="text" 
                           value={address1}
                           onChange={(e) => setAddress1(e.target.value)}
-                          pattern="^[A-Za-z0-9'\.\-\s\,#\:\/]{1,100}$" 
                           required/>
             <Form.Control.Feedback type="invalid">Address is required</Form.Control.Feedback>
 
@@ -169,7 +197,6 @@ function ProfileManagement(props,auth) {
                         type="text" 
                         value={city}
                         onChange={(e) => setCity(e.target.value)}
-                        patttern="[A-Za-z]{1,100}" 
                         required/>
           <Form.Control.Feedback type="invalid">City is required</Form.Control.Feedback>
           </Col>
@@ -208,7 +235,6 @@ function ProfileManagement(props,auth) {
           <Col md="1" style={{"paddingTop":"10px"}}>
           <Form.Label> Zip code: </Form.Label>
           <Form.Control name="zip" 
-                        //pattern="[0-9]{5,9}" 
                         value={zip}
                         onChange={(e) => setZip(e.target.value)}
                         type="text" 
@@ -238,6 +264,37 @@ function ProfileManagement(props,auth) {
       
 
     </Container>
+
+                <Modal
+                    show={modal_show}
+                    onHide={(e) => handleModalClose()}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Profiled Updated!</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <t2>Your profile information has been updated</t2>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant='danger' onClick={() => goToGetQuote()}>Go to Get Quote</Button>
+                    </Modal.Footer>
+                </Modal>
+                <Modal
+                    show={modal_show_validation}
+                    /* onHide={(handleModalClose)} */>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Invalid Inputs!</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <t2>Full name must be between 2 and 100 characters</t2><br/>
+                        <t2>Address1 must be between 2 and 200 characters</t2><br/>
+                        <t2>City must be between 2 and 100 characters</t2><br/>
+                        <t2>One state must be selected</t2><br/>
+                        <t2>Zip code must be between 5 and 7 numbers</t2>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant='danger' onClick={() => handleModal2Close()}>Close</Button>
+                    </Modal.Footer>
+                </Modal>
     </div>
   );
 }

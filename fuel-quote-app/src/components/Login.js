@@ -8,6 +8,11 @@ import * as actions from '../store/actions/index.js';
 import logo from '../images/cougar-gas.png'
 import { withCookies, useCookies } from 'react-cookie';
 
+/* Login Validation:
+- Username: 3-30 characters, required
+- Password: 5-50 characters, required
+*/
+
 const bcrypt = require('./custom-bcrypt');
 
 function simulateNetworkRequest() {
@@ -35,44 +40,53 @@ const Login = (props) => {
 
   const handleClick = () => setLoading(true);
 
+  const handleRegexValidation = (userObj) => {
+    if ((userObj.password.match(/^((?=.*[A-Z])(?=.*[0-9]).{5,50})$/) != null) &&
+        (userObj.username.match(/^(\w{3,30})$/) != null))
+        return true;
+    else 
+      return false;
+  }
+
+
   const handleSubmit = (event) => {
     const form = event.currentTarget;
+    setValidated(false);
     event.preventDefault();
 
     /*check front-end validation */
     if (form.checkValidity() === false) {
       event.stopPropagation();
     } else {    
+
+      
       const userObj = {
         username: username,
         password: /*bcrypt.hash(password)*/ password
       }
 
-    
-      
-      /* authenticate user credentials */
-      axios.post('http://localhost:4000/users/authenticate', userObj)
-      .then((res) => {
+      if (handleRegexValidation(userObj)) {
+
+        /* authenticate user credentials */
+        axios.post('http://localhost:4000/users/authenticate', userObj)
+        .then((res) => {
         setCookie('user', userObj.username, {
           path: '/'
         });
         console.log(cookies.user)
-        history.push('/home')
+        window.location.reload(); //history.push('/home')
         
-      }).catch((err) => {
-        console.log('Error in catch block of Login axios.post: ', err);
-        alert('Error logging in, please try again');
-      })
-      /*                                       
-      axios.post('http://localhost:4000/users/create', userObj)
-            .then((res) => {
-                console.log(res.data)
-            }).catch((error) => {
-            console.log(error)
-        }); */
-
+        }).catch((err) => {
+        console.log('Error in Login axios.post: ', err);
+        alert('User not found with inputted credentials. Please try again');
+        })
+      setValidated(true);
+      }
+      else {
+        setValidated(false);
+        alert('Username must be between 3 and 30 characters.\nPassword must be between 5 and 50 characters with at least one uppercase & one number')
+      }
     }
-    setValidated(true);
 
   }
   
@@ -100,9 +114,9 @@ const Login = (props) => {
             <Row>
                 <Col md="4"></Col>
                 <Col md="4">
+                  
                     <Form.Label>Username</Form.Label>
                     <Form.Control type="text" 
-                                  value={username} 
                                   onChange={(e) => setUsername(e.target.value)}
                                   required/>
                     <Form.Control.Feedback type="invalid">Please provide a username</Form.Control.Feedback>
@@ -113,7 +127,6 @@ const Login = (props) => {
                 <Col>
                     <Form.Label>Password</Form.Label>
                     <Form.Control type="password" 
-                                  value={password}
                                   onChange={(e) => setPassword(e.target.value)}
                                   required/>
                     <Form.Control.Feedback type="invalid">Please provide a password</Form.Control.Feedback>

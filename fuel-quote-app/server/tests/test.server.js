@@ -181,4 +181,73 @@ describe("server/client connections",function(){
             });
     });
 
+    // #14 should not update user info if validation fails
+    it("does not update user info if document validation fails", function(done){
+        const update_user = {
+            cookie_username: "UnitTestUser",
+            username: "UnitTestUser",
+            fullname: "U",
+            address1: "6",
+            address2: "AB",
+            city: "Houston",
+            state: "T",
+            zip: "0"
+        }
+        supertest(server)
+            .post('/users/update')
+            .send(update_user)
+            .expect(500, done);
+    });
+
+    // #15 should find user quote history
+    it("finds user quote history", function(done){
+        const curr_user = {
+            username: "UnitTestUser"
+        }
+        supertest(server)
+            .post('/users/history')
+            .send(curr_user)
+            .expect(200)
+            .end(function(err, res) {
+                if (err) return done(err);
+                return done();
+            });
+    });
+
+    // #16 should not find user quote history if user does not exist
+    it("does not find user quote history if user does not exist", function(done){
+        const curr_user = {
+            username: "MadeUpUser"
+        }
+        supertest(server)
+            .post('/users/history')
+            .send(curr_user)
+            .expect(200)
+            .end(function(err, res) {
+                if (err) return done(err);
+                res.data.should.equal("")
+                return done();
+            });
+    });
+
+    // #17 should add quote to user's quote history
+    it("adds quote to users quote history", function(done){
+        const user_quote = {
+            username: "UnitTestUser",
+            gallons_requested: 100,
+            delivery_address: "666 Street St",
+            delivery_date: "2021-03-30T03:43:09.750Z",
+            price_per_gallon: "1.75",
+            amount_due: "175.00"
+        }
+        supertest(server)
+            .post('/users/quoteupdate')
+            .send(user_quote)
+            .expect(200)
+            .end(function(err, res) {
+                if (err) return done(err);
+                return done();
+            });
+    });
+
 });

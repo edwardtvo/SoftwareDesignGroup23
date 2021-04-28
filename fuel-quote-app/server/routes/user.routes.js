@@ -49,6 +49,7 @@ client.connect()
                 }
             }, {strict: true}, (error, data) => {
                 if (error) {
+                    res.status(500);
                     console.log(error);
                     return next(error);
                 } else {
@@ -172,7 +173,7 @@ client.connect()
                     console.log(error);
                     return next(error);
                 } else {
-                    res.json(data)
+                    res.status(200).json(data);
                     console.log('/ / / Quote updated successfully ! / / /')
                 }
             })

@@ -93,6 +93,7 @@ const QuoteForm = () => {
                     console.log(username)
                     axios.post('http://localhost:4000/users/history', {username: cookies.user})
                         .then((res) => {
+                            console.log(`DATA: ${res.data} ! `)
                             if (res.data === "") setRate_history_factor(0)
                             else setRate_history_factor(0.01)
                         })
@@ -169,7 +170,8 @@ const QuoteForm = () => {
             gallons_requested: gallons,
             delivery_address: deliveryAddress,
             delivery_date: delivery_date,
-            price_per_gallon: suggested_price
+            price_per_gallon: suggested_price,
+            amount_due: final_price
         }
         axios.post('http://localhost:4000/users/quoteupdate', quoteObj)
             .then((res) => {

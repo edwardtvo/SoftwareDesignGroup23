@@ -166,7 +166,6 @@ const QuoteForm = () => {
     const handleClose = () => {
         setValidated(false);
         setShow(false);
-        //window.location.reload();
     }
 
     return (
@@ -207,8 +206,8 @@ const QuoteForm = () => {
                                                           } else {setGallonsInvalid(1)}
                                                       }}
                                         />
-                                        <Form.Control.Feedback type='invalid'>!! Please provide a
-                                            number greater than zero !!</Form.Control.Feedback>
+                                        <Form.Control.Feedback type='invalid'>Please provide a
+                                            number greater than zero</Form.Control.Feedback>
                                         </InputGroup>
                                     </Col>
                                 </Row>

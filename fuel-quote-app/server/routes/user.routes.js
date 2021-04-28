@@ -25,6 +25,15 @@ client.connect()
 
         })
 
+        router.route('/history').get((req, res, next) => {
+            quotehistory.find({}).toArray(function (error, data) {
+                if (error) throw error;
+                res.send(data);
+                //console.log(data);
+            });
+
+        })
+
         /* profile management */
         router.route('/update').post((req, res, next) => {
             let filter = {username: req.body.cookie_username};
@@ -43,7 +52,7 @@ client.connect()
                     console.log(error);
                     return next(error);
                 } else {
-                    res.json(data)
+                    res.status(200).json(data)
                     console.log(`User ${req.body.username} updated successfully !`)
                 }
             })
@@ -121,7 +130,7 @@ client.connect()
             user.findOne({username: req.body.username}).then(account => {
                 if (account) {
                     console.log(`User ${req.body.username} existed!`)
-                    res.json('USER_EXISTED')
+                    res.status(500).json('USER_EXISTED')
                 } else {
                     let newUser = {username: req.body.username, password: req.body.password};
                     bcrypt.genSalt(10)
@@ -136,7 +145,7 @@ client.connect()
                                 console.log(error);
                                 return next(error);
                             } else {
-                                res.json(data);
+                                res.sendStatus(200)
                                 console.log(`New user ${newUser.username} registered!`)
                             }
 
